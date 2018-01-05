@@ -2,7 +2,7 @@ console.log("loading");
 
 $(document).ready ( function () {
     $("#trigger").click( function(){
-        performRequest("https://4cqzyk1fe4.execute-api.us-east-1.amazonaws.com/Prod/getinfo",JSON.stringify({ "bucket": "testing-igngar","key": "someguy.jpg"}) );
+        performRequest("https://klyj1f4rcj.execute-api.us-east-1.amazonaws.com/Prod/getinfo",JSON.stringify({ "bucket": "testing-igngar","key": "someguy.jpg"}) );
     });
 
     function performRequest(urlPost,payload){

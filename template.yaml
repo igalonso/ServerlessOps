@@ -26,6 +26,6 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
             Path: /getinfo
             Method: POST
-      AutoPublishAlias: live
-      DeploymentPreference:
-        Type: Linear10PercentEvery1Minute
+      #AutoPublishAlias: live
+      #DeploymentPreference:
+      #  Type: Linear10PercentEvery1Minute
