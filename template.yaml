@@ -13,7 +13,7 @@ Resources:
   LambdaFunction:
    Type: AWS::Serverless::Function
    Properties:
-      CodeUri: detect-famous
+      CodeUri: functions/getinfo
       Handler: index.handler
       Policies: 
         - AmazonRekognitionFullAccess
