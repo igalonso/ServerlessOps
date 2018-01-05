@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion : '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AWS SAM template with API defined in an external Swagger file along with Lambda integrations and CORS configurations
+Resources:
+  ApiGatewayApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      DefinitionUri: swagger.yaml
+      StageName: Prod
+      Variables:
+        LambdaFunctionName: !Ref LambdaFunction
+
+  LambdaFunction:
+   Type: AWS::Serverless::Function
+   Properties:
+      CodeUri: detect-famous
+      Handler: index.handler
+      Policies: 
+        - AmazonRekognitionFullAccess
+        - AmazonS3ReadOnlyAccess
+      Runtime: nodejs4.3
+      Events:
+        ProxyApiRoot:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGatewayApi
+            Path: /getinfo
+            Method: POST
+      AutoPublishAlias: live
+      DeploymentPreference:
+        Type: Linear10PercentEvery1Minute
