@@ -16,15 +16,6 @@ const createResponse = (statusCode, body) => {
 
 
 exports.handler = (event, context, callback) => {
-    // Read from querystring
-    // Object key may have spaces or unicode non-ASCII characters.
-    
-    //const srcBucket = event.queryStringParameters.bucket;
-    //const srcKey = decodeURIComponent( event.queryStringParameters.key.replace(/\+/g, " ")); 
-     
-    
-    // Read from request JSON payload
-    // Object key may have spaces or unicode non-ASCII characters.
     const body = JSON.parse(event.body);
     const srcBucket = body.bucket;
     const srcKey = decodeURIComponent(body.key ? body.key.replace(/\+/g, " ") : null); 
