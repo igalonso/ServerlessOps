@@ -18,14 +18,16 @@ $(document).ready ( function () {
             data: payload,
             dataType: 'json',
             success: function(responseData, textStatus, jqXHR) {
+                console.log(responseData);
                 $('#place-holder').append("<table>");
-                for (var i=0;i<responseData.length;i++){
+                /*for (var i=0;i<responseData.length;i++){
                     console.log(responseData[i]["Name"]);
                     $('#place-holder').append("<tr>");
-                    $('#place-holder').append("<td>"+responseData[i]["Name"]+"</td>");
-                    $('#place-holder').append("<td>"+responseData[i]["Confidence"]+"</td>");
+                    $('#place-holder').append("<td>"+responseData[i]+"</td>");
+                    $('#place-holder').append("<td>"+responseData[i]+"</td>");
                     $('#place-holder').append("</tr>");
-                }
+                }*/
+                //$('#place-holder').append(responseData["CelebrityFaces"]);
                 $('#place-holder').append("</table>");
             },
             error: function (responseData, textStatus, errorThrown) {
