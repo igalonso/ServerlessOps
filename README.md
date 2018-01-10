@@ -3,11 +3,14 @@
 # *Under develop*:
 
 --------
-- [ ] Cloud9 - in charge.
-- [ ] Front end prettify.
-- [ ] Front end installation instructions.
-- [ ] Adding extra content on testing B/G deployment.
-- [ ] Add extra steps for testing (maybe exercise 2).
+- [ ] <span style="color:red">Cloud9 - in charge.</span>
+- [ ] <span style="color:red">Front end prettify.</span>
+- [ ] <span style="color:red">Front end installation instructions.</span>
+- [ ] <span style="color:orange">Adding extra content on testing B/G deployment.</span>
+- [ ] <span style="color:orange">Add extra steps for testing (maybe exercise 2).</span>
+- [ ] <span style="color:orange">Prepare it for customer facing.</span>
+- [ ] <span style="color:orange">Adding another example with API Gateway - Canary.</span>
+- [ ] <span style="color:orange">Adding concurrency example.</span>
 
 --------
 
