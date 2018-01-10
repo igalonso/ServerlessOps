@@ -205,7 +205,7 @@ During this Lab we will modify the function **"getinfo"** with the code within *
 1. Go to the CodePipeline console and click on **Get Started**
 2. Create a Pipeline with the name **ServerlessOps_pipeline** and click on next step.
 
-<img src="documentation/images/codepipeline1.png" width="60%"/>
+<img src="documentation/images/codepipeline1.png" />
 
 #### Step 5.3.1 Create the source of your pipeline.
 
@@ -213,7 +213,7 @@ During this Lab we will modify the function **"getinfo"** with the code within *
 4. Look for the repository name created previously and select it.
 5. Select the Branch name **master**.
 
-<img src="documentation/images/codepipeline2.png" width="60%"/>
+<img src="documentation/images/codepipeline2.png" />
 
 After defining our source, we will chose **CodeBuild** as our build provider. Click on Next Step.
 
@@ -233,7 +233,7 @@ Within the project, the file buildspec.yml has the information necesary for your
 3. Select *Create a service role in your account*. We will review it after creating the pipeline.
 4. Click on *Save build project*
 
-<img src="documentation/images/codepipeline3.png" width="60%"/>
+<img src="documentation/images/codepipeline3.png" />
 
 #### Step 5.3.3: Select the deploy phase using CloudFormation.
 
@@ -248,7 +248,7 @@ Click on Next Step once you have created your build project. Altough SAM (behind
 7. This is the role assumed by CloudFormation to deploy your code. For the shake of this training, we will use Administration permissions. Please bare in mind that these permissions should be the ones used by your stack (such as creating an API, Lambda Function, S3...). *Create/use an IAM role for CloudFormation with Administrator permissions*.
 8. In the next step we will *define the role used by CodePipeline* to access resources such as CodeBuild, CodeCommit, S3... If you have created a role previously, you can use it, if not click on Create role. By allowing the default policy, it will create a role called *AWS-CodePipeline-Service*. Then, click *Next Step*.
 9. Review the configuration and create the pipeline.
-<img src="documentation/images/codepipeline4.png" width="60%"/>
+<img src="documentation/images/codepipeline4.png" />
 
 #### Step 5.3.4: Review the CodeBuild IAM role to add S3 Permissions.
 
@@ -367,7 +367,7 @@ Now that we have made a change on our code it should be reflected on the result.
 1. Go to CodeDeploy and select the deployment that starts with ServerlessOps-stack.
 2. Under status, you should see an identifies starting with "d-". Click it.
 
-<img src="documentation/images/codedeploy.png" width="60%"/>
+<img src="documentation/images/codedeploy.png" />
 
 We are shifting traffic 10% each minute! This has been done using 3 lines on sam:
 
