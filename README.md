@@ -99,7 +99,8 @@ SAM Local can be used to test functions locally, start a local API Gateway from 
 ### Step 3: Install SAM Local -- Section to replace with Cloud9
  - https://github.com/awslabs/aws-sam-local
  - Introduce Visual Studio Code as we are going to use it for this session.
-### Step 4: SAM Local
+### Step 4: SAM Local -- Section to replace with Cloud9
+
 <details><summary>**Click here to toggle out this section**</summary>
 **Invoking function with event file:**
 
@@ -139,6 +140,7 @@ sam local invoke -d 5858 <function logical id>
 sam local start-api -d 5858
 ```
 </details>
+
 ### Step 5: Preparing for the pipeline!
 #### Step 5.1: Create S3 Bucket for deployments.
 
