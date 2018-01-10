@@ -126,76 +126,31 @@ my-deployments-<your-alias-here>
 2. Enter a repository name such as **ServerlessOps_Repository**
 3. Skip Configure email notifications' step.
 4. Follow the steps provided by CodeCommit to **Connect to your repository**
-5. Copy the content of the folder **ServerlessOps_workshop** to the recently created **ServerlessOps_Repository**
-6. Run these commands to perform the inital commit:
-
-````BASH
-git add -A
-git commit -m "initial commit"
-git push
-````
-Now your code is CodeCommit and you start building your pipeline.
-
-##### Note: The *yaml* template - SAM!
-
-The folder with the code has the following tree:
-
-	├── README.md
-	├── buildspec.yml
-	├── documentation
-	│   ├── SAM.pptx
-	│   ├── from-sam-to-aws.md
-	│   └── images
-	│       └── ...
-	├── frontend
-	│   ├── assets
-	│   │   └── ...
-	│   ├── front-js
-	│   │   └── **assets.js**
-	│   ├── index.html
-	│   └── someguy.jpg
-	├── functions
-	│   ├── **getinfo**
-	│   │   └── **index.js**
-	│   └── **getinfoenhanced**
-	│       └── **index.js**
-	├── **swagger.yaml**
-	├── template-local.yaml
-	├── **template.yaml**
-	└── tests
-	    └── ...
-
-The important files here are represented by *name of the file *.
-
-The SAM template is called **template.yaml** and has two resources:
-1. An API
-2. A function
-
-The function has an API method defined in the API as the event trigger. This method is define in the file **swagger.yaml** as well as some other features such as CORS.
 
 
-### Step 5.3: Creating the pipeline with CodePipeline
+#### Step 5.1: The *yaml* template - SAM!
 
-1. Go to the CodePipeline console and click on **Get Started**
-2. Create a Pipeline with the name **ServerlessOps_pipeline** and click on next step.
+Explain the SAM template with the functions and each field we are using. Explain why is the template 
 
-<img src="documentation/images/codepipeline1.png" width="60%"/>
+#### Step 5.2: Using CodeCommit as repository
 
-3. Drop down the service provider and select **CodeCommit**.
-4. Look for the repository name created previously and select it.
-5. Select the Branch name **master**.
+It's hard to explain this but, if you have time, explain how to setup code commit for pushing code.
 
-<img src="documentation/images/codepipeline2.png" width="60%"/>
+#### Step 5.3: Creating the pipeline with CodePipeline
+
+<img src="images/codepipeline1.png" width="60%"/>
+
+*Explain the change detection options*
+
+<img src="images/codepipeline2.png" width="60%"/>
 
 #### Step 5.4: How to use CodeBuild for your serveless pipeline - *build.yaml*
-
-Here we are going to select the build provider. In this case, we will use CodeBuild.
 
 Explain the file build.yaml.
 
 *Review role permissions.*
 
-<img src="documentation/images/codepipeline3.png" width="60%"/>
+<img src="images/codepipeline3.png" width="60%"/>
 
 CodeBuild Role:
 
@@ -229,7 +184,7 @@ CodeBuild Role:
         {
             "Effect": "Allow",
             "Action": "s3:*",
-            "Resource": "arn:aws:s3::012345678901:nameofyourbucket"
+            "Resource": "*"
         },
         {
             "Effect": "Allow",
@@ -244,7 +199,7 @@ CodeBuild Role:
 
 #### Step 5.5: Deploy using CloudFormation
 
-<img src="documentation/images/codepipeline4.png" width="60%"/>
+<img src="images/codepipeline4.png" width="60%"/>
 
 AWS Service Role - review this
 
@@ -254,8 +209,8 @@ AWS Service Role - review this
 
 #### Step 7.1: Start a project
 
-<img src="documentation/images/codestar1.png" width="60%"/>
-<img src="documentation/images/codestar2.png" width="60%"/>
+<img src="images/codestar1.png" width="60%"/>
+<img src="images/codestar2.png" width="60%"/>
 
 Create user.
 

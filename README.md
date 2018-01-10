@@ -1,9 +1,23 @@
-## ServerlessOps - "script" under development.
+# ServerlessOps Workshop
 
+# *Under develop*:
+
+--------
+- [ ] Cloud9 - in charge.
+- [ ] Front end prettify.
+- [ ] Front end installation instructions.
+- [ ] Adding extra content on testing B/G deployment.
+- [ ] Add extra steps for testing (maybe exercise 2).
+
+--------
+
+<details><summary>**Click here to toggle out this section**</summary>
 In this session you will learn the basis of Serverless and the starting set for every developer. We will go through all the steps from local development to continuous delivery using our favourite AWS Serverless Services.
 
-### Step 1: What is Serverless?
+</details>
 
+### Step 1: Introduction - What is Serverless?
+<details><summary>**Click here to toggle out this section**</summary>
 In this part of the presentation, if the customers know what is serverless, let's talk about their workloads. **What are they doing/planning to do with Serverless?**
 
 Pysical Servers -> Virtual Machines -> Containers -> **Serverless**
@@ -16,9 +30,11 @@ Building serverless applications means that your developers can focus on their c
 - Explain Serveless Paradigm is change of mindset.
 - Serverless is still growing.
 
+</details>
+
 ### Step 2: Services we are going to use:
 #### Step 2.1: AWS Lambda
-
+<details><summary>**Click here to toggle out this section**</summary>
 AWS Lambda is a compute service that lets you run code without provisioning or managing servers. 
 
 - Runs on Amazon Handled Container.
@@ -38,8 +54,10 @@ AWS Lambda is a compute service that lets you run code without provisioning or m
 - VPC
 - DLQ for failed requests
 
-#### Step 2.2: Api Gateway
+</details>
 
+#### Step 2.2: Api Gateway
+<details><summary>**Click here to toggle out this section**</summary>
 Amazon API Gateway is a fully managed service that makes it easy for developers to create, publish, maintain, monitor, and secure APIs at any scale.
 
 1. Create a unified API frontend fro multiple microservices
@@ -50,8 +68,10 @@ Amazon API Gateway is a fully managed service that makes it easy for developers 
 6. Custom error codes - Abstract the app layer from the API
 7. Swagger compatible
 
-#### Step 2.3: SAM - Serverless Application Model
+</details>
 
+#### Step 2.3: SAM - Serverless Application Model
+<details><summary>**Click here to toggle out this section**</summary>
 SAM is an abstraction on CloudFormation
 
 - New resource types AWS::Serverless::*
@@ -64,12 +84,16 @@ sam validate - validates a Serverless SAM template
 sam package - aws cloudformation package
 sam deploy - aws cloudformation deploy
 
-#### Step 2.4: SAM Local
+</details>
 
+#### Step 2.4: SAM Local
+<details><summary>**Click here to toggle out this section**</summary>
 Let's start from the begining! Local development.
 SAM Local can be used to test functions locally, start a local API Gateway from a SAM template, validate a SAM template, and generate sample payloads for various event sources.
 
-### Step 3: Install SAM Local
+</details>
+
+### Step 3: Install SAM Local -- Section to replace with Cloud9
  - https://github.com/awslabs/aws-sam-local
  - Introduce Visual Studio Code as we are going to use it for this session.
 ### Step 4: SAM Local
@@ -126,33 +150,121 @@ my-deployments-<your-alias-here>
 2. Enter a repository name such as **ServerlessOps_Repository**
 3. Skip Configure email notifications' step.
 4. Follow the steps provided by CodeCommit to **Connect to your repository**
+5. Copy the content of the folder **ServerlessOps_workshop** to the recently created **ServerlessOps_Repository**
+6. Run these commands to perform the inital commit:
+
+````BASH
+git add -A
+git commit -m "initial commit"
+git push
+````
+Now your code is CodeCommit and you start building your pipeline.
+
+##### Note: The *yaml* template - SAM!
+
+The folder with the code has the following tree:
+
+	├── README.md
+	├── buildspec.yml
+	├── documentation
+	│   ├── SAM.pptx
+	│   ├── from-sam-to-aws.md
+	│   └── images
+	│       └── ...
+	├── frontend
+	│   ├── assets
+	│   │   └── ...
+	│   ├── front-js
+	│   │   └── **assets.js**
+	│   ├── index.html
+	│   └── someguy.jpg
+	├── functions
+	│   ├── **getinfo**
+	│   │   └── **index.js**
+	│   └── **getinfoenhanced**
+	│       └── **index.js**
+	├── **swagger.yaml**
+	├── template-local.yaml
+	├── **template.yaml**
+	└── tests
+	    └── ...
+
+The important files here are represented by *name of the file *.
+
+The SAM template is called **template.yaml** and has two resources:
+1. An API
+2. A function
+
+The function has an API method defined in the API as the event trigger. This method is define in the file **swagger.yaml** as well as some other features such as CORS.
+
+During this Lab we will modify the function **"getinfo"** with the code within **"getinfoenhanced"** to demonstrate how can propagate a change within the pipeline and deploy it in a Blue/Green matter.
 
 
-#### Step 5.1: The *yaml* template - SAM!
+### Step 5.3: Creating the pipeline with CodePipeline
 
-Explain the SAM template with the functions and each field we are using. Explain why is the template 
-
-#### Step 5.2: Using CodeCommit as repository
-
-It's hard to explain this but, if you have time, explain how to setup code commit for pushing code.
-
-#### Step 5.3: Creating the pipeline with CodePipeline
+1. Go to the CodePipeline console and click on **Get Started**
+2. Create a Pipeline with the name **ServerlessOps_pipeline** and click on next step.
 
 <img src="documentation/images/codepipeline1.png" width="60%"/>
 
-*Explain the change detection options*
+#### Step 5.3.1 Create the source of your pipeline.
+
+3. Drop down the service provider and select **CodeCommit**.
+4. Look for the repository name created previously and select it.
+5. Select the Branch name **master**.
 
 <img src="documentation/images/codepipeline2.png" width="60%"/>
 
-#### Step 5.4: How to use CodeBuild for your serveless pipeline - *build.yaml*
+After defining our source, we will chose **CodeBuild** as our build provider. Click on Next Step.
 
-Explain the file build.yaml.
+#### Step 5.3.2: How to create a CodeBuild project for your serveless pipeline
 
-*Review role permissions.*
+Here we are going to select the build provider. In this case, we will use CodeBuild.
+
+In the phase of creating a build project, we select "Create a new build project".
+
+Within the project, the file buildspec.yml has the information necesary for your deployments. If we inspect this file, we will find that the deployment generages a file calles SAM-template.yaml which replaces the "local code" with a file within the S3 bucket previously provided.
+
+1. Name it as *ServerlessOps_build*.
+2. Select *Use an image managed by AWs CodeBuild*.
+3. Chose *Ubuntu* as the Operating system.
+4. Select *Node.js* as the runtime.
+5. Select Version *4.3.2*.
+3. Select *Create a service role in your account*. We will review it after creating the pipeline.
+4. Click on *Save build project*
 
 <img src="documentation/images/codepipeline3.png" width="60%"/>
 
-CodeBuild Role:
+#### Step 5.3.3: Select the deploy phase using CloudFormation.
+
+Click on Next Step once you have created your build project. Altough SAM (behind the scenes) will use CodeDeploy, SAM is based in CloudFormation and the deploy will do it as well.
+
+1. Select *CloudFormation* as the deployment provider.
+2. Chose *Change or replace a change set* as the Action Mode.
+3. Name the Stack **ServerlessOps-stack**
+4. Name the Change set as **ServerlessOps-changeset**
+5. The template file that CodeBuild generates is *SAM-template.yaml*. Set it under Template file.
+6. Select Capabilities *CAPABILITIES_IAM*
+7. This is the role assumed by CloudFormation to deploy your code. For the shake of this training, we will use Administration permissions. Please bare in mind that these permissions should be the ones used by your stack (such as creating an API, Lambda Function, S3...). *Create/use an IAM role for CloudFormation with Administrator permissions*.
+8. In the next step we will *define the role used by CodePipeline* to access resources such as CodeBuild, CodeCommit, S3... If you have created a role previously, you can use it, if not click on Create role. By allowing the default policy, it will create a role called *AWS-CodePipeline-Service*. Then, click *Next Step*.
+9. Review the configuration and create the pipeline.
+<img src="documentation/images/codepipeline4.png" width="60%"/>
+
+#### Step 5.3.4: Review the CodeBuild IAM role to add S3 Permissions.
+
+The IAM role created by CodeBuild doesn't have the specific permissions for the instruction needed on it's buildspec.yml:
+
+```
+aws cloudformation package --template-file template.yaml --s3-bucket deployments-<your-alias> --output-template-file SAM-template.yaml
+```
+
+After creating the pipeline, you will see that it fails during the build phase due to a permissions issue. We need to add these permissions (S3).
+
+1. Go to the IAM Console and look for the role.
+2. Attach an S3 administator policy to this role.
+
+
+<details><summary>CodeBuild Role:</summary>
 
 ```JSON
 {
@@ -184,7 +296,7 @@ CodeBuild Role:
         {
             "Effect": "Allow",
             "Action": "s3:*",
-            "Resource": "*"
+            "Resource": "arn:aws:s3::012345678901:nameofyourbucket"
         },
         {
             "Effect": "Allow",
@@ -196,25 +308,76 @@ CodeBuild Role:
     ]
 }
 ```
-
-#### Step 5.5: Deploy using CloudFormation
-
-<img src="documentation/images/codepipeline4.png" width="60%"/>
-
-AWS Service Role - review this
+</details>
 
 ### Step 6: Update your code to force a release!
 
-### Step 7: What about CodeStar?
+Let's make our first release. We could simply use a release change within the pipeline console but, in order to demonstrate the automation, we will do it directly from the console/git command:
 
-#### Step 7.1: Start a project
+1. Run the following git commands:
 
-<img src="documentation/images/codestar1.png" width="60%"/>
-<img src="documentation/images/codestar2.png" width="60%"/>
+	```
+	git add -A
+	git commit -m "My first commit! - ServerlessOps"
+	git push
+	```
 
-Create user.
+2. Go back to the CodePipeline Console to see the release.
 
-Wait for Codestar to deploy everything. All this workshop is already done by default.
+The code will stop at staging, yet the Pipeline won't have generated any resources such as APIs, Lambdas... Why? Because the Pipeline should have generated a ChangeSet. You can go to CloudFormation, select the stack and execute the change set.
+
+A final stage should be added to the pipeline. ExecuteChangeSet is required.
+
+1. On the CodePipeline console, click on *Edit*.
+2. At the bottom of your pipeline, click on the icon *+ Stage*.
+3. Enter a stage name like *ExecuteChangeSet*.
+4. Click on Action.
+5. Under Action Category, select *Deploy*.
+6. Name the action *ExecuteChangeSet*.
+7. The deployment provider will be CloudFormation.
+8. Under Action mode, select *Execute a change set*.
+9. Select the stack and the Change set name.
+10. Save the Stage and click on *Save pipeline changes*.
+
+Now, it's time to make a change. Our web application is clearly incomplete! We need to find out the celebrities in our photo!
+
+To do this, we need to change the code behind this file:
+ 
+ ```
+ functions/getinfo/index.js
+ ```
+With the content within
+
+```
+functions/getinfoenhanced/index.js
+```
+
+After doing it, we need to commit these changes. Use the previously mentioned git commands to push the code to git commit:
+ 
+```
+git add -A
+git commit -m "Adding celebrities to the result."
+git push
+```
+
+### Step 7: Let's review our deployment!
+
+Now that we have made a change on our code it should be reflected on the result. But wait... Does it? No! We are B/G deploying it! Follow these steps:
+
+1. Go to CodeDeploy and select the deployment that starts with ServerlessOps-stack.
+2. Under status, you should see an identifies starting with "d-". Click it.
+
+<img src="documentation/images/codedeploy.png" width="60%"/>
+
+We are shifting traffic 10% each minute! This has been done using 3 lines on sam:
+
+```
+AutoPublishAlias: live
+      DeploymentPreference:
+        Type: Linear10PercentEvery1Minute
+```
+
+You can run tests against the application to find see the different requests.
 
 ## Annotations:
 

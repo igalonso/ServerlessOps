@@ -29,18 +29,11 @@ exports.handler = (event, context, callback) => {
         }
     };
 
-    /*rekognition.detectLabels(params).promise().then(function (data) {
+    rekognition.detectLabels(params).promise().then(function (data) {
         console.log(createResponse(200, data.Labels));
         callback(null, createResponse(200, data.Labels));
     }).catch(function (err) {
         callback(null, createResponse(err.statusCode, err));
-    });*/
-    rekognition.recognizeCelebrities(params).promise().then(function(result) {
-        rekognition.detectLabels(params).promise().then(function (data){
-            result.Labels = data.Labels;
-            callback(null, createResponse(200, result));
-        });
-    }).catch(function (err) {
-        callback(null, createResponse(err.statusCode, err));
     });
+    
 };

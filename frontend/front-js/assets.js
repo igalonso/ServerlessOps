@@ -1,8 +1,19 @@
-console.log("loading");
+function include(file)
+{
+  var script  = document.createElement('script');
+  script.src  = file;  script.type = 'text/javascript';  script.defer = true;
+  document.getElementsByTagName('head').item(0).appendChild(script);
+}
 
+include("front-js/jquery.jsontotable.js");
+
+//Modify with the url of the API
+var api = "https://ilbenr8ro4.execute-api.us-east-1.amazonaws.com";
+
+console.log("loading");
 $(document).ready ( function () {
     $("#trigger").click( function(){
-        performRequest("https://klyj1f4rcj.execute-api.us-east-1.amazonaws.com/Prod/getinfo",JSON.stringify({ "bucket": "testing-igngar","key": "someguy.jpg"}) );
+        performRequest(api+"/Prod/getinfo",JSON.stringify({ "bucket": "testing-igngar","key": "someguy.jpg"}) );
     });
 
     function performRequest(urlPost,payload){
@@ -19,20 +30,12 @@ $(document).ready ( function () {
             dataType: 'json',
             success: function(responseData, textStatus, jqXHR) {
                 console.log(responseData);
-                $('#place-holder').append("<table>");
-                /*for (var i=0;i<responseData.length;i++){
-                    console.log(responseData[i]["Name"]);
-                    $('#place-holder').append("<tr>");
-                    $('#place-holder').append("<td>"+responseData[i]+"</td>");
-                    $('#place-holder').append("<td>"+responseData[i]+"</td>");
-                    $('#place-holder').append("</tr>");
-                }*/
-                //$('#place-holder').append(responseData["CelebrityFaces"]);
-                $('#place-holder').append("</table>");
+                $.jsontotable(responseData, { id: '#jsontotable', header: false });
             },
             error: function (responseData, textStatus, errorThrown) {
                 console.log('POST failed.');
             }
         });
     }
+    
 });

@@ -3,7 +3,7 @@
 swagger: 2.0
 basePath: /prod
 info:
-  title: AwsSamExample
+  title: ServerlessOps-api
 schemes:
 - https
 paths:
