@@ -322,6 +322,7 @@ After creating the pipeline, you will see that it fails during the build phase d
     ]
 }
 ```
+
 </details>
 
 ## Step 3: The front end.
