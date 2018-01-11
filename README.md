@@ -170,30 +170,28 @@ Now your code is CodeCommit and you start building your pipeline.
 
 The folder with the code has the following tree:
 
-	├── README.md
-	├── buildspec.yml
-	├── documentation
-	│   ├── SAM.pptx
-	│   ├── from-sam-to-aws.md
-	│   └── images
-	│       └── ...
-	├── frontend
-	│   ├── assets
-	│   │   └── ...
-	│   ├── front-js
-	│   │   └── **assets.js**
-	│   ├── index.html
-	│   └── someguy.jpg
-	├── functions
-	│   ├── **getinfo**
-	│   │   └── **index.js**
-	│   └── **getinfoenhanced**
-	│       └── **index.js**
-	├── **swagger.yaml**
-	├── template-local.yaml
-	├── **template.yaml**
-	└── tests
-	    └── ...
+    ├── README.md
+    ├── *buildspec.yml*
+    ├── documentation
+    │   └── images
+    │       └── ...
+    ├── frontend
+    │   ├── assets
+    │   │   └── ...
+    │   ├── front-js
+    │   │   ├── assets.js
+    │   │   └── ...
+    │   ├── *index.html*
+    │   └── ...
+    ├── functions
+    │   ├── getinfo
+    │   │   └── *index.js*
+    │   └── getinfoenhanced
+    │       └── *index.js*
+    ├── old
+    │   └── ...
+    ├── swagger.yaml
+    └── *template.yaml*
 
 The important files here are represented by *name of the file *.
 
