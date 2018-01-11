@@ -1,12 +1,14 @@
 # ServerlessOps Workshop
 
-# *Under develop*:
+<img src="documentation/images/devops.png"/>
+
+### *Under develop*:
 
 
 --------
 - [ ] <span style="color:red">Cloud9 - in charge.</span>
 - [ ] <span style="color:red">Front end prettify.</span>
-- [ ] <span style="color:red">Front end installation instructions.</span>
+- [x] <span style="color:red">Front end installation instructions.</span>
 - [ ] <span style="color:orange">Adding extra content on testing B/G deployment.</span>
 - [ ] <span style="color:orange">Add extra steps for testing (maybe exercise 2).</span>
 - [ ] <span style="color:orange">Prepare it for customer facing.</span>
@@ -16,13 +18,15 @@
 
 --------
 
-<details><summary>**Click here to toggle out this section**</summary>
+
 In this session you will learn the basis of Serverless and the starting set for every developer. We will go through all the steps from local development to continuous delivery using our favourite AWS Serverless Services.
 
-</details>
 
-### Step 1: Introduction - What is Serverless?
-<details><summary>**Click here to toggle out this section**</summary>
+
+## Step 1: Introduction - What is Serverless?
+
+<details><summary> Click here to toggle out this section</summary>
+
 In this part of the presentation, if the customers know what is serverless, let's talk about their workloads. **What are they doing/planning to do with Serverless?**
 
 Pysical Servers -> Virtual Machines -> Containers -> **Serverless**
@@ -35,11 +39,10 @@ Building serverless applications means that your developers can focus on their c
 - Explain Serveless Paradigm is change of mindset.
 - Serverless is still growing.
 
-</details>
 
-### Step 2: Services we are going to use:
-#### Step 2.1: AWS Lambda
-<details><summary>**Click here to toggle out this section**</summary>
+### Step 1.2: Services we are going to use:
+#### Step 1.2.1: AWS Lambda
+
 AWS Lambda is a compute service that lets you run code without provisioning or managing servers. 
 
 - Runs on Amazon Handled Container.
@@ -59,10 +62,10 @@ AWS Lambda is a compute service that lets you run code without provisioning or m
 - VPC
 - DLQ for failed requests
 
-</details>
 
-#### Step 2.2: Api Gateway
-<details><summary>**Click here to toggle out this section**</summary>
+
+#### Step 1.2.2: Api Gateway
+
 Amazon API Gateway is a fully managed service that makes it easy for developers to create, publish, maintain, monitor, and secure APIs at any scale.
 
 1. Create a unified API frontend fro multiple microservices
@@ -73,10 +76,10 @@ Amazon API Gateway is a fully managed service that makes it easy for developers 
 6. Custom error codes - Abstract the app layer from the API
 7. Swagger compatible
 
-</details>
 
-#### Step 2.3: SAM - Serverless Application Model
-<details><summary>**Click here to toggle out this section**</summary>
+
+#### Step 1.2.3: SAM - Serverless Application Model
+
 SAM is an abstraction on CloudFormation
 
 - New resource types AWS::Serverless::*
@@ -89,21 +92,26 @@ sam validate - validates a Serverless SAM template
 sam package - aws cloudformation package
 sam deploy - aws cloudformation deploy
 
-</details>
 
-#### Step 2.4: SAM Local
-<details><summary>**Click here to toggle out this section**</summary>
+
+#### Step 1.2.4: SAM Local
+
 Let's start from the begining! Local development.
 SAM Local can be used to test functions locally, start a local API Gateway from a SAM template, validate a SAM template, and generate sample payloads for various event sources.
 
-</details>
 
-### Step 3: Install SAM Local -- Section to replace with Cloud9
+
+### Step 1.3: Install SAM Local -- Section to replace with Cloud9
+
+
+
  - https://github.com/awslabs/aws-sam-local
  - Introduce Visual Studio Code as we are going to use it for this session.
-### Step 4: SAM Local -- Section to replace with Cloud9
 
-<details><summary>**Click here to toggle out this section**</summary>
+ 
+### Step 1.4: SAM Local -- Section to replace with Cloud9
+
+
 **Invoking function with event file:**
 
 `sam local invoke "Ratings" -e event.json`
@@ -141,17 +149,18 @@ Invoke the Lamda to debug
 sam local invoke -d 5858 <function logical id>
 sam local start-api -d 5858
 ```
+
 </details>
 
-### Step 5: Preparing for the pipeline!
-#### Step 5.1: Create S3 Bucket for deployments.
+## Step 2: Building the Pipeline!
+### Step 2.1: Create S3 Bucket for deployments.
 
 Create an S3 bucket where your deployments are going to be uploaded. Use a name such as:
 
 ```Javascript
 my-deployments-<your-alias-here>
 ```
-#### Step 5.2: Create a CodeCommit repository.
+### Step 2.2: Create a CodeCommit repository.
 
 1. Go to the CodeCommit repository and click on **Create Repository**
 2. Enter a repository name such as **ServerlessOps_Repository**
@@ -205,14 +214,14 @@ The function has an API method defined in the API as the event trigger. This met
 During this Lab we will modify the function **"getinfo"** with the code within **"getinfoenhanced"** to demonstrate how can propagate a change within the pipeline and deploy it in a Blue/Green matter.
 
 
-### Step 5.3: Creating the pipeline with CodePipeline
+## Step 2.3: Creating the pipeline with CodePipeline
 
 1. Go to the CodePipeline console and click on **Get Started**
 2. Create a Pipeline with the name **ServerlessOps_pipeline** and click on next step.
 
 <img src="documentation/images/codepipeline1.png" />
 
-#### Step 5.3.1 Create the source of your pipeline.
+### Step 2.3.1 Create the source of your pipeline.
 
 3. Drop down the service provider and select **CodeCommit**.
 4. Look for the repository name created previously and select it.
@@ -222,7 +231,7 @@ During this Lab we will modify the function **"getinfo"** with the code within *
 
 After defining our source, we will chose **CodeBuild** as our build provider. Click on Next Step.
 
-#### Step 5.3.2: How to create a CodeBuild project for your serveless pipeline
+### Step 2.3.2: How to create a CodeBuild project for your serveless pipeline
 
 Here we are going to select the build provider. In this case, we will use CodeBuild.
 
@@ -240,7 +249,7 @@ Within the project, the file buildspec.yml has the information necesary for your
 
 <img src="documentation/images/codepipeline3.png" />
 
-#### Step 5.3.3: Select the deploy phase using CloudFormation.
+### Step 2.3.3: Select the deploy phase using CloudFormation.
 
 Click on Next Step once you have created your build project. Altough SAM (behind the scenes) will use CodeDeploy, SAM is based in CloudFormation and the deploy will do it as well.
 
@@ -255,7 +264,7 @@ Click on Next Step once you have created your build project. Altough SAM (behind
 9. Review the configuration and create the pipeline.
 <img src="documentation/images/codepipeline4.png" />
 
-#### Step 5.3.4: Review the CodeBuild IAM role to add S3 Permissions.
+### Step 2.3.4: Review the CodeBuild IAM role to add S3 Permissions.
 
 The IAM role created by CodeBuild doesn't have the specific permissions for the instruction needed on it's buildspec.yml:
 
@@ -315,7 +324,48 @@ After creating the pipeline, you will see that it fails during the build phase d
 ```
 </details>
 
-### Step 6: Update your code to force a release!
+## Step 3: The front end.
+
+In order to make this web page available for every customer, we will have to upload it to S3. 
+
+### Step 3.1: Prepare the front-end. 
+
+The first step is to modify the javascript to point to the API created by your pipeline. 
+
+1. Go to the AWS API Gateway console.
+2. Select the API *ServerlessOps-api*.
+3. Under Stages, select *Prod*.
+4. Copy the Invoke URL presented there.
+5. Open the file under the project tree: 
+
+	```
+	ServerlessOps > frontend > front-js > assets.js
+	```
+6. Change the variable api with the URL copied before.
+
+Now we should be able to open the application locally by opening the file:
+
+```
+ServerlessOps > frontend > index.html
+```
+### Step 3.2: Upload the front-end.
+
+Now, let's upload this content to S3.
+
+1. Create bucket called:
+
+	```
+	serverless-ops-frontend-<your-alias>
+	```
+2. Upload all the content within the folder *frontend*.
+
+Configure your bucket for Website hosting by following these 3 simple steps in our documentation:
+
+ - https://docs.aws.amazon.com/AmazonS3/latest/dev/HowDoIWebsiteConfiguration.html
+
+Now, go to your application and test it!
+
+## Step 4: Update your code to force a release!
 
 Let's make our first release. We could simply use a release change within the pipeline console but, in order to demonstrate the automation, we will do it directly from the console/git command:
 
@@ -365,7 +415,7 @@ git commit -m "Adding celebrities to the result."
 git push
 ```
 
-### Step 7: Let's review our deployment!
+## Step 5: Let's review our deployment!
 
 Now that we have made a change on our code it should be reflected on the result. But wait... Does it? No! We are B/G deploying it! Follow these steps:
 
