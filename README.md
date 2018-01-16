@@ -457,7 +457,7 @@ At this point, this code should have been released. Let's manually set the concu
 
 1. Go to the Lambda Console.
 2. Select the Lambda Function deployed by our SAM template (starts with *ServerlessOps-stack-LambdaFunction-)*.
-3. Under Configuration tab, set the concurrency to 1.
+3. Under Configuration tab, set the concurrency to 25.
 
 ![Add concurrency](documentation/images/lambda-concurrency.png)
 4. Save the function.
@@ -469,7 +469,6 @@ To test this concurrency, let's go to our console and run the following command.
 
 
 ```bash
-https://aws.amazon.com/blogs/compute/managing-aws-lambda-function-concurrency/
 ## If you don't have go installed:
 sudo yum install go -y
 ## mac with brew
@@ -478,11 +477,7 @@ brew install go
 
 go get -u github.com/rakyll/hey
 
-./go/bin/hey -n 5000 -c 50  -d '{ "bucket": "serverless-ops-frontend-<your-alias-here>","key": "someguy.jpg"}' -H 'Content-Type: application/json' -m POST https://<your-api-endpoint>/Prod/getinfo
-
-./go/bin/hey -n 5000 -c 50  \
-	-d '{ "bucket": "serverless-ops-frontend-igngar","key": "someguy.jpg"}' \
-	-H 'Content-Type: application/json' \
-	-m POST
-	 https://ilbenr8ro4.execute-api.us-east-1.amazonaws.com/Prod/getinfo 
+./go/bin/hey -n 1000 -c 50 \
+-d '{ "bucket": "serverless-ops-frontend-<your-alias-here>","key": "someguy.jpg"}' \ 
+-H 'Content-Type: application/json' -m POST https://<your-api-endpoint>/Prod/getinfo
 ```
