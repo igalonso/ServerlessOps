@@ -2,6 +2,7 @@ version: 0.1
 phases:
   install:
     commands:
+      - pip install awscli --upgrade --user
       - aws cloudformation package --template-file template.yaml 
                                    --output-template-file SAM-template.yaml
 artifacts:
