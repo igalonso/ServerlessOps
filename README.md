@@ -14,7 +14,7 @@
 - [ ] <span style="color:orange">Prepare it for customer facing.</span>
 - [ ] <span style="color:orange">Adding another example with API Gateway - Canary.</span>
 - [ ] <span style="color:orange">Recreate images</span>
-- [ ] <span style="color:orange">Adding concurrency example.</span>
+- [x] <span style="color:orange">Adding concurrency example.</span>
 - [ ] <span style="color:orange">Multistage pipeline</span>
 
 --------
