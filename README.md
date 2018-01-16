@@ -159,8 +159,11 @@ sam local start-api -d 5858
 Create an S3 bucket where your deployments are going to be uploaded. Use a name such as:
 
 ```Javascript
-my-deployments-<your-alias-here>
+serverless-ops-my-deployments-<your-alias-here>
 ```
+
+Within the code, go to `template.yaml` and change the S3 bucket to the one you have just created.
+
 ### Step 2.2: Create a CodeCommit repository.
 
 1. Go to the CodeCommit repository and click on **Create Repository**
