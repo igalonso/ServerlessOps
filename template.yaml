@@ -14,6 +14,7 @@ Resources:
    Type: AWS::Serverless::Function
    Properties:
       CodeUri: functions/getinfo
+      Description: "Backend Lambda for Serverless Ops Workshop"
       Handler: index.handler
       Timeout: 60
       Policies: 

@@ -1,5 +1,5 @@
 {
-  "body": "{ \"bucket\": \"serverlessops-images-igngar\",\"key\": \"somepeoplefamous.png\"}",
+  "body": "{ \"bucket\": \"serverlessops-images-<your-alias>\",\"key\": \"someguy.jpg\"}",
   "resource": "/{proxy+}",
   "requestContext": {
     "resourceId": "123456",

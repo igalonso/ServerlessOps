@@ -158,7 +158,7 @@ sam local start-api -d 5858
 
 Create an S3 bucket where your deployments are going to be uploaded. Use a name such as:
 
-```Javascript
+```
 serverless-ops-my-deployments-<your-alias-here>
 ```
 
@@ -173,7 +173,7 @@ Within the code, go to `template.yaml` and change the S3 bucket to the one you h
 5. Copy the content of the folder **ServerlessOps_workshop** to the recently created **ServerlessOps_Repository**
 6. Run these commands to perform the inital commit:
 
-````BASH
+````bash
 git add -A
 git commit -m "initial commit"
 git push
@@ -219,6 +219,9 @@ During this Lab we will modify the function **"getinfo"** with the code within *
 
 
 ## Step 2.3: Creating the pipeline with CodePipeline
+
+Before you start, change the file ```buildspec.yml``` to add your alias in the command.
+
 
 1. Go to the CodePipeline console and click on **Get Started**
 2. Create a Pipeline with the name **ServerlessOps_pipeline** and click on next step.
@@ -273,7 +276,7 @@ Click on Next Step once you have created your build project. Altough SAM (behind
 The IAM role created by CodeBuild doesn't have the specific permissions for the instruction needed on it's buildspec.yml:
 
 ```
-aws cloudformation package --template-file template.yaml --s3-bucket deployments-<your-alias> --output-template-file SAM-template.yaml
+aws cloudformation package --template-file template.yaml --s3-bucket  serverless-ops-my-deployments-<your-alias> --output-template-file SAM-template.yaml
 ```
 
 After creating the pipeline, you will see that it fails during the build phase due to a permissions issue. We need to add these permissions (S3).
@@ -335,7 +338,7 @@ In order to make this web page available for every customer, we will have to upl
 
 ### Step 3.1: Prepare the front-end. 
 
-The first step is to modify the javascript to point to the API created by your pipeline. 
+The first step is to modify the javascript to point to the API created by your pipeline and the image to review. 
 
 1. Go to the AWS API Gateway console.
 2. Select the API *ServerlessOps-api*.
@@ -347,12 +350,14 @@ The first step is to modify the javascript to point to the API created by your p
 	ServerlessOps > frontend > front-js > assets.js
 	```
 6. Change the variable api with the URL copied before.
+7. Change the bucket name and confirm the image. (the image should be in the same bucket as the front-end).
 
 Now we should be able to open the application locally by opening the file:
 
 ```
 ServerlessOps > frontend > index.html
 ```
+
 ### Step 3.2: Upload the front-end.
 
 Now, let's upload this content to S3.
@@ -443,9 +448,11 @@ You can run tests against the application to find see the different requests.
 
 AWS Lambda limits your concurrency to 1000 concurrent executions within one region. Of course, these limits can be updated by requesting a limit increase to our support team. However, it is always a good idea to limit your functions to certain amount of concurrent executions. 
 
-Let's put an example: We have our own environment with several developers pushing code and testing lambda functions. We are deeply into Serverless! Some of these functions are just for testing purposes but one of our developers is doing a load test to see how does it react to heavy load. Because of this, his tesing lambda function is taking 900 concurrent executions letting only 100 left for the rest of your Lambda functions. Luckily, you followed the best practices and split testing and production in two different accounts so this is not impacting your production environment but, of course, the rest of the developers are seeing 429 whenever they trigger their functions. You got several angry developers! How can we avoid this?
+Let's put an example: We have our own environment with several developers pushing code and testing lambda functions. We are deeply into Serverless! Some of these functions are just for testing purposes but one of our developers is doing a load test to see how does it react to heavy load. Because of this, his tesing lambda function is taking 900 concurrent executions letting only 100 left for the rest of your Lambda functions. Luckily, you followed the best practices and split testing and production in two different accounts so this is not impacting your production environment but, of course, the rest of the developers are seeing 429 in the Lambda execution whenever they trigger their functions. You got several angry developers! How can we avoid this?
 
-For the purpose of this workshop, we are going to limit the concurrency of our function to 10. You probably notices in the code that there is "wait" of 3000 seconds.
+Another use case would be to "reserve" capacity for our Lambda function so other executions won't take it.
+
+For the purpose of this workshop, we are going to limit the concurrency of our function to 25. You probably noticed in the code that there is "wait" of 3000 seconds.
 
 ```JAVASCRIPT
 setTimeout(function(){...
@@ -453,20 +460,7 @@ setTimeout(function(){...
 ```
 This has been made on purpose to force your Lambda function to have concurrent executions.
 
-At this point, this code should have been released. Let's manually set the concurrency for our Lambda Function.
-
-1. Go to the Lambda Console.
-2. Select the Lambda Function deployed by our SAM template (starts with *ServerlessOps-stack-LambdaFunction-)*.
-3. Under Configuration tab, set the concurrency to 25.
-
-![Add concurrency](documentation/images/lambda-concurrency.png)
-4. Save the function.
-
-It is important to understand that this concurrency is shared between all the aliases and versions of this function. Lambda concurrency is function based.
-
-To test this concurrency, let's go to our console and run the following command.
-
-
+Let's test our Lambda Function without concurrency. To do it, we recommend you to use an EC2 instance so you can install hey easily.
 
 ```bash
 ## If you don't have go installed:
@@ -481,3 +475,49 @@ go get -u github.com/rakyll/hey
 -d '{ "bucket": "serverless-ops-frontend-<your-alias-here>","key": "someguy.jpg"}' \ 
 -H 'Content-Type: application/json' -m POST https://<your-api-endpoint>/Prod/getinfo
 ```
+
+At this point, this code should have been released. Let's manually set the concurrency for our Lambda Function.
+
+1. Go to the Lambda Console.
+2. Select the Lambda Function deployed by our SAM template (starts with *ServerlessOps-stack-LambdaFunction-)*.
+3. Under Configuration tab, set the concurrency to 25.
+
+![Add concurrency](documentation/images/lambda-concurrency.png)
+4. Save the function.
+
+It is important to understand that this concurrency is shared between all the aliases and versions of this function. Lambda concurrency is function based.
+
+To test this concurrency, let's go to our terminal and run the previous command command.
+
+
+
+```bash
+./go/bin/hey -n 1000 -c 50 \
+-d '{ "bucket": "serverless-ops-frontend-<your-alias-here>","key": "someguy.jpg"}' \ 
+-H 'Content-Type: application/json' -m POST https://<your-api-endpoint>/Prod/getinfo
+```
+
+You will definitely see something like this:
+
+```bash
+Response time histogram:
+  0.083 [1]	|
+  1.548 [500]	|∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎
+  3.012 [0]	|
+  4.476 [457]	|∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎
+  5.941 [15]	|∎
+  7.405 [5]	|
+  8.869 [1]	|
+  10.334 [0]	|
+  11.798 [0]	|
+  13.262 [3]	|
+  14.727 [18]	|∎
+  
+  ...
+  Status code distribution:
+  [502]	501 responses
+  [200]	499 responses
+```
+As we can see here, the 502's responses has increased! 
+  
+  

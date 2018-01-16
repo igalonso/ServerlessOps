@@ -8,12 +8,14 @@ function include(file)
 include("front-js/jquery.jsontotable.js");
 
 //Modify with the url of the API
-var api = "https://ilbenr8ro4.execute-api.us-east-1.amazonaws.com";
+var api = "https://<your-api>.execute-api.us-east-1.amazonaws.com";
+var bucket = "serverless-ops-frontend-<your-alias>";
+var image = "someguy.jpg";
 
 console.log("loading");
 $(document).ready ( function () {
     $("#trigger").click( function(){
-        performRequest(api+"/Prod/getinfo",JSON.stringify({ "bucket": "serverless-ops-frontend-igngar","key": "someguy.jpg"}) );
+        performRequest(api+"/Prod/getinfo",JSON.stringify({ "bucket": bucket,"key": image}) );
     });
 
     function performRequest(urlPost,payload){
