@@ -453,27 +453,36 @@ setTimeout(function(){...
 ```
 This has been made on purpose to force your Lambda function to have concurrent executions.
 
-At this point, this code should have been released.
+At this point, this code should have been released. Let's manually set the concurrency for our Lambda Function.
 
-## Annotations:
+1. Go to the Lambda Console.
+2. Select the Lambda Function deployed by our SAM template (starts with *ServerlessOps-stack-LambdaFunction-)*.
+3. Under Configuration tab, set the concurrency to 1.
 
-- MacOSX -> SSH instead of HTTPs to git (CodeCommit)
-- Add CodeBuild permissions -> S3.
-- Execute ChangeSet in CloudFormation or create a new stage in the codepipeline to automatically execute i
-- Add photos to a S3 bucket (they are read by querystring)
-- use postman to show the behavior
-- Show codestart at the end (basically, it does everything for you).
+![Add concurrency](documentation/images/lambda-concurrency.png)
+4. Save the function.
 
-## Path
+It is important to understand that this concurrency is shared between all the aliases and versions of this function. Lambda concurrency is function based.
 
-How to develop in Serverless:
+To test this concurrency, let's go to our console and run the following command.
 
-1. What is Serverless
-1. What is Lambda
-1. What is API Gateway
-1. What is SAM
-1. What is SAM Local
-1. Code* Services
-1. Build CI/CD
-1. Test our CI/CD
-1. CodeStar
+
+
+```bash
+https://aws.amazon.com/blogs/compute/managing-aws-lambda-function-concurrency/
+## If you don't have go installed:
+sudo yum install go -y
+## mac with brew
+brew install go
+##
+
+go get -u github.com/rakyll/hey
+
+./go/bin/hey -n 5000 -c 50  -d '{ "bucket": "serverless-ops-frontend-<your-alias-here>","key": "someguy.jpg"}' -H 'Content-Type: application/json' -m POST https://<your-api-endpoint>/Prod/getinfo
+
+./go/bin/hey -n 5000 -c 50  \
+	-d '{ "bucket": "serverless-ops-frontend-igngar","key": "someguy.jpg"}' \
+	-H 'Content-Type: application/json' \
+	-m POST
+	 https://ilbenr8ro4.execute-api.us-east-1.amazonaws.com/Prod/getinfo 
+```
