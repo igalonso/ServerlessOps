@@ -13,8 +13,6 @@ const createResponse = (statusCode, body) => {
         "body": JSON.stringify(body)
     }
 };
-
-
 exports.handler = (event, context, callback) => {
     const body = JSON.parse(event.body);
     const srcBucket = body.bucket;
@@ -29,12 +27,13 @@ exports.handler = (event, context, callback) => {
         }
     };
 
-    rekognition.recognizeCelebrities(params).promise().then(function(result) {
+    setTimeout(function(){
+        rekognition.recognizeCelebrities(params).promise().then(function(result) {
         rekognition.detectLabels(params).promise().then(function (data){
             result.Labels = data.Labels;
             callback(null, createResponse(200, result));
         });
     }).catch(function (err) {
         callback(null, createResponse(err.statusCode, err));
-    });    
+    })},3000);    
 };

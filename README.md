@@ -435,6 +435,22 @@ AutoPublishAlias: live
 
 You can run tests against the application to find see the different requests.
 
+## Step 6: Set concurrency in your Lambda Function.
+
+AWS Lambda limits your concurrency to 1000 concurrent executions within one region. Of course, these limits can be updated by requesting a limit increase to our support team. However, it is always a good idea to limit your functions to certain amount of concurrent executions. 
+
+Let's put an example: We have our own environment with several developers pushing code and testing lambda functions. We are deeply into Serverless! Some of these functions are just for testing purposes but one of our developers is doing a load test to see how does it react to heavy load. Because of this, his tesing lambda function is taking 900 concurrent executions letting only 100 left for the rest of your Lambda functions. Luckily, you followed the best practices and split testing and production in two different accounts so this is not impacting your production environment but, of course, the rest of the developers are seeing 429 whenever they trigger their functions. You got several angry developers! How can we avoid this?
+
+For the purpose of this workshop, we are going to limit the concurrency of our function to 10. You probably notices in the code that there is "wait" of 3000 seconds.
+
+```JAVASCRIPT
+setTimeout(function(){...
+},3000);
+```
+This has been made on purpose to force your Lambda function to have concurrent executions.
+
+At this point, this code should have been released.
+
 ## Annotations:
 
 - MacOSX -> SSH instead of HTTPs to git (CodeCommit)

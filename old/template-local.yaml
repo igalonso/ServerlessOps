@@ -13,7 +13,7 @@ Resources:
   LambdaFunction:
    Type: AWS::Serverless::Function
    Properties:
-      CodeUri: functions/getinfoenhanced
+      CodeUri: ../functions/getinfoenhanced
       Handler: index.handler
       Timeout: 60
       Policies: 

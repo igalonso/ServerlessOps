@@ -3,6 +3,7 @@ const util = require('util');
 const AWS = require('aws-sdk');
 const rekognition = new AWS.Rekognition({region: process.env.AWS_REGION});
 
+
 const createResponse = (statusCode, body) => {
     
     return {
