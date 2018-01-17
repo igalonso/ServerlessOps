@@ -18,6 +18,10 @@
 - [ ] <span style="color:red">Change the Role CloudFormation</span>
 - [ ] <span style="color:red">Change the Role CodePipeline</span>
 - [ ] <span style="color:red">Explain roles in detail</span>
+- [ ] <span style="color:red">Add steps to modify swagger swagger.yaml > line 23, put your account ID, and region</span>
+- [ ] <span style="color:red">Front-end after the first pipeline generated resources successfully</span>
+- [ ] <span style="color:red">before first real commit, add changeset</span>
+- [ ] <span style="color:red">Add front end with celebrities (not working)</span>
 - [x] <span style="color:orange">Adding extra content on testing B/G deployment.</span>
 - [ ] <span style="color:orange">Add extra steps for testing (maybe exercise 2).</span>
 - [ ] <span style="color:orange">Prepare it for customer facing.</span>
@@ -347,6 +351,8 @@ After creating the pipeline, you will see that it fails during the build phase d
 
 </details>
 
+### Now, go to CloudFormation, execute change set.
+
 ## Step 3: The front end.
 
 In order to make this web page available for every customer, we will have to upload it to S3. 
@@ -365,13 +371,7 @@ The first step is to modify the javascript to point to the API created by your p
 	ServerlessOps > frontend > front-js > assets.js
 	```
 6. Change the variable api with the URL copied before.
-7. Change the bucket name and confirm the image. (the image should be in the same bucket as the front-end).
 
-Now we should be able to open the application locally by opening the file:
-
-```
-ServerlessOps > frontend > index.html
-```
 
 ### Step 3.2: Upload the front-end.
 
@@ -382,11 +382,20 @@ Now, let's upload this content to S3.
 	```
 	serverless-ops-frontend-<your-alias>
 	```
-2. Upload all the content within the folder *frontend*.
+1. Upload all the content within the folder *frontend*.
 
-Configure your bucket for Website hosting by following these 3 simple steps in our documentation:
+	Configure your bucket for Website hosting by following these 3 simple steps in our documentation:
 
  - https://docs.aws.amazon.com/AmazonS3/latest/dev/HowDoIWebsiteConfiguration.html
+
+1. Change the bucket name and confirm that the image is in the bucket. (the image should be in the same bucket as the front-end).
+
+Now we should be able to open the application locally by opening the file:
+
+```
+ServerlessOps > frontend > index.html
+```
+
 
 Now, go to your application and test it!
 

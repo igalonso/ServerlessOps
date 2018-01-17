@@ -15,7 +15,7 @@ var image = "someguy.jpg";
 console.log("loading");
 $(document).ready ( function () {
     $("#trigger").click( function(){
-        performRequest(api+"/Prod/getinfo",JSON.stringify({ "bucket": bucket,"key": image}) );
+        performRequest(api+"/getinfo",JSON.stringify({ "bucket": bucket,"key": image}) );
     });
 
     function performRequest(urlPost,payload){
