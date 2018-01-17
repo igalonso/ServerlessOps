@@ -7,8 +7,17 @@
 
 --------
 - [ ] <span style="color:red">Cloud9 - in charge.</span>
+- [ ] <span style="color:red">Multi region testing</span>
 - [ ] <span style="color:red">Front end prettify.</span>
+- [ ] <span style="color:red">Prerequisites tech</span>
+	- [ ] <span style="color:red">Git credentials code commit</span>
+	- [ ] <span style="color:red">SAM installation https://github.com/awslabs/aws-sam-local/issues/66</span>
+	- [ ] <span style="color:red">AWS CLI</span>
+- [ ] <span style="color:red">Prerequisites knowledge</span>
 - [x] <span style="color:red">Front end installation instructions.</span>
+- [ ] <span style="color:red">Change the Role CloudFormation</span>
+- [ ] <span style="color:red">Change the Role CodePipeline</span>
+- [ ] <span style="color:red">Explain roles in detail</span>
 - [x] <span style="color:orange">Adding extra content on testing B/G deployment.</span>
 - [ ] <span style="color:orange">Add extra steps for testing (maybe exercise 2).</span>
 - [ ] <span style="color:orange">Prepare it for customer facing.</span>
@@ -162,7 +171,9 @@ Create an S3 bucket where your deployments are going to be uploaded. Use a name 
 serverless-ops-my-deployments-<your-alias-here>
 ```
 
-Within the code, go to `template.yaml` and change the S3 bucket to the one you have just created.
+Within the code, go to `buildspec.yaml` and change the S3 bucket to the one you have just created.
+
+### Create IAM git credentials - SSH
 
 ### Step 2.2: Create a CodeCommit repository.
 
@@ -172,6 +183,10 @@ Within the code, go to `template.yaml` and change the S3 bucket to the one you h
 4. Follow the steps provided by CodeCommit to **Connect to your repository**
 5. Copy the content of the folder **ServerlessOps_workshop** to the recently created **ServerlessOps_Repository**
 6. Run these commands to perform the inital commit:
+
+### Git clone + unzip + next steps
+
+!Insert images here.
 
 ````bash
 git add -A
