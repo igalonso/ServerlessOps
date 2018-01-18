@@ -6,29 +6,7 @@
 
 
 --------
-- [ ] <span style="color:red">Cloud9 - in charge.</span>
-- [ ] <span style="color:red">Multi region testing</span>
-- [ ] <span style="color:red">Front end prettify.</span>
-- [ ] <span style="color:red">Prerequisites tech</span>
-	- [ ] <span style="color:red">Git credentials code commit</span>
-	- [ ] <span style="color:red">SAM installation https://github.com/awslabs/aws-sam-local/issues/66</span>
-	- [ ] <span style="color:red">AWS CLI</span>
-- [ ] <span style="color:red">Prerequisites knowledge</span>
-- [x] <span style="color:red">Front end installation instructions.</span>
-- [ ] <span style="color:red">Change the Role CloudFormation</span>
-- [ ] <span style="color:red">Change the Role CodePipeline</span>
-- [ ] <span style="color:red">Explain roles in detail</span>
-- [ ] <span style="color:red">Add steps to modify swagger swagger.yaml > line 23, put your account ID, and region</span>
-- [ ] <span style="color:red">Front-end after the first pipeline generated resources successfully</span>
-- [ ] <span style="color:red">before first real commit, add changeset</span>
-- [ ] <span style="color:red">Add front end with celebrities (not working)</span>
-- [x] <span style="color:orange">Adding extra content on testing B/G deployment.</span>
-- [ ] <span style="color:orange">Add extra steps for testing (maybe exercise 2).</span>
-- [ ] <span style="color:orange">Prepare it for customer facing.</span>
-- [ ] <span style="color:orange">Adding another example with API Gateway - Canary.</span>
-- [ ] <span style="color:orange">Recreate images</span>
-- [x] <span style="color:orange">Adding concurrency example.</span>
-- [ ] <span style="color:orange">Multistage pipeline</span>
+GitHub issues.
 
 --------
 
