@@ -1,0 +1,128 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "Template with the all the steps previous to the workshop."
+Resources:
+  ServerlessOpsFrontend:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      AccessControl: PublicRead
+      WebsiteConfiguration:
+        IndexDocument: index.html
+  
+  ServerlessOpsDeployments:
+    Type: 'AWS::S3::Bucket'
+
+  BucketPolicy:
+    Type: 'AWS::S3::BucketPolicy'
+    Properties:
+      PolicyDocument:
+        Id: MyPolicy
+        Version: 2012-10-17
+        Statement:
+          - Sid: PublicReadForGetBucketObjects
+            Effect: Allow
+            Principal: '*'
+            Action: 's3:GetObject'
+            Resource: !Join 
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref ServerlessOpsFrontend
+                - /*
+      Bucket: !Ref ServerlessOpsFrontend
+
+  ServerlessOpsCodePipeline:
+    Type: "AWS::IAM::Role"
+    Properties: 
+      AssumeRolePolicyDocument:
+        JSON object
+      ManagedPolicyArns:
+        - String
+      Path: String
+      Policies:
+        - Policies
+      RoleName: String
+  
+  ServerlessOpsCodePipelinePolicy:
+    Type: "AWS::IAM::Policy"
+    Properties: 
+      PolicyName: "ServerlessOpsCodePipelineBucketPolicy"
+      PolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Effect: "Allow"
+            Action: 
+              - "cloudformation:Describe*"
+              - "cloudformation:List*"
+              - "cloudformation:Get*"
+            Resource: "*"
+
+  ServerlessOpsCodeBuild:
+    Type: "AWS::IAM::Role"
+    Properties: 
+      AssumeRolePolicyDocument:
+        JSON object
+      ManagedPolicyArns:
+        - String
+      Path: String
+      Policies:
+        - Policies
+      RoleName: String
+
+  ServerlessOpsCodeBuildPolicy:
+    Type: "AWS::IAM::Policy"
+    Properties: 
+      PolicyName: "ServerlessOpsCodePipelineBucketPolicy"
+      PolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Effect: "Allow"
+            Action: 
+              - "cloudformation:Describe*"
+              - "cloudformation:List*"
+              - "cloudformation:Get*"
+            Resource: "*"
+
+
+  ServerlessOpsCodePipelineForCloudFormation:
+    Type: "AWS::IAM::Role"
+    Properties: 
+      AssumeRolePolicyDocument:
+        JSON object
+      ManagedPolicyArns:
+        - String
+      Path: String
+      Policies:
+        - Policies
+      RoleName: String
+  
+  ServerlessOpsCodePipelineForCloudFormationPolicy:
+    Type: "AWS::IAM::Policy"
+    Properties: 
+      PolicyName: "ServerlessOpsCodePipelineBucketPolicy"
+      PolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Effect: "Allow"
+            Action: 
+              - "cloudformation:Describe*"
+              - "cloudformation:List*"
+              - "cloudformation:Get*"
+            Resource: "*"
+
+
+Outputs:
+  WebsiteURL:
+    Value: !GetAtt 
+      - ServerlessOpsFrontend
+      - WebsiteURL
+    Description: URL for website hosted on S3
+  S3BucketSecureURL:
+    Value: !Join 
+      - ''
+      - - 'https://'
+        - !GetAtt 
+          - ServerlessOpsFrontend
+          - DomainName
+    Description: Name of S3 bucket to hold website content
