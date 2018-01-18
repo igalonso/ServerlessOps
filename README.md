@@ -6,7 +6,7 @@
 
 
 --------
-Check [issues tab](issues)
+Check [issues tab](../../issues)
 
 --------
 
