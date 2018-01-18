@@ -6,7 +6,7 @@
 
 
 --------
-GitHub issues.
+Check [issues tab](issues)
 
 --------
 
