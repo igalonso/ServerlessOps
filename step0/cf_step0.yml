@@ -87,5 +87,9 @@ Resources:
             Statement:
             - Effect: Allow
               Resource: "*"
-              Action: "*"
+              Action: 
+              - "apigateway:*"
+              - "iam:createrole"
+              - "lambda:*"
+              - "codedeploy:*"
       RoleName: "ServerlessOps-cloudformationrole"
