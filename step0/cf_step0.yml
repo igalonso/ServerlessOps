@@ -29,100 +29,63 @@ Resources:
                 - /*
       Bucket: !Ref ServerlessOpsFrontend
 
-  ServerlessOpsCodePipeline:
-    Type: "AWS::IAM::Role"
-    Properties: 
-      AssumeRolePolicyDocument:
-        JSON object
-      ManagedPolicyArns:
-        - String
-      Path: String
-      Policies:
-        - Policies
-      RoleName: String
-  
-  ServerlessOpsCodePipelinePolicy:
-    Type: "AWS::IAM::Policy"
-    Properties: 
-      PolicyName: "ServerlessOpsCodePipelineBucketPolicy"
-      PolicyDocument: 
-        Version: "2012-10-17"
-        Statement: 
-          - 
-            Effect: "Allow"
-            Action: 
-              - "cloudformation:Describe*"
-              - "cloudformation:List*"
-              - "cloudformation:Get*"
-            Resource: "*"
-
   ServerlessOpsCodeBuild:
     Type: "AWS::IAM::Role"
     Properties: 
-      AssumeRolePolicyDocument:
-        JSON object
-      ManagedPolicyArns:
-        - String
-      Path: String
-      Policies:
-        - Policies
-      RoleName: String
-
-  ServerlessOpsCodeBuildPolicy:
-    Type: "AWS::IAM::Policy"
-    Properties: 
-      PolicyName: "ServerlessOpsCodePipelineBucketPolicy"
-      PolicyDocument: 
+      AssumeRolePolicyDocument: 
         Version: "2012-10-17"
         Statement: 
           - 
             Effect: "Allow"
+            Principal: 
+              Service: 
+                - "codebuild.amazonaws.com"
             Action: 
-              - "cloudformation:Describe*"
-              - "cloudformation:List*"
-              - "cloudformation:Get*"
-            Resource: "*"
+              - "sts:AssumeRole"
+      Path: "/"
+      Policies: 
+        - 
+          PolicyName: "root"
+          PolicyDocument: 
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Resource: "*"
+              Action:
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            - Effect: Allow
+              Resource: "*"
+              Action: "s3:*"
+            - Effect: Allow
+              Action:
+              - ssm:GetParameters
+              Resource: "*"
+      RoleName: "ServerlessOps-codebuildrole"
 
-
-  ServerlessOpsCodePipelineForCloudFormation:
+  
+  ServerlessOpsCloudFormationRole:
     Type: "AWS::IAM::Role"
     Properties: 
-      AssumeRolePolicyDocument:
-        JSON object
-      ManagedPolicyArns:
-        - String
-      Path: String
-      Policies:
-        - Policies
-      RoleName: String
-  
-  ServerlessOpsCodePipelineForCloudFormationPolicy:
-    Type: "AWS::IAM::Policy"
-    Properties: 
-      PolicyName: "ServerlessOpsCodePipelineBucketPolicy"
-      PolicyDocument: 
+      AssumeRolePolicyDocument: 
         Version: "2012-10-17"
         Statement: 
           - 
             Effect: "Allow"
+            Principal: 
+              Service: 
+                - "cloudformation.amazonaws.com"
             Action: 
-              - "cloudformation:Describe*"
-              - "cloudformation:List*"
-              - "cloudformation:Get*"
-            Resource: "*"
-
-
-Outputs:
-  WebsiteURL:
-    Value: !GetAtt 
-      - ServerlessOpsFrontend
-      - WebsiteURL
-    Description: URL for website hosted on S3
-  S3BucketSecureURL:
-    Value: !Join 
-      - ''
-      - - 'https://'
-        - !GetAtt 
-          - ServerlessOpsFrontend
-          - DomainName
-    Description: Name of S3 bucket to hold website content
+              - "sts:AssumeRole"
+      Path: "/"
+      Policies: 
+        - 
+          PolicyName: "root"
+          PolicyDocument: 
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Resource: "*"
+              Action: "*"
+      RoleName: "ServerlessOps-cloudformationrole"
