@@ -89,7 +89,7 @@ Resources:
               Resource: "*"
               Action: 
               - "apigateway:*"
-              - "iam:createrole"
+              - "iam:*"
               - "lambda:*"
               - "codedeploy:*"
               - "cloudformation:*"
