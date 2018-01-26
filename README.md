@@ -157,14 +157,65 @@ Within the code, go to `buildspec.yaml` and change the S3 bucket to the one you 
 
 ### Create IAM git credentials - SSH
 
+
+#### SSH and Linux, macOS, or Unix: Set Up the Public and Private Keys for Git and AWS CodeCommit
+
+From the terminal on your local machine, run the ssh-keygen command, and follow the directions to save the file to the .ssh directory for your profile.
+
+For example:
+
+```bash
+$ ssh-keygen
+
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/user-name/.ssh/id_rsa): Type /home/your-user-name/.ssh/ and a file name here, for example /home/your-user-name/.ssh/codecommit_rsa
+
+Enter passphrase (empty for no passphrase): <Type a passphrase, and then press Enter>
+Enter same passphrase again: <Type the passphrase again, and then press Enter>
+
+Your identification has been saved in /home/user-name/.ssh/codecommit_rsa.
+Your public key has been saved in /home/user-name/.ssh/codecommit_rsa.pub.
+The key fingerprint is:
+45:63:d5:99:0e:99:73:50:5e:d4:b3:2d:86:4a:2c:14 user-name@client-name
+The key's randomart image is:
++--[ RSA 2048]----+
+|        E.+.o*.++|
+|        .o .=.=o.|
+|       . ..  *. +|
+|        ..o . +..|
+|        So . . . |
+|          .      |
+|                 |
+|                 |
+|                 |
++-----------------+
+
+```
+
+This generates:
+
+- The codecommit_rsa file, which is the private key file.
+- The codecommit_rsa.pub file, which is the public key file.
+
+Run the following command to display the value of the public key file (codecommit_rsa.pub):
+
+```bash
+cat ~/.ssh/codecommit_rsa.pub
+```
+
 ### Step 2.2: Create a CodeCommit repository.
 
 1. Go to the CodeCommit repository and click on **Create Repository**
 2. Enter a repository name such as **ServerlessOps_Repository**
 3. Skip Configure email notifications' step.
 4. Follow the steps provided by CodeCommit to **Connect to your repository**
-5. Copy the content of the folder **ServerlessOps_workshop** to the recently created **ServerlessOps_Repository**
-6. Run these commands to perform the inital commit:
+
+By now, you should have a folder called **ServerlessOps-repository**.
+
+Now
+
+1. Copy the content of the folder **ServerlessOps_workshop** to the recently created **ServerlessOps_Repository**
+2. Run these commands to perform the inital commit:
 
 ### Git clone + unzip + next steps
 
