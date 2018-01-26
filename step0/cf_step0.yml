@@ -92,4 +92,5 @@ Resources:
               - "iam:createrole"
               - "lambda:*"
               - "codedeploy:*"
+              - "cloudformation:*"
       RoleName: "ServerlessOps-cloudformationrole"
