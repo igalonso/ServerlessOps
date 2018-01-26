@@ -93,4 +93,5 @@ Resources:
               - "lambda:*"
               - "codedeploy:*"
               - "cloudformation:*"
+              - "s3:*"
       RoleName: "ServerlessOps-cloudformationrole"
