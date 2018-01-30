@@ -2,7 +2,7 @@ version: 0.1
 phases:
   install:
     commands:
-      - aws cloudformation package --template-file template.yaml --s3-bucket ServerlessOps-deploymentbucket-igngar 
+      - aws cloudformation package --template-file template.yaml --s3-bucket ServerlessOps-deploymentbucket-<your-alias> 
                                    --output-template-file SAM-template.yaml
 artifacts:
   type: zip
