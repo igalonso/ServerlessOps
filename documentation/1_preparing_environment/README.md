@@ -48,4 +48,4 @@ Here you have to change `<region>` and `<AccountId>`with the region you're deplo
 
 ## Step X: Preparing the field:
 
-Once you have finished this step you can start the second step [here](../documentation/2_develop_with_cloud9).
+Once you have finished this step you can start the second step [here](../../documentation/2_develop_with_cloud9).
