@@ -2,6 +2,7 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: "Template with the all the steps previous to the workshop."
 Parameters: 
   Alias:
+    Type: String
     Description : "put here a unique alias to be used in your workshops"
 
 Resources:
@@ -15,9 +16,10 @@ Resources:
   ServerlessOpsDeployments:
     Type: 'AWS::S3::Bucket'
     Properties:
-      Name: !Join
-        - "ServerlessOps-deploymentbucket-"
-        - !Ref Alias
+      BucketName: !Join
+        - ""
+        - - "serverlessops-deploymentbucket-"
+          - !Ref Alias
 
   BucketPolicy:
     Type: 'AWS::S3::BucketPolicy'
