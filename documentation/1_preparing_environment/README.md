@@ -22,7 +22,7 @@ To deploy these assets go to the step0 folder and find the follwing file:
 
 <img src="../images/0_cloudformation_iam_permissions.png" />
 
-### 1.1.2: Change the buildspec.yaml to add S3 deployments.
+## 1.2: Change the buildspec.yaml to add S3 deployments.
 
 The CloudFormation stack will create an S3 bucket for deployments with the following 
 
@@ -32,7 +32,7 @@ serverlessops-deploymentbucket-<your-alias-here>
 
 Within the code, go to `buildspec.yaml` and change the S3 bucket to the one you have just created. Basically, add the alias you added to the CloudFormation here.
 
-## 1.2. Review swagger
+## 1.3. Review swagger
 
 Now, the application consists on an API, Lambda and Rekognition to get the tags of a photo. A key element on this application is the API which is defined by a swagger template called **swagger.yaml**.
 
@@ -47,3 +47,5 @@ uri: arn:aws:apigateway:<region>:lambda:path/2015-03-31/functions/arn:aws:lambda
 Here you have to change `<region>` and `<AccountId>`with the region you're deploying in and the account Id you are using.
 
 ## Step X: Preparing the field:
+
+Once you have finished this step you can start the second step [here](../documentation/2_develop_with_cloud9).
