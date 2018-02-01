@@ -1,18 +1,11 @@
 # 3. Building your CI/CD pipeline
 ## 3.1. Set up your repository with CodeCommit.
-## 3.2. Set up your pipeline with CodePipeline.
-## 3.3. Build your project with CodeBuild.
-## 3.4. Do your first push to you pipeline.
-## 3.5. Modify your pipeline: add a ChangeSet execution Automation.
 
-
-## Step X: Building the Pipeline!
-
-### Step X.1: Create IAM git credentials - SSH
+### 3.1.1: Create IAM git credentials - SSH
 
 Now, we have our deployment ready to go. To start building our pipeline, we need to create keys to our IAM user to be able to push/pull code from CodeCommit (our respository). Continue this guide to create these keys.
 
-#### Step X.1.1: SSH and Linux, macOS, or Unix: Set Up the Public and Private Keys for Git and AWS CodeCommit
+#### 3.1.1.1: SSH and Linux, macOS, or Unix: Set Up the Public and Private Keys for Git and AWS CodeCommit
 
 From the terminal on your local machine, run the ssh-keygen command, and follow the directions to save the file to the .ssh directory for your profile.
 
@@ -70,7 +63,7 @@ Select Upload SSH public key with the content displayed in previous steps:
 
 Upload it.
 
-### Step 2.2: Create a CodeCommit repository.
+### Step 3.1.2: Create a CodeCommit repository.
 
 1. Go to the CodeCommit repository and click on **Create Repository**
 
@@ -85,15 +78,8 @@ Upload it.
 By now, you should have a folder called **ServerlessOps-repository**.
 
 1. Copy the content of the folder **ServerlessOps_workshop** to the recently created **ServerlessOps_Repository**
-2. Run these commands to perform the inital commit:
-
-### Git clone + unzip + next steps
-
 <img src="../images/codecommit_copy_content.png" />
-
-!Insert images here.
-
-Then, let's do our initial commit to the repository with the following steps:
+2. Run these commands to perform the inital commit:
 
 ````bash
 cd ServerlessOps-repository
@@ -102,6 +88,134 @@ git commit -m "initial commit"
 git push
 ````
 Go to the **CodeCommit** console to verify that the content has been added.
+
+Now, let's try the application. Go to the public bucket url and test it.
+
+## 3.2. Set up your pipeline with CodePipeline.
+
+Now we are going to create our first pipeline! 
+
+1. Go to the CodePipeline console and click on **Get Started**
+2. Create a Pipeline with the name **ServerlessOps_pipeline** and click on next step.
+
+<img src="../images/codepipeline1.png" />
+
+### Step 3.2.1 Create the source of your pipeline.
+
+3. Drop down the service provider and select **CodeCommit**.
+4. Look for the repository name created previously and select it.
+5. Select the Branch name **master**.
+
+<img src="../images/codepipeline2.png" />
+
+After defining our source, we will chose **CodeBuild** as our build provider. Click on Next Step.
+
+### Step 3.2.2: How to create a CodeBuild project for your serveless pipeline
+
+Here we are going to select the build provider. In this case, we will use CodeBuild.
+
+In the phase of creating a build project, we select "Create a new build project".
+
+Within the project, the file buildspec.yml has the information necesary for your deployments. If we inspect this file, we will find that the deployment generages a file calles SAM-template.yaml which replaces the "local code" with a file within the S3 bucket previously provided.
+
+1. Name it as *ServerlessOps_build*.
+2. Select *Use an image managed by AWs CodeBuild*.
+3. Chose *Ubuntu* as the Operating system.
+4. Select *Node.js* as the runtime.
+5. Select Version *4.3.2*.
+3. Select *Create a service role in your account*. We will review it after creating the pipeline.
+4. Click on *Save build project*
+
+<img src="../images/codepipeline3.png" />
+
+### Step 3.2.3: Select the deploy phase using CloudFormation.
+
+Click on Next Step once you have created your build project. Altough SAM (behind the scenes) will use CodeDeploy, SAM is based in CloudFormation and the deploy will do it as well.
+
+1. Select *CloudFormation* as the deployment provider.
+2. Chose *Change or replace a change set* as the Action Mode.
+3. Name the Stack **ServerlessOps-stack**
+4. Name the Change set as **ServerlessOps-changeset**
+5. The template file that CodeBuild generates is *SAM-template.yaml*. Set it under Template file.
+6. Select Capabilities *CAPABILITIES_IAM*
+7. This is the role assumed by CloudFormation to deploy your code. For the shake of this training, we will use Administration permissions. Please bare in mind that these permissions should be the ones used by your stack (such as creating an API, Lambda Function, S3...). *Create/use an IAM role for CloudFormation with Administrator permissions*.
+8. In the next step we will *define the role used by CodePipeline* to access resources such as CodeBuild, CodeCommit, S3... If you have created a role previously, you can use it, if not click on Create role. By allowing the default policy, it will create a role called *AWS-CodePipeline-Service*. Then, click *Next Step*.
+9. Review the configuration and create the pipeline.
+<img src="../images/codepipeline4.png" />
+
+
+## 3.4. Modify your pipeline: add a ChangeSet execution Automation.
+
+Go to the **CodePipeline** console and take a look at all the stages flowing. This might take a while but worth seeing!
+
+After everything is in green, does it work? No. you need to go to CloudFormation and Execute the ChangeSet.
+
+Let's add this tep to the pipeline
+
+## 3.5. Try again to  push to you pipeline.
+
+Now we have our pipeline out. Shall we start with our first deployment? Why not!
+
+Let's go to our Lambda function (the file called functions/getinfo/index.js) and replace the code with the following:
+
+```javascript
+'use strict';
+const util = require('util');
+const AWS = require('aws-sdk');
+const rekognition = new AWS.Rekognition({region: process.env.AWS_REGION});
+
+const createResponse = (statusCode, body) => {
+    
+    return {
+        "statusCode": statusCode,
+        "headers": {
+            'Access-Control-Allow-Origin': '*'
+        },
+        "body": JSON.stringify(body)
+    }
+};
+exports.handler = (event, context, callback) => {
+    const body = JSON.parse(event.body);
+    const srcBucket = body.bucket;
+    const srcKey = decodeURIComponent(body.key ? body.key.replace(/\+/g, " ") : null); 
+
+    var params = {
+        Image: {
+            S3Object: {
+                Bucket: srcBucket,
+                Name: srcKey 
+            }
+        }
+    };
+
+    setTimeout(function(){
+        rekognition.recognizeCelebrities(params).promise().then(function(result) {
+        rekognition.detectLabels(params).promise().then(function (data){
+            result.Labels = data.Labels;
+            callback(null, createResponse(200, result));
+        });
+    }).catch(function (err) {
+        callback(null, createResponse(err.statusCode, err));
+    })},3000);    
+};
+```
+
+We have added a new and awesome feature! Now we not only get the labels of each photo but we get famous labels added to our application.
+
+Let's test the pipeline with, again:
+
+````bash
+cd ServerlessOps-repository
+git add -A
+git commit -m "Adding famous labels to the application."
+git push
+````
+
+Now it works!
+
+## Step 3: Building the Pipeline!
+
+
 
 ##### Note: The *yaml* template - SAM!
 
@@ -143,117 +257,7 @@ During this Lab we will modify the function **"getinfo"** with the code within *
 
 ## Step 2.3: Creating the pipeline with CodePipeline
 
-Before you start, change the file ```buildspec.yml``` to add your alias in the command.
 
-
-1. Go to the CodePipeline console and click on **Get Started**
-2. Create a Pipeline with the name **ServerlessOps_pipeline** and click on next step.
-
-<img src="../images/codepipeline1.png" />
-
-### Step 2.3.1 Create the source of your pipeline.
-
-3. Drop down the service provider and select **CodeCommit**.
-4. Look for the repository name created previously and select it.
-5. Select the Branch name **master**.
-
-<img src="../images/codepipeline2.png" />
-
-After defining our source, we will chose **CodeBuild** as our build provider. Click on Next Step.
-
-### Step 2.3.2: How to create a CodeBuild project for your serveless pipeline
-
-Here we are going to select the build provider. In this case, we will use CodeBuild.
-
-In the phase of creating a build project, we select "Create a new build project".
-
-Within the project, the file buildspec.yml has the information necesary for your deployments. If we inspect this file, we will find that the deployment generages a file calles SAM-template.yaml which replaces the "local code" with a file within the S3 bucket previously provided.
-
-1. Name it as *ServerlessOps_build*.
-2. Select *Use an image managed by AWs CodeBuild*.
-3. Chose *Ubuntu* as the Operating system.
-4. Select *Node.js* as the runtime.
-5. Select Version *4.3.2*.
-3. Select *Create a service role in your account*. We will review it after creating the pipeline.
-4. Click on *Save build project*
-
-<img src="../images/codepipeline3.png" />
-
-### Step 2.3.3: Select the deploy phase using CloudFormation.
-
-Click on Next Step once you have created your build project. Altough SAM (behind the scenes) will use CodeDeploy, SAM is based in CloudFormation and the deploy will do it as well.
-
-1. Select *CloudFormation* as the deployment provider.
-2. Chose *Change or replace a change set* as the Action Mode.
-3. Name the Stack **ServerlessOps-stack**
-4. Name the Change set as **ServerlessOps-changeset**
-5. The template file that CodeBuild generates is *SAM-template.yaml*. Set it under Template file.
-6. Select Capabilities *CAPABILITIES_IAM*
-7. This is the role assumed by CloudFormation to deploy your code. For the shake of this training, we will use Administration permissions. Please bare in mind that these permissions should be the ones used by your stack (such as creating an API, Lambda Function, S3...). *Create/use an IAM role for CloudFormation with Administrator permissions*.
-8. In the next step we will *define the role used by CodePipeline* to access resources such as CodeBuild, CodeCommit, S3... If you have created a role previously, you can use it, if not click on Create role. By allowing the default policy, it will create a role called *AWS-CodePipeline-Service*. Then, click *Next Step*.
-9. Review the configuration and create the pipeline.
-<img src="../images/codepipeline4.png" />
-
-### Step 2.3.4: Review the CodeBuild IAM role to add S3 Permissions.
-
-The IAM role created by CodeBuild doesn't have the specific permissions for the instruction needed on it's buildspec.yml:
-
-```
-aws cloudformation package --template-file template.yaml --s3-bucket  serverless-ops-my-deployments-<your-alias> --output-template-file SAM-template.yaml
-```
-
-After creating the pipeline, you will see that it fails during the build phase due to a permissions issue. We need to add these permissions (S3).
-
-1. Go to the IAM Console and look for the role.
-2. Attach an S3 administator policy to this role.
-
-
-<details><summary>CodeBuild Role:</summary>
-
-```JSON
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Resource": [
-                "arn:aws:logs:us-east-1:012345678901:log-group:/aws/codebuild/from-sam-to-aws",
-                "arn:aws:logs:us-east-1:012345678901:log-group:/aws/codebuild/from-sam-to-aws:*"
-            ],
-            "Action": [
-                "logs:CreateLogGroup",
-                "logs:CreateLogStream",
-                "logs:PutLogEvents"
-            ]
-        },
-        {
-            "Effect": "Allow",
-            "Resource": [
-                "arn:aws:s3:::codepipeline-us-east-1-*"
-            ],
-            "Action": [
-                "s3:PutObject",
-                "s3:GetObject",
-                "s3:GetObjectVersion"
-            ]
-        },
-        {
-            "Effect": "Allow",
-            "Action": "s3:*",
-            "Resource": "arn:aws:s3::012345678901:nameofyourbucket"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "ssm:GetParameters"
-            ],
-            "Resource": "arn:aws:ssm:us-east-1:012345678901:parameter/CodeBuild/*"
-        }
-    ]
-}
-```
-
-</details>
 
 ### Now, go to CloudFormation, execute change set.
 
