@@ -80,7 +80,7 @@ Let's make our release. As we did on previous steps, we will do it directly from
 
 <img src="../images/codedeploy.png" />
 
-We are shifting traffic 10% each minute! This has been done using 2 lines on SAM. How awesome is it?
+We are shifting traffic 10% each minute! This has been done using 2 lines on SAM. How awesome it is?
 
 You can run tests (different requests) against the application to find see the different results.
 
@@ -133,11 +133,6 @@ Or if you want to go beyond that, try to build your first integration test!
 
 
 ## 4.3. Lambda Concurrency.
-
-##Change on CloudFormation!! 
-
-https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-reservedconcurrentexecutions
-
 
 AWS Lambda limits your concurrency to 1000 concurrent executions within one region. Of course, these limits can be updated by requesting a limit increase to our support team. However, it is always a good idea to limit your functions to certain amount of concurrent executions. 
 
@@ -212,3 +207,7 @@ Response time histogram:
   [200]	499 responses
 ```
 As we can see here, the 502's responses has increased! 
+
+https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-reservedconcurrentexecutions
+
+
