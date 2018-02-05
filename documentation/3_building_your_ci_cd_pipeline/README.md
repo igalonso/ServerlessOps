@@ -69,7 +69,7 @@ Upload it.
 
 <img src="../images/codecommit_create_repository.png" width="70%" />
 
-2. Enter a repository name such as **ServerlessOps_Repository**
+2. Enter a repository name such as ```ServerlessOps_Repository```
 3. Skip Configure email notifications' step.
 4. Follow the steps provided by CodeCommit to **Connect to your repository**
 
@@ -96,7 +96,7 @@ Now, let's try the application. Go to the public bucket url and test it.
 Now we are going to create our first pipeline! 
 
 1. Go to the CodePipeline console and click on **Get Started**
-2. Create a Pipeline with the name **ServerlessOps_pipeline** and click on next step.
+2. Create a Pipeline with the name ```ServerlessOps_pipeline``` and click on next step.
 
 <img src="../images/codepipeline1.png" />
 

@@ -17,7 +17,7 @@ To deploy these assets go to the step0 folder and find the follwing file:
 <img src="../images/0_cloudformation_stack.png" />
 
 1. Go to the **CloudFormation** Console and click on create a new stack.
-2. Write the Stack name **ServerlessOps-step0-stack** your **Alias** and click continue.
+2. Write the Stack name ```ServerlessOps-step0-stack``` your **Alias** and click continue.
 3. Once you are in the final option page, enable CloudFormation to create IAM resources:
 
 <img src="../images/0_cloudformation_iam_permissions.png" />
@@ -53,7 +53,7 @@ During the course of this workshop we will use this web page as the application 
 You can use this command once you are within the *frontend* folder:
 
 ```bash
-aws s3 cp . s3://ServerlessOps-step0-stack-serverlessopsfrontend-<random-string>
+aws s3 cp . s3://ServerlessOps-step0-stack-serverlessopsfrontend-<random-string> --recursive
 ```
 
 Of course, you need to change <random-string> with your actual bucket.

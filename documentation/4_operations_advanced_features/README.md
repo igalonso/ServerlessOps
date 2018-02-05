@@ -1,81 +1,142 @@
 # 4. Operations: Advanced Features
 
 ## 4.1. Blue Green Deployments
-## 4.2. API Gateway Canary releases.
-## 4.3. Lambda Concurrency.
 
 
-## Step 4: Update your code to force a release!
 
-Let's make our first release. We could simply use a release change within the pipeline console but, in order to demonstrate the automation, we will do it directly from the console/git command:
+## 4.1: Blue Green Deployments
+
+One of the most wanted features for Serverless applications is the possibility of shifting the traffic to, for example, prevent failing deployments to impact your application entirely. Some others like to shift the traffic to monitor if their infrastructure (behind the scenes) can stand it. 
+
+With Lambda, you can easily create this traffic shifting feature with just a few lines of SAM code:
+
+### 4.1.1: Update your deployment preference
+
+1. Go to the file *template.yaml* and uncomment these lines:
+
+	```yaml
+	DeploymentPreference:
+	Type: Linear10PercentEvery1Minute
+	```
+	
+2. We need to perform a visible change on our infrastructure to see how it works. Change your function code to this in your development environment.
+	
+	```javascript
+	'use strict';
+	const util = require('util');
+	const AWS = require('aws-sdk');
+	const rekognition = new AWS.Rekognition({region: process.env.AWS_REGION});
+	
+	const createResponse = (statusCode, body) => {
+	    
+	    return {
+	        "statusCode": statusCode,
+	        "headers": {
+	            'Access-Control-Allow-Origin': '*'
+	        },
+	        "body": JSON.stringify(body)
+	    }
+	};
+	exports.handler = (event, context, callback) => {
+	    const body = JSON.parse(event.body);
+	    const srcBucket = body.bucket;
+	    const srcKey = decodeURIComponent(body.key ? body.key.replace(/\+/g, " ") : null); 
+	
+	    var params = {
+	        Image: {
+	            S3Object: {
+	                Bucket: srcBucket,
+	                Name: srcKey 
+	            }
+	        }
+	    };
+	
+	    setTimeout(function(){
+	        rekognition.recognizeCelebrities(params).promise().then(function(result) {
+	        rekognition.detectLabels(params).promise().then(function (data){
+	            result.Labels = data.Labels;
+	            callback(null, createResponse(200, result));
+	        });
+	    }).catch(function (err) {
+	        callback(null, createResponse(err.statusCode, err));
+	    })},3000);    
+	};
+	```
+
+Now, let's do a deployment!
+
+
+
+### 4.1.2: Update your code to force a release!
+
+Let's make our release. As we did on previous steps, we will do it directly from the console/git command:
 
 1. Run the following git commands:
 
 	```
 	git add -A
-	git commit -m "My first commit! - ServerlessOps"
+	git commit -m "My first b/g commit! - ServerlessOps"
 	git push
 	```
 
-2. Go back to the CodePipeline Console to see the release.
-
-The code will stop at staging, yet the Pipeline won't have generated any resources such as APIs, Lambdas... Why? Because the Pipeline should have generated a ChangeSet. You can go to CloudFormation, select the stack and execute the change set.
-
-A final stage should be added to the pipeline. ExecuteChangeSet is required.
-
-1. On the CodePipeline console, click on *Edit*.
-2. At the bottom of your pipeline, click on the icon *+ Stage*.
-3. Enter a stage name like *ExecuteChangeSet*.
-4. Click on Action.
-5. Under Action Category, select *Deploy*.
-6. Name the action *ExecuteChangeSet*.
-7. The deployment provider will be CloudFormation.
-8. Under Action mode, select *Execute a change set*.
-9. Select the stack and the Change set name.
-10. Save the Stage and click on *Save pipeline changes*.
-
-Now, it's time to make a change. Our web application is clearly incomplete! We need to find out the celebrities in our photo!
-
-To do this, we need to change the code behind this file:
- 
- ```
- functions/getinfo/index.js
- ```
-With the content within
-
-```
-functions/getinfoenhanced/index.js
-```
-
-After doing it, we need to commit these changes. Use the previously mentioned git commands to push the code to git commit:
- 
-```
-git add -A
-git commit -m "Adding celebrities to the result."
-git push
-```
-
-## Step 5: Let's review our deployment!
-
-Now that we have made a change on our code it should be reflected on the result. But wait... Does it? No! We are B/G deploying it! Follow these steps:
-
-1. Go to CodeDeploy and select the deployment that starts with ServerlessOps-stack.
-2. Under status, you should see an identifies starting with "d-". Click it.
+2. Go to CodeDeploy and select the deployment that starts with ServerlessOps-stack.
+3. Under status, you should see an identifies starting with "d-". Click it.
 
 <img src="../images/codedeploy.png" />
 
-We are shifting traffic 10% each minute! This has been done using 3 lines on sam:
+We are shifting traffic 10% each minute! This has been done using 2 lines on SAM. How awesome is it?
 
+You can run tests (different requests) against the application to find see the different results.
+
+### 4.1.3 OPTIONAL - Use hooks and alarms.
+<details>
+<summary><strong>Optional Blue/Green deployment exercise (expand for details)</strong></summary><p>
+Now that you have seen how easy is to deploy with blue green deployments, you might want to investigate hooks and alarms to monitor and trigger automated rollback of your deployments.
+
+```yaml
+Alarms:
+	# A list of alarms that you want to monitor
+	- !Ref AliasErrorMetricGreaterThanZeroAlarm
+	- !Ref LatestVersionErrorMetricGreaterThanZeroAlarm
 ```
-AutoPublishAlias: live
-      DeploymentPreference:
-        Type: Linear10PercentEvery1Minute
+
+During traffic shifting, if any of the CloudWatch Alarms go to Alarm state, CodeDeploy will immediately flip the Alias back to old version and report a failure to CloudFormation.
+
+If you want to implement this feature, you can start by creating an alarm and prepare and reference it in your *template.yaml*. Then, using [set-alarm-state](https://docs.aws.amazon.com/cli/latest/reference/cloudwatch/set-alarm-state.html) you can change it into *ALARM* and rollback the deployment you want.
+
+
+```yaml
+Hooks:
+	# Validation Lambda functions that are run before & after traffic shifting
+	PreTraffic: !Ref PreTrafficLambdaFunction
+	PostTraffic: !Ref PostTrafficLambdaFunction
 ```
 
-You can run tests against the application to find see the different requests.
+Before traffic shifting starts, CodeDeploy will invoke the PreTraffic Hook Lambda Function. This Lambda function must call back to CodeDeploy with an explicit status of Success or Failure, via the [PutLifecycleEventHookExecutionStatus](https://docs.aws.amazon.com/codedeploy/latest/APIReference/API_PutLifecycleEventHookExecutionStatus.html) API. On Failure, CodeDeploy will abort and report a failure back to CloudFormation. On Success, CodeDeploy will proceed with the specified traffic shifting.
+
+If you want to implement this feature, you can create a Lambda function based on [this one](https://github.com/awslabs/serverless-application-model/blob/master/examples/2016-10-31/lambda_safe_deployments/preTrafficHook.js). For example, for the shake of this workshop, you can use a random choice such as **1** equals, it's validated, **0** has failed. Here is, for example, a pice of the code you might want to use:
+
+```javascript
+var rand_status = 'Succeeded';
+if(Math.floor(Math.random() * Math.floor(2)) < 0){
+	rand_status = 'Failed';
+}
+
+var params = {
+    deploymentId: deploymentId,
+    lifecycleEventHookExecutionId: lifecycleEventHookExecutionId,
+    status: rand_status 
+};
+```
+
+Or if you want to go beyond that, try to build your first integration test!
+
+</p></details>
+
+## 4.2. API Gateway Canary releases.
 
 
-## Step 6: Set concurrency in your Lambda Function.
+## 4.3. Lambda Concurrency.
 
 ##Change on CloudFormation!! 
 
