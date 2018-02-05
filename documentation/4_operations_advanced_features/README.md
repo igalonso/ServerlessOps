@@ -23,44 +23,46 @@ With Lambda, you can easily create this traffic shifting feature with just a few
 	const AWS = require('aws-sdk');
 	const rekognition = new AWS.Rekognition({region: process.env.AWS_REGION});
 	
+	
 	const createResponse = (statusCode, body) => {
 	    
-	    return {
-	        "statusCode": statusCode,
-	        "headers": {
-	            'Access-Control-Allow-Origin': '*'
-	        },
-	        "body": JSON.stringify(body)
+	return {
+	    "statusCode": statusCode,
+	    "headers": {
+	        'Access-Control-Allow-Origin': '*'
+	    },
+	    "body": JSON.stringify(body)
+	}
+	};
+	
+	
+	exports.handler = (event, context, callback) => {
+	const body = JSON.parse(event.body);
+	const srcBucket = body.bucket;
+	const srcKey = decodeURIComponent(body.key ? body.key.replace(/\+/g, " ") : null); 
+	
+	var params = {
+	    Image: {
+	        S3Object: {
+	            Bucket: srcBucket,
+	            Name: srcKey 
+	        }
 	    }
 	};
-	exports.handler = (event, context, callback) => {
-	    const body = JSON.parse(event.body);
-	    const srcBucket = body.bucket;
-	    const srcKey = decodeURIComponent(body.key ? body.key.replace(/\+/g, " ") : null); 
-	
-	    var params = {
-	        Image: {
-	            S3Object: {
-	                Bucket: srcBucket,
-	                Name: srcKey 
-	            }
-	        }
-	    };
-	
-	    setTimeout(function(){
-	        rekognition.recognizeCelebrities(params).promise().then(function(result) {
-	        rekognition.detectLabels(params).promise().then(function (data){
-	            result.Labels = data.Labels;
+	setTimeout(function(){
+	    rekognition.recognizeCelebrities(params).promise().then(function(result) {
+	    rekognition.detectText(params).promise().then(function (data){
+	        result.TextDetections = data.TextDetections;
 	            callback(null, createResponse(200, result));
 	        });
-	    }).catch(function (err) {
-	        callback(null, createResponse(err.statusCode, err));
-	    })},3000);    
+	}).catch(function (err) {
+	    callback(null, createResponse(err.statusCode, err));
+	})},3000);
+	    
 	};
 	```
 
 Now, let's do a deployment!
-
 
 
 ### 4.1.2: Update your code to force a release!
@@ -82,7 +84,7 @@ Let's make our release. As we did on previous steps, we will do it directly from
 
 We are shifting traffic 10% each minute! This has been done using 2 lines on SAM. How awesome it is?
 
-You can run tests (different requests) against the application to find see the different results.
+You can run tests (different requests) against the application to find see the different results. Sometimes it will give you the labels and sometime, text found on the picture!
 
 ### 4.1.3 OPTIONAL - Use hooks and alarms.
 <details>
