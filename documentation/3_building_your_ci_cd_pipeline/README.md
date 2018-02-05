@@ -238,5 +238,7 @@ git commit -m "Adding famous labels to the application."
 git push
 ````
 
-Now it works!
+After the pipeline has propagated the change, go back to your application... Can you see the difference?
+
+If you are ready, go to the next [section](../../documentation/4_operations_advanced_features)
 

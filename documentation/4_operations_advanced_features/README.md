@@ -1,55 +1,9 @@
-## 4. [Operations: Advanced Features] (documentation/4_opeations_advanced_features)
-### 4.1. Setup your frontend.
-### 4.2. Blue Green Deployments
-### 4.3. API Gateway Canary releases.
-### 4.4. Lambda Concurrency.
+# 4. Operations: Advanced Features
 
+## 4.1. Blue Green Deployments
+## 4.2. API Gateway Canary releases.
+## 4.3. Lambda Concurrency.
 
-## Step 3: The front end.
-
-In order to make this web page available for every customer, we will have to upload it to S3. 
-
-### Step 3.1: Prepare the front-end. 
-
-The first step is to modify the javascript to point to the API created by your pipeline and the image to review. 
-
-1. Go to the AWS API Gateway console.
-2. Select the API *ServerlessOps-api*.
-3. Under Stages, select *Prod*.
-4. Copy the Invoke URL presented there.
-5. Open the file under the project tree: 
-
-	```
-	ServerlessOps > frontend > front-js > assets.js
-	```
-6. Change the variable api with the URL copied before.
-
-
-### Step 3.2: Upload the front-end.
-
-Now, let's upload this content to S3.
-
-1. Create bucket called:
-
-	```
-	serverless-ops-frontend-<your-alias>
-	```
-1. Upload all the content within the folder *frontend*.
-
-	Configure your bucket for Website hosting by following these 3 simple steps in our documentation:
-
- - https://docs.aws.amazon.com/AmazonS3/latest/dev/HowDoIWebsiteConfiguration.html
-
-1. Change the bucket name and confirm that the image is in the bucket. (the image should be in the same bucket as the front-end).
-
-Now we should be able to open the application locally by opening the file:
-
-```
-ServerlessOps > frontend > index.html
-```
-
-
-Now, go to your application and test it!
 
 ## Step 4: Update your code to force a release!
 
