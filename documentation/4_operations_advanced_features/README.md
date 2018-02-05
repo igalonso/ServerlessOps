@@ -170,7 +170,8 @@ At this point, this code should have been released. Let's manually set the concu
 2. Select the Lambda Function deployed by our SAM template (starts with *ServerlessOps-stack-LambdaFunction-)*.
 3. Under Configuration tab, set the concurrency to 25.
 
-![Add concurrency](documentation/images/lambda-concurrency.png)
+	![Add concurrency](../images/lambda-concurrency.png)
+
 4. Save the function.
 
 It is important to understand that this concurrency is shared between all the aliases and versions of this function. Lambda concurrency is function based.
