@@ -118,28 +118,29 @@ In the phase of creating a build project, we select "Create a new build project"
 
 Within the project, the file buildspec.yml has the information necesary for your deployments. If we inspect this file, we will find that the deployment generages a file calles SAM-template.yaml which replaces the "local code" with a file within the S3 bucket previously provided.
 
-1. Name it as *ServerlessOps_build*.
-2. Select *Use an image managed by AWs CodeBuild*.
-3. Chose *Ubuntu* as the Operating system.
-4. Select *Node.js* as the runtime.
-5. Select Version *4.3.2*.
-3. Select *Create a service role in your account*. We will review it after creating the pipeline.
+1. Name it as ```ServerlessOps_build```.
+2. Select ```Use an image managed by AWs CodeBuild```.
+3. Chose ```Ubuntu``` as the Operating system.
+4. Select ```Node.js``` as the runtime.
+5. Select Version ```4.3.2```.
+3. Select ```Chose an existing service role from your account``` and, on that dropdown, select ```ServerlessOps-codebuildrole```. We will review it after creating the pipeline.
 4. Click on *Save build project*
 
 <img src="../images/codepipeline3.png" />
 
 ### Step 3.2.3: Select the deploy phase using CloudFormation.
 
-Click on Next Step once you have created your build project. Altough SAM (behind the scenes) will use CodeDeploy, SAM is based in CloudFormation and the deploy will do it as well.
+Click on *Next Step* once you have created your build project. Altough SAM (behind the scenes) will use CodeDeploy, SAM is based in CloudFormation and the deploy will do it as well.
 
-1. Select *CloudFormation* as the deployment provider.
-2. Chose *Change or replace a change set* as the Action Mode.
-3. Name the Stack **ServerlessOps-stack**
-4. Name the Change set as **ServerlessOps-changeset**
-5. The template file that CodeBuild generates is *SAM-template.yaml*. Set it under Template file.
-6. Select Capabilities *CAPABILITIES_IAM*
-7. This is the role assumed by CloudFormation to deploy your code. For the shake of this training, we will use Administration permissions. Please bare in mind that these permissions should be the ones used by your stack (such as creating an API, Lambda Function, S3...). *Create/use an IAM role for CloudFormation with Administrator permissions*.
-8. In the next step we will *define the role used by CodePipeline* to access resources such as CodeBuild, CodeCommit, S3... If you have created a role previously, you can use it, if not click on Create role. By allowing the default policy, it will create a role called *AWS-CodePipeline-Service*. Then, click *Next Step*.
+1. Select ```CloudFormation``` as the deployment provider.
+2. Chose ```Change or replace a change set``` as the Action Mode.
+3. Name the Stack ```ServerlessOps-stack```
+4. Name the Change set as ```ServerlessOps-changeset```
+5. The template file that CodeBuild generates is ```SAM-template.yaml```. Set it under Template file.
+6. Select Capabilities ```CAPABILITIES_IAM```
+7. Select the role created in *step 1* called ```ServerlessOps-cloudformationrole```.
+8. Click *Next Step*.
+9. In this AWS Service Role, CodePipeline should have permissions to add new stacks to *CloudFormation*, pull code from *CodeCommit*... If you don't have it, click on *Create role* and follow the steps mentioned after it.
 9. Review the configuration and create the pipeline.
 <img src="../images/codepipeline4.png" />
 
@@ -148,9 +149,35 @@ Click on Next Step once you have created your build project. Altough SAM (behind
 
 Go to the **CodePipeline** console and take a look at all the stages flowing. This might take a while but worth seeing!
 
-After everything is in green, does it work? No. you need to go to CloudFormation and Execute the ChangeSet.
+After everything is in green, did it work? Have you deployed a new API? Seems like you haven't!
 
-Let's add this tep to the pipeline
+You need to go to CloudFormation and Execute the ChangeSet.
+
+1. Select the stack *ServerlessOps-stack*. On the down panel, click on *Change sets*. 
+2. Click on the Change Set called *ServerlessOps-changeset*.
+2. On the new page, click on *Execute*. Accept the warning by clicking again, *Execute*.
+
+<img src="../images/cloudformation-execute.png" />
+
+But... This isn't pretty automatic, right? Sometimes, we might want to review all the change set before we proceed but, in this case, we want to have it all automated. To achieve it, let's add a new step to our pipeline!
+
+1. Go to the *CodePipeline* console.
+2. Select *ServelessOps_pipeline* and click *Edit*.
+3. Under the stage *Staging*, click on the pen icon:
+<img src="../images/codepipeline-staging-changeset.png" />
+4. Click on Action and, in the new panel, add *Action category* as ```Deploy```.
+5. Action name, call it ```ExecuteChangeSet```.
+6. Under *Deployment provider*, select *AWS CloudFormation*.
+7. Then, a new panel for CloudFormation will appear. Select Action mode *Execute a change set*, Stack name ```ServerlessOps-stack```and Change set name, ```ServerlessOps-changeset```.
+8. Click on *Add action*.
+9. On top of the page, click *Save pipeline changes*.
+<img src="../images/codepipeline-staging-changeset-2.png" />
+
+Your pipeline should look like this:
+
+<img src="../images/codepipeline-staging-changeset-3.png" />
+
+
 
 ## 3.5. Try again to  push to you pipeline.
 
@@ -212,52 +239,4 @@ git push
 ````
 
 Now it works!
-
-## Step 3: Building the Pipeline!
-
-
-
-##### Note: The *yaml* template - SAM!
-
-The folder with the code has the following tree:
-
-    ├── README.md
-    ├── *buildspec.yml*
-    ├── documentation
-    │   └── images
-    │       └── ...
-    ├── frontend
-    │   ├── assets
-    │   │   └── ...
-    │   ├── front-js
-    │   │   ├── assets.js
-    │   │   └── ...
-    │   ├── *index.html*
-    │   └── ...
-    ├── functions
-    │   ├── getinfo
-    │   │   └── *index.js*
-    │   └── getinfoenhanced
-    │       └── *index.js*
-    ├── old
-    │   └── ...
-    ├── swagger.yaml
-    └── *template.yaml*
-
-The important files here are represented by *name of the file *.
-
-The SAM template is called **template.yaml** and has two resources:
-1. An API
-2. A function
-
-The function has an API method defined in the API as the event trigger. This method is define in the file **swagger.yaml** as well as some other features such as CORS.
-
-During this Lab we will modify the function **"getinfo"** with the code within **"getinfoenhanced"** to demonstrate how can propagate a change within the pipeline and deploy it in a Blue/Green matter.
-
-
-## Step 2.3: Creating the pipeline with CodePipeline
-
-
-
-### Now, go to CloudFormation, execute change set.
 

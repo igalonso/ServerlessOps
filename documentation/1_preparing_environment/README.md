@@ -46,6 +46,16 @@ uri: arn:aws:apigateway:<region>:lambda:path/2015-03-31/functions/arn:aws:lambda
 
 Here you have to change `<region>` and `<AccountId>`with the region you're deploying in and the account Id you are using.
 
-## Step X: Preparing the field:
+## 1.4. Upload your web page
+
+During the course of this workshop we will use this web page as the application we will be changing over time. In this case, upload all the content under *frontend* to the S3 bucket created by **step 1.1.1**. 
+
+You can use this command once you are within the *frontend* folder:
+
+```bash
+aws s3 cp . s3://ServerlessOps-step0-stack-serverlessopsfrontend-<random-string>
+```
+
+Of course, you need to change <random-string> with your actual bucket.
 
 Once you have finished this step you can start the second step [here](../../documentation/2_develop_with_cloud9).

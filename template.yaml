@@ -28,7 +28,7 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
             Path: /getinfo
             Method: POST
-      #AutoPublishAlias: live
+      AutoPublishAlias: live
       #DeploymentPreference:
       #  Type: Linear10PercentEvery1Minute
       #   Alarms:
@@ -39,3 +39,4 @@ Resources:
       #     # Validation Lambda functions that are run before & after traffic shifting
       #     PreTraffic: !Ref PreTrafficLambdaFunction
       #     PostTraffic: !Ref PostTrafficLambdaFunction
+      ##ReservedConcurrentExecutions : 10
