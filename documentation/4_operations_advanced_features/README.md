@@ -1,9 +1,5 @@
 # 4. Operations: Advanced Features
 
-## 4.1. Blue Green Deployments
-
-
-
 ## 4.1: Blue Green Deployments
 
 One of the most wanted features for Serverless applications is the possibility of shifting the traffic to, for example, prevent failing deployments to impact your application entirely. Some others like to shift the traffic to monitor if their infrastructure (behind the scenes) can stand it. 
