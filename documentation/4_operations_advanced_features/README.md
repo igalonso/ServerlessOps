@@ -12,7 +12,7 @@ With Lambda, you can easily create this traffic shifting feature with just a few
 
 	```yaml
 	DeploymentPreference:
-	Type: Linear10PercentEvery1Minute
+		Type: Linear10PercentEvery1Minute
 	```
 	
 2. We need to perform a visible change on our infrastructure to see how it works. Change your function code to this in your development environment.
@@ -26,39 +26,40 @@ With Lambda, you can easily create this traffic shifting feature with just a few
 	
 	const createResponse = (statusCode, body) => {
 	    
-	return {
-	    "statusCode": statusCode,
-	    "headers": {
-	        'Access-Control-Allow-Origin': '*'
-	    },
-	    "body": JSON.stringify(body)
-	}
-	};
-	
-	
-	exports.handler = (event, context, callback) => {
-	const body = JSON.parse(event.body);
-	const srcBucket = body.bucket;
-	const srcKey = decodeURIComponent(body.key ? body.key.replace(/\+/g, " ") : null); 
-	
-	var params = {
-	    Image: {
-	        S3Object: {
-	            Bucket: srcBucket,
-	            Name: srcKey 
-	        }
+	    return {
+	        "statusCode": statusCode,
+	        "headers": {
+	            'Access-Control-Allow-Origin': '*'
+	        },
+	        "body": JSON.stringify(body)
 	    }
 	};
-	setTimeout(function(){
-	    rekognition.recognizeCelebrities(params).promise().then(function(result) {
-	    rekognition.detectText(params).promise().then(function (data){
-	        result.TextDetections = data.TextDetections;
-	            callback(null, createResponse(200, result));
-	        });
-	}).catch(function (err) {
-	    callback(null, createResponse(err.statusCode, err));
-	})},3000);
-	    
+	exports.handler = (event, context, callback) => {
+	    const body = JSON.parse(event.body);
+	    const srcBucket = body.bucket;
+	    const srcKey = decodeURIComponent(body.key ? body.key.replace(/\+/g, " ") : null); 
+	
+	    var params = {
+	        Image: {
+	            S3Object: {
+	                Bucket: srcBucket,
+	                Name: srcKey 
+	            }
+	        }
+	    };
+	
+	    setTimeout(function(){
+	        rekognition.recognizeCelebrities(params).promise().then(function(result) {
+	            rekognition.detectText(params).promise().then(function (detectedtext){
+	                result.TextDetections = detectedtext;
+	                rekognition.detectLabels(params).promise().then(function (labels){
+	                    result.Labels = labels;
+	                    callback(null, createResponse(200, result));
+	                });
+	            });
+	    }).catch(function (err) {
+	        callback(null, createResponse(err.statusCode, err));
+	    })},3000); 
 	};
 	```
 
@@ -138,9 +139,9 @@ Or if you want to go beyond that, try to build your first integration test!
 
 AWS Lambda limits your concurrency to 1000 concurrent executions within one region. Of course, these limits can be updated by requesting a limit increase to our support team. However, it is always a good idea to limit your functions to certain amount of concurrent executions. 
 
-Let's put an example: We have our own environment with several developers pushing code and testing lambda functions. We are deeply into Serverless! Some of these functions are just for testing purposes but one of our developers is doing a load test to see how does it react to heavy load. Because of this, his tesing lambda function is taking 900 concurrent executions letting only 100 left for the rest of your Lambda functions. Luckily, you followed the best practices and split testing and production in two different accounts so this is not impacting your production environment but, of course, the rest of the developers are seeing 429 in the Lambda execution whenever they trigger their functions. You got several angry developers! How can we avoid this?
+Let's put an example: We have our own environment with several developers pushing code and testing lambda functions. We are deeply into Serverless! Some of these functions are just for testing purposes but one of our developers is doing a load test to see how does it react to heavy load. Because of this, his tesing lambda function is taking 900 concurrent executions letting only 100 left for the rest of your Lambda functions. Luckily, you followed the best practices and split testing and production in two different accounts so this is not impacting your production environment but, of course, the rest of the developers are seeing 429 in the Lambda execution whenever they trigger their functions. You got several angry developers!
 
-Another use case would be to "reserve" capacity for our Lambda function so other executions won't take it.
+Another use case would be to "reserve" capacity for our Lambda function so other Lambda executions won't take these.
 
 For the purpose of this workshop, we are going to limit the concurrency of our function to 25. You probably noticed in the code that there is "wait" of 3000 seconds.
 
@@ -161,20 +162,66 @@ brew install go
 
 go get -u github.com/rakyll/hey
 
-./go/bin/hey -n 1000 -c 50 \
--d '{ "bucket": "serverless-ops-frontend-<your-alias-here>","key": "someguy.jpg"}' \ 
--H 'Content-Type: application/json' -m POST https://<your-api-endpoint>/Prod/getinfo
+./go/bin/hey -n 5000 -c 50 -d '{ "bucket": "serverlessops-step0-stack-serverlessopsfrontend-<your-alias-here>","key": "someguy.jpg"}' -H 'Content-Type: application/json' -m POST https://<your-api-endpoint>/Prod/getinfo
 ```
 
-At this point, this code should have been released. Let's manually set the concurrency for our Lambda Function.
+Yoy should see the a result like this:
 
-1. Go to the Lambda Console.
-2. Select the Lambda Function deployed by our SAM template (starts with *ServerlessOps-stack-LambdaFunction-)*.
-3. Under Configuration tab, set the concurrency to 25.
+```bash
+Response time histogram:
+  5.452 [1]	|
+  5.973 [3626]	|∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎
+  6.493 [1095]	|∎∎∎∎∎∎∎∎∎∎∎∎
+  7.014 [185]	|∎∎
+  7.534 [55]	|∎
+  8.055 [24]	|
+  8.575 [6]	|
+  9.096 [3]	|
+  9.616 [1]	|
+  10.137 [2]	|
+  10.658 [2]	|
 
-	![Add concurrency](../images/lambda-concurrency.png)
+Status code distribution:
+  [200]	5000 responses
+```
 
-4. Save the function.
+Let's enable concurrency in your Lambda. To do so, we will implement it via SAM. We are going to remove the blue green deployment and add a line for concurrency reserverd executions. Uncomment the line `ReservedConcurrentExecutions` Your Lambda Function in SAM should look like this:
+
+```yaml
+LambdaFunction:
+   Type: AWS::Serverless::Function
+   Properties:
+      CodeUri: functions/getinfo
+      Description: "Backend Lambda for Serverless Ops Workshop"
+      Handler: index.handler
+      Timeout: 60
+      Policies: 
+        - AmazonRekognitionFullAccess
+        - AmazonS3ReadOnlyAccess
+      Runtime: nodejs4.3
+      Events:
+        ProxyApiRoot:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGatewayApi
+            Path: /getinfo
+            Method: POST
+      AutoPublishAlias: live
+      ReservedConcurrentExecutions : 25
+```
+
+Seems like CloudFormation in SAM doesn't work right now:
+
+ - aws lambda put-function-concurrency --function-name ServerlessOps-stack-LambdaFunction-<your-alias> --reserved-concurrent-executions 25
+
+Now, as always, let's deploy it through our pipeline.
+
+```bash
+git add -A
+git commit -m "Adding concurrecy limits"
+git push
+```
+After the change is propagated, we can review it on our AWS Lambda console.
 
 It is important to understand that this concurrency is shared between all the aliases and versions of this function. Lambda concurrency is function based.
 
@@ -183,12 +230,10 @@ To test this concurrency, let's go to our terminal and run the previous command 
 
 
 ```bash
-./go/bin/hey -n 1000 -c 50 \
--d '{ "bucket": "serverless-ops-frontend-<your-alias-here>","key": "someguy.jpg"}' \ 
--H 'Content-Type: application/json' -m POST https://<your-api-endpoint>/Prod/getinfo
+./go/bin/hey -n 5000 -c 50 -d '{ "bucket": "serverlessops-step0-stack-serverlessopsfrontend-<your-alias-here>","key": "someguy.jpg"}' -H 'Content-Type: application/json' -m POST https://<your-api-endpoint>/Prod/getinfo
 ```
 
-You will definitely see something like this:
+You will see something like this:
 
 ```bash
 Response time histogram:
