@@ -1,4 +1,8 @@
-# 4. Operations: Advanced Features
+# 4. Operations: Advanced Features - WARNING: MEMES AHEAD
+
+Now you are prepare for some advaneced features. We have created a pipeline, changed different settings and reduced the operational overhead of our deployments. It's time to execute at the most reliable level!
+
+<img src="../images/joke-continious-delivery.png" width="75%" />
 
 ## 4.1: Blue Green Deployments
 
@@ -65,6 +69,7 @@ With Lambda, you can easily create this traffic shifting feature with just a few
 
 Now, let's do a deployment!
 
+<img src="../images/joke-rollback.png" width="50%"/>
 
 ### 4.1.2: Update your code to force a release!
 
@@ -134,6 +139,52 @@ Or if you want to go beyond that, try to build your first integration test!
 
 ## 4.2. API Gateway Canary releases.
 
+Sure, we have tested how to perform incremental deployments on our code but, when we do changes on our API, often, we need to test it first. Our customers love Canary testing because it allows them to test their API changes with real traffic yet it won't impact heavily their customer experience. 
+
+With API gateway, you can deploy these changes easily on an percentage of resources going to your API by using the API Gateway canary release option. 
+
+To do so, follow these steps:
+
+1. Go to the API Gateway console and click on *Stages* of the *ServerlessOps-api*.
+2. Click on the Stage where you want to add Canary. In this case, *Prod*.
+2. Click on the *Canary* tab.
+3. Click on *Create canary*.
+4. Under *Percentage of requests directed to Canary* edit it and put 10%. This will route 10% of your traffic to the Canary release of your API.
+	<img src="../images/canary-percentage.png"/>
+6. Now, let's make a change to be promoted. Under the same API go to *Gateway Response*.
+7. Look for *Missing Authentication Token* and open it. The Body Mapping Template should look like this:
+
+	```bash
+	{"message":$context.error.messageString}
+	```
+
+8. Change it to this:
+
+	```bash
+	{"message-customized":$context.error.messageString}
+	```
+9. Click on *Save*.
+10. Now, click on *Resources*, *Actions* and click *Deploy API*.
+11. Select the API Stage Prod. It will prompt a message saying that the canary release is enabled on this Stage. Click *Deploy*.
+
+Now, let's test this feature:
+
+1. Use the following command with the appropiate parameters for your API:
+
+``` bash
+curl -X POST   https://<api-id>.execute-api.us-east-1.amazonaws.com/Prod/a-ramdom-name-that-will-trigger-403 'Content-Type: application/json' -d '{ "bucket": "serverlessops-step0-stack-serverlessopsfrontend-<bucket-id>","key": "someguy.jpg"}'
+```
+Didn't work? Are you seeing the "message-customized" response? Of course not! you need to try to several times since only 10% of the traffic is going to the canary! Try a little harder.
+
+<img src="../images/joke-canary.png" width="80%"/>
+
+Now what? Did it work? Of course! We are ready to promote this Canary to release version. Go to *Stages > Prod > Canary* and click on Promote Canary and then OK. 
+
+<img src="../images/canary-promote.png" width="50%"/>
+
+Then, test a few *curls* more.
+
+It might take a while to propagate all the changes but you will see that, after a few attempts, all the responses have the *message-customized* response.
 
 ## 4.3. Lambda Concurrency.
 
