@@ -29,6 +29,3 @@ Resources:
             Path: /getinfo
             Method: POST
       AutoPublishAlias: live
-      #DeploymentPreference:
-      #  Type: Linear10PercentEvery1Minute
-      ##ReservedConcurrentExecutions : 10
