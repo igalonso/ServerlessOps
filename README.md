@@ -32,11 +32,11 @@ To start, please download the zip file with the content on this GitHub. To do th
 
 Then, you can start with the first step:
 
-###1. [Preparing the environment](documentation/1_preparing_environment)
-###2. [Develop with Cloud9](documentation/2_develop_with_cloud9)
-###3. [Building your CI/CD pipeline](documentation/3_building_your_ci_cd_pipeline)
-###4. [Operations: Advanced Features](documentation/4_operations_advanced_features)
-###5. [Closing and next steps](documentation/5_closing_and_next_steps).
+1. [Preparing the environment](documentation/1_preparing_environment)
+2. [Develop with Cloud9](documentation/2_develop_with_cloud9)
+3. [Building your CI/CD pipeline](documentation/3_building_your_ci_cd_pipeline)
+4. [Operations: Advanced Features](documentation/4_operations_advanced_features)
+5. [Closing and next steps](documentation/5_closing_and_next_steps).
 
 
 ### *Under develop*:
