@@ -1,5 +1,12 @@
 # 3. Building your CI/CD pipeline
+
+Remember this? Let's build it!
+
+<img src="../images/diagrams/serverlessops-workshop-workflow.png" />
+
 ## 3.1. Set up your repository with CodeCommit.
+
+We need to place our code in a repository. For this, we will use, CodeCommit.
 
 ### 3.1.1: Create IAM git credentials - SSH
 
