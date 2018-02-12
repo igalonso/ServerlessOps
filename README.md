@@ -1,19 +1,18 @@
 # ServerlessOps Workshop
 
-<img src="documentation/images/devops.png" center/>
+Serverless is the last iteration of reducing the cost and improving the efectiviness of the team. You can now focus on what really matters. Your business. 
 
-### *Under develop*:
+Serverless computing allows you to build and run applications and services without thinking about servers. Serverless applications don't require you to provision, scale, and manage any servers. You can build them for nearly any type of application or backend service, and everything required to run and scale your application with high availability is handled for you.
 
+<img src="documentation/images/devops.png"/>
 
---------
-Check [issues tab](../../issues)
+However, as [Ben Kehoe](https://www.slideshare.net/BenKehoe/serverless-operations-for-the-irobot-fleet) mentions during his sessions, Serverless doesn't mean **no ops**. It is **Different Ops**.
 
---------
-
+During the course of this workshop we will cover step by step some of the basic knowledge to operate Serverless applications on AWS.
 
 ## The application workflow
 
-Here you can see a diagram with the workflow of the actual application:
+Here you can see a diagram with the workflow of the application we will deploy:
 
 <img src="documentation/images/diagrams/serverlessops-workshop-app1.png" />
 
@@ -38,3 +37,12 @@ Then, you can start with the first step:
 3. [Building your CI/CD pipeline](documentation/3_building_your_ci_cd_pipeline)
 4. [Operations: Advanced Features](documentation/4_operations_advanced_features)
 5. [Closing and next steps](documentation/5_closing_and_next_steps).
+
+
+### *Under develop*:
+
+
+--------
+Check [issues tab](../../issues)
+
+--------
