@@ -1,6 +1,6 @@
 # ServerlessOps Workshop
 
-<img src="documentation/images/devops.png"/>
+<img src="documentation/images/devops.png" center/>
 
 ### *Under develop*:
 
