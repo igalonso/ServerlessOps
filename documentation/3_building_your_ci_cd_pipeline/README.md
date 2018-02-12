@@ -12,7 +12,7 @@ We need to place our code in a repository. For this, we will use, CodeCommit.
 
 Now, we have our deployment ready to go. To start building our pipeline, we need to create keys to our IAM user to be able to push/pull code from CodeCommit (our respository). Continue this guide to create these keys.
 
-### 3.1.1.1: SSH and Linux, macOS, or Unix: Set Up the Public and Private Keys for Git and AWS CodeCommit
+#### 3.1.1.1: SSH and Linux, macOS, or Unix: Set Up the Public and Private Keys for Git and AWS CodeCommit
 
 From the terminal on your local machine, run the ssh-keygen command, and follow the directions to save the file to the .ssh directory for your profile.
 
