@@ -12,29 +12,47 @@ In order to ease the workshop we have created a CloudFormation Stack that deploy
 
 ### 1.1.1: Deploy the Step 0 CloudFormation Stack.
 
-To deploy these assets go to the step0 folder and find the follwing file:
+To deploy these assets go to the step0 folder and find the following file:
 
 <img src="../images/0_cloudformation_stack.png" />
 
+Click on one of the following links. Beware! This will be the region you will use during the rest of the workshop!
+
+Region| Launch
+------|-----
+US East (N. Virginia) | [![Launch Step 0 in us-east-1](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=serverlessops-step0-stack&templateURL=https://s3.amazonaws.com/igngar/public/serverlessops-workshop/cf_step0.yml)
+US East (Ohio) | [![Launch Step 0 in us-east-2](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/new?stackName=serverlessops-step0-stack&templateURL=https://s3.amazonaws.com/igngar/public/serverlessops-workshop/cf_step0.yml)
+US West (Oregon) | [![Launch Step 0 in us-west-2](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=serverlessops-step0-stack&templateURL=https://s3.amazonaws.com/igngar/public/serverlessops-workshop/cf_step0.yml)
+EU (Frankfurt) | [![Launch Step 0 in eu-central-1](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-central-1#/stacks/new?stackName=serverlessops-step0-stack&templateURL=https://s3.amazonaws.com/igngar/public/serverlessops-workshop/cf_step0.yml)
+EU (Ireland) | [![Launch Step 0 in eu-west-1](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=serverlessops-step0-stack&templateURL=https://s3.amazonaws.com/igngar/public/serverlessops-workshop/cf_step0.yml)
+EU (London) | [![Launch Step 0 in eu-west-2](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-west-2#/stacks/new?stackName=serverlessops-step0-stack&templateURL=https://s3.amazonaws.com/igngar/public/serverlessops-workshop/cf_step0.yml)
+Asia Pacific (Tokyo) | [![Launch Step 0 in ap-northeast-1](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=ap-northeast-1#/stacks/new?stackName=serverlessops-step0-stack&templateURL=https://s3.amazonaws.com/igngar/public/serverlessops-workshop/cf_step0.yml)
+Asia Pacific (Seoul) | [![Launch Step 0 in ap-northeast-2](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=ap-northeast-2#/stacks/new?stackName=serverlessops-step0-stack&templateURL=https://s3.amazonaws.com/igngar/public/serverlessops-workshop/cf_step0.yml)
+Asia Pacific (Sydney) | [![Launch Step 0 in ap-southeast-2](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=ap-southeast-2#/stacks/new?stackName=serverlessops-step0-stack&templateURL=https://s3.amazonaws.com/wildrydes-ap-southeast-2/WebApplication/1_StaticWebHosting/webapp-static-hosting.yaml)
+Asia Pacific (Mumbai) | [![Launch Step 0 in ap-south-1](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=ap-south-1#/stacks/new?stackName=serverlessops-step0-stack&templateURL=https://s3.amazonaws.com/wildrydes-ap-south-1/WebApplication/1_StaticWebHosting/webapp-static-hosting.yaml)
+
+
 1. Go to the **CloudFormation** Console and click on create a new stack.
-2. Write the Stack name ```ServerlessOps-step0-stack``` your **Alias** and click continue.
+2. Verify the Stack name ```serverlessops-step0-stack```, write your **Alias** and click continue.
 3. Once you are in the final option page, enable CloudFormation to create IAM resources:
 
 <img src="../images/0_cloudformation_iam_permissions.png" />
 
 ## 1.2: Change the buildspec.yaml to add S3 deployments.
 
-The CloudFormation stack will create an S3 bucket for deployments with the following 
+The CloudFormation stack will create an S3 bucket for deployments with the following
 
 ```
 serverlessops-deploymentbucket-<your-alias-here>
 ```
 
-Within the code, go to `buildspec.yaml` and change the S3 bucket to the one you have just created. Basically, add the alias you added to the CloudFormation here.
+Take into account that the S3 bucket has to be unique! Your **Alias** should be unique among everyone so chose it wisely.
+
+Now we have to go to `buildspec.yaml`. You will find it in the root folder, of the ZIP you downloaded on previous steps. Change the S3 bucket to the one you have just created. Basically, add the alias you added to the CloudFormation here.
 
 ## 1.3. Review swagger
 
-Now, the application consists on an API, Lambda and Rekognition to get the tags of a photo. A key element on this application is the API which is defined by a swagger template called **swagger.yaml**.
+Now, the application consists on an API, Lambda and Rekognition to get the tags of a photo. A key element on this application is the API which is defined by a swagger template called `swagger.yaml`.
 
 Go to that file and and change the line 23 which cotains:
 
