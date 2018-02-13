@@ -12,57 +12,52 @@ Resources:
       AccessControl: PublicRead
       WebsiteConfiguration:
         IndexDocument: index.html
-  
-  ServerlessOpsCognitoRole:
-    Type: "AWS::IAM::Role"
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: "2012-10-17"
-        Statement: 
-          - 
-            Effect: "Allow"
-            Principal: 
-              Service: 
-                - "cognito.amazonaws.com"
-            Action: 
-              - "sts:AssumeRole"
-      Path: "/"
-      Policies: 
-        - 
-          PolicyName: "root"
-          PolicyDocument: 
-            Version: '2012-10-17'
-            Statement:
-              - Sid: S3PutFor
-                Effect: Allow
-                Principal: '*'
-                Action: 's3:GetObject'
-                Resource: !Join 
-                  - ''
-                  - - 'arn:aws:s3:::'
-                    - !Ref ServerlessOpsFrontend
-                    - /*
-      RoleName: "ServerlessOps-cognito"
 
   CognitoIdPool:
     Type: "AWS::Cognito::IdentityPool"
     Properties:
-      IdentityPoolName: ServerlessOps-cognitoIdPool
+      IdentityPoolName: serverlessopscognitoidpool
       AllowUnauthenticatedIdentities: true
+
+  CognitoUnauthorizedRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal: 
+              Federated: "cognito-identity.amazonaws.com"
+            Action: 
+              - "sts:AssumeRoleWithWebIdentity"
+            Condition:
+              StringEquals: 
+                "cognito-identity.amazonaws.com:aud": !Ref CognitoIdPool
+              "ForAnyValue:StringLike":
+                "cognito-identity.amazonaws.com:amr": unauthenticated
+      Policies:
+        - PolicyName: "CognitoAuthorizedPolicy"
+          PolicyDocument: 
+            Version: "2012-10-17"
+            Statement: 
+              - Effect: "Allow"
+                Action:
+                  - "mobileanalytics:PutEvents"
+                  - "cognito-sync:*"
+                  - "cognito-identity:*"
+                Resource: "*"
+              - Effect: "Allow"
+                Action:
+                  - "s3:*"
+                Resource: "*"
   
   CognitoIdPoolRoleAttachment:
     Type: "AWS::Cognito::IdentityPoolRoleAttachment"
     Properties:
       IdentityPoolId: !Ref CognitoIdPool
       Roles:
-        unauthenticated:
-          Fn::GetAtt:
-          - ServerlessOpsCognitoRole
-          - Arn
-        authenticated:
-          Fn::GetAtt:
-          - ServerlessOpsCognitoRole
-          - Arn
+        unauthenticated: !GetAtt CognitoUnauthorizedRole.Arn
+        authenticated: !GetAtt CognitoUnauthorizedRole.Arn
 
   
   ServerlessOpsDeployments:
