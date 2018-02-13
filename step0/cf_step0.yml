@@ -13,6 +13,58 @@ Resources:
       WebsiteConfiguration:
         IndexDocument: index.html
   
+  ServerlessOpsCognitoRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Effect: "Allow"
+            Principal: 
+              Service: 
+                - "cognito.amazonaws.com"
+            Action: 
+              - "sts:AssumeRole"
+      Path: "/"
+      Policies: 
+        - 
+          PolicyName: "root"
+          PolicyDocument: 
+            Version: '2012-10-17'
+            Statement:
+              - Sid: S3PutFor
+                Effect: Allow
+                Principal: '*'
+                Action: 's3:GetObject'
+                Resource: !Join 
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - !Ref ServerlessOpsFrontend
+                    - /*
+      RoleName: "ServerlessOps-cognito"
+
+  CognitoIdPool:
+    Type: "AWS::Cognito::IdentityPool"
+    Properties:
+      IdentityPoolName: ServerlessOps-cognitoIdPool
+      AllowUnauthenticatedIdentities: true
+  
+  CognitoIdPoolRoleAttachment:
+    Type: "AWS::Cognito::IdentityPoolRoleAttachment"
+    Properties:
+      IdentityPoolId: !Ref CognitoIdPool
+      Roles:
+        unauthenticated:
+          Fn::GetAtt:
+          - ServerlessOpsCognitoRole
+          - Arn
+        authenticated:
+          Fn::GetAtt:
+          - ServerlessOpsCognitoRole
+          - Arn
+
+  
   ServerlessOpsDeployments:
     Type: 'AWS::S3::Bucket'
     Properties:
@@ -38,6 +90,8 @@ Resources:
                 - !Ref ServerlessOpsFrontend
                 - /*
       Bucket: !Ref ServerlessOpsFrontend
+  
+
 
   ServerlessOpsCodeBuild:
     Type: "AWS::IAM::Role"
