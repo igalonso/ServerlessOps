@@ -8,7 +8,7 @@ Serverless computing allows you to build and run applications and services witho
 
 However, as [Ben Kehoe](https://www.slideshare.net/BenKehoe/serverless-operations-for-the-irobot-fleet) mentions during his sessions, Serverless doesn't mean **no ops**. It is **Different Ops**.
 
-During the course of this workshop we will cover step by step some of the basic knowledge to operate Serverless applications on AWS.
+During the course of this workshop we will cover step by step some of the basic knowledge to operate Serverless applications on AWS. This includes the basis of Serverless Operations like "how to manually create a pipeline" or "review a SAM template", "debug your code with SAM Local", "blue green deployments" or even "API Canary releases". Basic starting points for your day to day operations. Are you ready? Let's start with the operation!
 
 ## The application workflow
 
@@ -22,7 +22,6 @@ However, this is not the important part. Let's take a look at this new diagram:
 
 <img src="documentation/images/diagrams/serverlessops-workshop-workflow.png" />
 
-In this session you will learn the basis of Serverless Operations which includes how to manually create a pipeline, review a SAM template, debug your code with SAM Local, blue green deployments and Canary releases of your API. Are you ready?
 
 ## Introduction
 
