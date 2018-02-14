@@ -21,7 +21,7 @@ This workshop requires:
 
 We won't cover these topics during this workshop. If you need some extra help with this, we recommend you visit these other resources:
 
-- [Serverless 101 workshop - Wild Rydes](https://github.com/awslabs/aws-serverless-workshops/tree/master/WebApplication)
+- [Serverless 101 workshop - Wild Rydes Web Application](https://github.com/awslabs/aws-serverless-workshops/tree/master/WebApplication)
 - [Introduction to AWS](https://aws.amazon.com/es/about-aws/whats-new/2014/01/14/new-introduction-to-aws-instructional-videos-and-labs/)
 - [SAM documentation](https://github.com/awslabs/serverless-application-model)
 
