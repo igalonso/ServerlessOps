@@ -10,6 +10,20 @@ However, as [Ben Kehoe](https://www.slideshare.net/BenKehoe/serverless-operation
 
 During the course of this workshop we will cover step by step some of the basic knowledge to operate Serverless applications on AWS. This includes the basis of Serverless Operations like "how to manually create a pipeline" or "review a SAM template", "debug your code with SAM Local", "blue green deployments" or even "API Canary releases". Basic starting points for your day to day operations. Are you ready? Let's start with the operation!
 
+## Requirements
+
+This workshop requires:
+
+- AWS knowledge. There are a lot of workshops that cover different services and introductions to AWS. Within this workshop we expect basic knowledge of AWS.
+- Experience with Serverless services such as AWS Lambda, DynamoDB, API Gateway or Cognito.
+- An active AWS Account with administrative permissions.
+
+We won't cover these topics during this workshop. If you need some extra help with this, we recommend you visit these other resources:
+
+- [Serverless 101 workshop - Wild Rydes](https://github.com/awslabs/aws-serverless-workshops/tree/master/WebApplication)
+- [Introduction to AWS](https://aws.amazon.com/es/about-aws/whats-new/2014/01/14/new-introduction-to-aws-instructional-videos-and-labs/)
+- [SAM documentation](https://github.com/awslabs/serverless-application-model)
+
 ## The application workflow
 
 Here you can see a diagram with the workflow of the application we will deploy:
