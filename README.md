@@ -17,6 +17,7 @@ This workshop requires:
 - AWS knowledge. There are a lot of workshops that cover different services and introductions to AWS. Within this workshop we expect basic knowledge of AWS.
 - Experience with Serverless services such as AWS Lambda, DynamoDB, API Gateway or Cognito.
 - An active AWS Account with administrative permissions.
+- If you are using your own development environment, you should have [npm](https://docs.npmjs.com/getting-started/installing-node) and [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) installed.
 
 We won't cover these topics during this workshop. If you need some extra help with this, we recommend you visit these other resources:
 
