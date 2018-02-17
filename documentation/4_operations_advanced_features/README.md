@@ -1,5 +1,23 @@
 # 4. Operations: Advanced Features - WARNING: MEMES AHEAD
 
+Seems like you made it! You have successfully deployed your first pipeline from the repository till final deployment. However, I would like to share a little secret with you. All of this job is automatically done with CodeStar!
+
+<center><img src="../images/codestar-logo.png"/></center>
+
+To do so, you just need to follow these steps:
+
+1. Go to the **CodeStar** Console.
+2. Click on **+ Create a new project**.
+3. Select the type of project you want to deploy. For example, during this workshop we used **Web Application**, **NodeJs**, and **AWS Lambda**.
+
+4. Select the option left.
+	<img src="../images/4_codestar_option.png" />
+5. Select a name fo your project and chose beween CodeCommit and GitHub and click next.
+6. Click on **Create Project**.
+
+--------------
+
+
 Now you are prepare for some advaneced features. We have created a pipeline, changed different settings and reduced the operational overhead of our deployments. It's time to execute at the most reliable level!
 
 <img src="../images/joke-continious-delivery.png" width="75%" />
