@@ -1,9 +1,18 @@
 # 4. Operations: Advanced Features - WARNING: MEMES AHEAD
 
-Seems like you made it! You have successfully deployed your first pipeline from the repository till final deployment. However, I would like to share a little secret with you. All of this job is automatically done with CodeStar!
+Now you are prepare for some advaneced features. We have created a pipeline, changed different settings and reduced the operational overhead of our deployments. It's time to execute at the most reliable level!
+
+<img src="../images/joke-continious-delivery.png" width="75%" />
+
+## 4.1 What about CodeStar?
+
+You have successfully deployed your first pipeline from the repository till final deployment. However, I would like to share a little secret with you. All of this job is automatically done with CodeStar!
 
 <center><img src="../images/codestar-logo.png"/></center>
 
+
+<details>
+<summary><strong>These steps are not required for the workshop. The are just optional.</strong></summary><p>
 To do so, you just need to follow these steps:
 
 1. Go to the **CodeStar** Console.
@@ -15,20 +24,19 @@ To do so, you just need to follow these steps:
 5. Select a name fo your project and chose beween CodeCommit and GitHub and click next.
 6. Click on **Create Project**.
 
---------------
+After these steps, and some more time for the project to build, you will see that the pipeline has been created! Of course, this is not required for this workshop but keep it in mind if you want to start fast and easy.
+
+</details>
 
 
-Now you are prepare for some advaneced features. We have created a pipeline, changed different settings and reduced the operational overhead of our deployments. It's time to execute at the most reliable level!
 
-<img src="../images/joke-continious-delivery.png" width="75%" />
-
-## 4.1: Blue Green Deployments
+## 4.2: Blue Green Deployments
 
 One of the most wanted features for Serverless applications is the possibility of shifting the traffic to, for example, prevent failing deployments to impact your application entirely. Some others like to shift the traffic to monitor if their infrastructure (behind the scenes) can stand it. 
 
 With Lambda, you can easily create this traffic shifting feature with just a few lines of SAM code:
 
-### 4.1.1: Update your deployment preference
+### 4.2.1: Update your deployment preference
 
 1. Go to the file *template.yaml* and uncomment these lines:
 
@@ -89,7 +97,7 @@ Now, let's do a deployment!
 
 <img src="../images/joke-rollback.png" width="50%"/>
 
-### 4.1.2: Update your code to force a release!
+### 4.2.2: Update your code to force a release!
 
 Let's make our release. As we did on previous steps, we will do it directly from the console/git command:
 
@@ -110,7 +118,7 @@ We are shifting traffic 10% each minute! This has been done using 2 lines on SAM
 
 You can run tests (different requests) against the application to find see the different results. Sometimes it will give you the labels and sometime, text found on the picture!
 
-### 4.1.3 OPTIONAL - Use hooks and alarms.
+### 4.2.3 OPTIONAL - Use hooks and alarms.
 <details>
 <summary><strong>Optional Blue/Green deployment exercise (expand for details)</strong></summary><p>
 Now that you have seen how easy is to deploy with blue green deployments, you might want to investigate hooks and alarms to monitor and trigger automated rollback of your deployments.
@@ -155,7 +163,7 @@ Or if you want to go beyond that, try to build your first integration test!
 
 </p></details>
 
-## 4.2. API Gateway Canary releases.
+## 4.3. API Gateway Canary releases.
 
 Sure, we have tested how to perform incremental deployments on our code but, when we do changes on our API, often, we need to test it first. Our customers love Canary testing because it allows them to test their API changes with real traffic yet it won't impact heavily their customer experience. 
 
