@@ -71,7 +71,7 @@ During the course of this workshop we will use this web page as the application 
 You can use this command once you are within the *frontend* folder:
 
 ```bash
-aws s3 cp . s3://ServerlessOps-step0-stack-serverlessopsfrontend-<random-string> --recursive
+aws s3 cp . s3://serverlessops-step0-stack-serverlessopsfrontend-<random-string> --recursive
 ```
 
 Of course, you need to change <random-string> with your actual bucket.
