@@ -33,7 +33,7 @@ Asia Pacific (Mumbai) | [![Launch Step 0 in ap-south-1](http://docs.aws.amazon.c
 
 
 1. Go to the **CloudFormation** Console and click on create a new stack.
-2. Verify the Stack name ```serverlessops-step0-stack```, write your **Alias** and click continue.
+2. Verify the Stack name ```serverlessops-step0-stack```, write your **Alias** and click continue. Make sure you enter an **Alias** as it will be used to create your S3 bucket and also ensure that your **Alias** is unique among everyone so chose it wisely.
 3. Once you are in the final option page, enable CloudFormation to create IAM resources:
 
 <img src="../images/0_cloudformation_iam_permissions.png" />
@@ -45,8 +45,6 @@ The CloudFormation stack will create an S3 bucket for deployments with the follo
 ```
 serverlessops-deploymentbucket-<your-alias-here>
 ```
-
-Take into account that the S3 bucket has to be unique! Your **Alias** should be unique among everyone so chose it wisely.
 
 Now we have to go to `buildspec.yaml`. You will find it in the root folder, of the ZIP you downloaded on previous steps. Change the S3 bucket to the one you have just created. Basically, add the alias you added to the CloudFormation here.
 
@@ -66,7 +64,7 @@ Here you have to change `<region>` and `<AccountId>`with the region you're deplo
 
 ## 1.4. Upload your web page
 
-During the course of this workshop we will use this web page as the application we will be changing over time. In this case, upload all the content under *frontend* to the S3 bucket created by **step 1.1.1**. 
+During the course of this workshop we will use this web page as the application we will be changing over time. In this case, upload all the content under *frontend* to the S3 bucket created by **step 1.1.1**.
 
 You can use this command once you are within the *frontend* folder:
 
