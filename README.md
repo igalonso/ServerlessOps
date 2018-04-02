@@ -51,12 +51,3 @@ Then, you can start with the first step:
 3. [Building your CI/CD pipeline](documentation/3_building_your_ci_cd_pipeline)
 4. [Operations: Advanced Features](documentation/4_operations_advanced_features)
 5. [Closing and next steps](documentation/5_closing_and_next_steps).
-
-
-### *Under develop*:
-
-
---------
-Check [issues tab](../../issues)
-
---------
