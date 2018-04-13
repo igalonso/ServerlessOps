@@ -32,7 +32,7 @@ After these steps, and some more time for the project to build, you will see tha
 
 ## 4.2: Blue Green Deployments
 
-One of the most wanted features for Serverless applications is the possibility of shifting the traffic to, for example, prevent failing deployments to impact your application entirely. Some others like to shift the traffic to monitor if their infrastructure (behind the scenes) can stand it. 
+One of the most wanted features for Serverless applications is the possibility of shifting the traffic to, for example, prevent failing deployments to impact your application entirely. Some others like to shift the traffic to monitor if their infrastructure (behind the scenes) can stand it.
 
 With Lambda, you can easily create this traffic shifting feature with just a few lines of SAM code:
 
@@ -44,18 +44,18 @@ With Lambda, you can easily create this traffic shifting feature with just a few
 	DeploymentPreference:
 		Type: Linear10PercentEvery1Minute
 	```
-	
+
 2. We need to perform a visible change on our infrastructure to see how it works. Change your function code to this in your development environment.
-	
+
 	```javascript
 	'use strict';
 	const util = require('util');
 	const AWS = require('aws-sdk');
 	const rekognition = new AWS.Rekognition({region: process.env.AWS_REGION});
-	
-	
+
+
 	const createResponse = (statusCode, body) => {
-	    
+
 	    return {
 	        "statusCode": statusCode,
 	        "headers": {
@@ -67,17 +67,17 @@ With Lambda, you can easily create this traffic shifting feature with just a few
 	exports.handler = (event, context, callback) => {
 	    const body = JSON.parse(event.body);
 	    const srcBucket = body.bucket;
-	    const srcKey = decodeURIComponent(body.key ? body.key.replace(/\+/g, " ") : null); 
-	
+	    const srcKey = decodeURIComponent(body.key ? body.key.replace(/\+/g, " ") : null);
+
 	    var params = {
 	        Image: {
 	            S3Object: {
 	                Bucket: srcBucket,
-	                Name: srcKey 
+	                Name: srcKey
 	            }
 	        }
 	    };
-	
+
 	    setTimeout(function(){
 	        rekognition.recognizeCelebrities(params).promise().then(function(result) {
 	            rekognition.detectText(params).promise().then(function (detectedtext){
@@ -89,7 +89,7 @@ With Lambda, you can easily create this traffic shifting feature with just a few
 	            });
 	    }).catch(function (err) {
 	        callback(null, createResponse(err.statusCode, err));
-	    })},3000); 
+	    })},3000);
 	};
 	```
 
@@ -155,7 +155,7 @@ if(Math.floor(Math.random() * Math.floor(2)) < 0){
 var params = {
     deploymentId: deploymentId,
     lifecycleEventHookExecutionId: lifecycleEventHookExecutionId,
-    status: rand_status 
+    status: rand_status
 };
 ```
 
@@ -165,9 +165,9 @@ Or if you want to go beyond that, try to build your first integration test!
 
 ## 4.3. API Gateway Canary releases.
 
-Sure, we have tested how to perform incremental deployments on our code but, when we do changes on our API, often, we need to test it first. Our customers love Canary testing because it allows them to test their API changes with real traffic yet it won't impact heavily their customer experience. 
+Sure, we have tested how to perform incremental deployments on our code but, when we do changes on our API, often, we need to test it first. Our customers love Canary testing because it allows them to test their API changes with real traffic yet it won't impact heavily their customer experience.
 
-With API gateway, you can deploy these changes easily on an percentage of resources going to your API by using the API Gateway canary release option. 
+With API gateway, you can deploy these changes easily on an percentage of resources going to your API by using the API Gateway canary release option.
 
 To do so, follow these steps:
 
@@ -204,7 +204,7 @@ Didn't work? Are you seeing the "message-customized" response? Of course not! yo
 
 <img src="../images/joke-canary.png" width="80%"/>
 
-Now what? Did it work? Of course! We are ready to promote this Canary to release version. Go to *Stages > Prod > Canary* and click on Promote Canary and then OK. 
+Now what? Did it work? Of course! We are ready to promote this Canary to release version. Go to *Stages > Prod > Canary* and click on Promote Canary and then OK.
 
 <img src="../images/canary-promote.png" width="50%"/>
 
@@ -214,7 +214,7 @@ It might take a while to propagate all the changes but you will see that, after 
 
 ## 4.3. Lambda Concurrency.
 
-AWS Lambda limits your concurrency to 1000 concurrent executions within one region. Of course, these limits can be updated by requesting a limit increase to our support team. However, it is always a good idea to limit your functions to certain amount of concurrent executions. 
+AWS Lambda limits your concurrency to 1000 concurrent executions within one region. Of course, these limits can be updated by requesting a limit increase to our support team. However, it is always a good idea to limit your functions to certain amount of concurrent executions.
 
 Let's put an example: We have our own environment with several developers pushing code and testing lambda functions. We are deeply into Serverless! Some of these functions are just for testing purposes but one of our developers is doing a load test to see how does it react to heavy load. Because of this, his tesing lambda function is taking 900 concurrent executions letting only 100 left for the rest of your Lambda functions. Luckily, you followed the best practices and split testing and production in two different accounts so this is not impacting your production environment but, of course, the rest of the developers are seeing 429 in the Lambda execution whenever they trigger their functions. You got several angry developers!
 
@@ -272,7 +272,7 @@ LambdaFunction:
       Description: "Backend Lambda for Serverless Ops Workshop"
       Handler: index.handler
       Timeout: 60
-      Policies: 
+      Policies:
         - AmazonRekognitionFullAccess
         - AmazonS3ReadOnlyAccess
       Runtime: nodejs4.3
@@ -325,14 +325,20 @@ Response time histogram:
   11.798 [0]	|
   13.262 [3]	|
   14.727 [18]	|∎
-  
+
   ...
   Status code distribution:
   [502]	501 responses
   [200]	499 responses
 ```
-As we can see here, the 502's responses has increased! 
+As we can see here, the 502's responses has increased!
 
 https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-reservedconcurrentexecutions
 
+## 4.4. Integration tests.
 
+In this section we will extend the deployment pipeline we built in the previous section to include an automatic integration test step so we can improve our confidence on the changes being continuously introduced before them reach our production environment.
+
+The changes that we will introduce will basically add a pre-production (also known as QA or staging) environment so we can deploy the new version of our infrastructure/application to this new environment, run the integration tests again this just-deployed version and, only if tests succeeds, proceed with the deployment to our production environment.
+
+Our integration test will be implemented using a new lambda function that will execute an HTTP request against the API Gateway endpoint (so the production lambda code will be executed and the invocation to Recognition as well) using a previously uploaded input (i.e. an image available in our S3 bucket corresponding to a well known celebrity) and validate that the HTTP response is okay (i.e. status code is 200) and the response contains the name expected celebrity.
