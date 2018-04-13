@@ -32,7 +32,7 @@ After these steps, and some more time for the project to build, you will see tha
 
 ## 4.2: Blue Green Deployments
 
-One of the most wanted features for Serverless applications is the possibility of shifting the traffic to, for example, prevent failing deployments to impact your application entirely. Some others like to shift the traffic to monitor if their infrastructure (behind the scenes) can stand it. 
+One of the most wanted features for Serverless applications is the possibility of shifting the traffic to, for example, prevent failing deployments to impact your application entirely. Some others like to shift the traffic to monitor if their infrastructure (behind the scenes) can stand it.
 
 With Lambda, you can easily create this traffic shifting feature with just a few lines of SAM code:
 
@@ -44,18 +44,18 @@ With Lambda, you can easily create this traffic shifting feature with just a few
 	DeploymentPreference:
 		Type: Linear10PercentEvery1Minute
 	```
-	
+
 2. We need to perform a visible change on our infrastructure to see how it works. Change your function code to this in your development environment.
-	
+
 	```javascript
 	'use strict';
 	const util = require('util');
 	const AWS = require('aws-sdk');
 	const rekognition = new AWS.Rekognition({region: process.env.AWS_REGION});
-	
-	
+
+
 	const createResponse = (statusCode, body) => {
-	    
+
 	    return {
 	        "statusCode": statusCode,
 	        "headers": {
@@ -67,17 +67,17 @@ With Lambda, you can easily create this traffic shifting feature with just a few
 	exports.handler = (event, context, callback) => {
 	    const body = JSON.parse(event.body);
 	    const srcBucket = body.bucket;
-	    const srcKey = decodeURIComponent(body.key ? body.key.replace(/\+/g, " ") : null); 
-	
+	    const srcKey = decodeURIComponent(body.key ? body.key.replace(/\+/g, " ") : null);
+
 	    var params = {
 	        Image: {
 	            S3Object: {
 	                Bucket: srcBucket,
-	                Name: srcKey 
+	                Name: srcKey
 	            }
 	        }
 	    };
-	
+
 	    setTimeout(function(){
 	        rekognition.recognizeCelebrities(params).promise().then(function(result) {
 	            rekognition.detectText(params).promise().then(function (detectedtext){
@@ -89,7 +89,7 @@ With Lambda, you can easily create this traffic shifting feature with just a few
 	            });
 	    }).catch(function (err) {
 	        callback(null, createResponse(err.statusCode, err));
-	    })},3000); 
+	    })},3000);
 	};
 	```
 
@@ -155,7 +155,7 @@ if(Math.floor(Math.random() * Math.floor(2)) < 0){
 var params = {
     deploymentId: deploymentId,
     lifecycleEventHookExecutionId: lifecycleEventHookExecutionId,
-    status: rand_status 
+    status: rand_status
 };
 ```
 
@@ -165,9 +165,9 @@ Or if you want to go beyond that, try to build your first integration test!
 
 ## 4.3. API Gateway Canary releases.
 
-Sure, we have tested how to perform incremental deployments on our code but, when we do changes on our API, often, we need to test it first. Our customers love Canary testing because it allows them to test their API changes with real traffic yet it won't impact heavily their customer experience. 
+Sure, we have tested how to perform incremental deployments on our code but, when we do changes on our API, often, we need to test it first. Our customers love Canary testing because it allows them to test their API changes with real traffic yet it won't impact heavily their customer experience.
 
-With API gateway, you can deploy these changes easily on an percentage of resources going to your API by using the API Gateway canary release option. 
+With API gateway, you can deploy these changes easily on an percentage of resources going to your API by using the API Gateway canary release option.
 
 To do so, follow these steps:
 
@@ -204,7 +204,7 @@ Didn't work? Are you seeing the "message-customized" response? Of course not! yo
 
 <img src="../images/joke-canary.png" width="80%"/>
 
-Now what? Did it work? Of course! We are ready to promote this Canary to release version. Go to *Stages > Prod > Canary* and click on Promote Canary and then OK. 
+Now what? Did it work? Of course! We are ready to promote this Canary to release version. Go to *Stages > Prod > Canary* and click on Promote Canary and then OK.
 
 <img src="../images/canary-promote.png" width="50%"/>
 
@@ -214,7 +214,7 @@ It might take a while to propagate all the changes but you will see that, after 
 
 ## 4.3. Lambda Concurrency.
 
-AWS Lambda limits your concurrency to 1000 concurrent executions within one region. Of course, these limits can be updated by requesting a limit increase to our support team. However, it is always a good idea to limit your functions to certain amount of concurrent executions. 
+AWS Lambda limits your concurrency to 1000 concurrent executions within one region. Of course, these limits can be updated by requesting a limit increase to our support team. However, it is always a good idea to limit your functions to certain amount of concurrent executions.
 
 Let's put an example: We have our own environment with several developers pushing code and testing lambda functions. We are deeply into Serverless! Some of these functions are just for testing purposes but one of our developers is doing a load test to see how does it react to heavy load. Because of this, his tesing lambda function is taking 900 concurrent executions letting only 100 left for the rest of your Lambda functions. Luckily, you followed the best practices and split testing and production in two different accounts so this is not impacting your production environment but, of course, the rest of the developers are seeing 429 in the Lambda execution whenever they trigger their functions. You got several angry developers!
 
@@ -272,7 +272,7 @@ LambdaFunction:
       Description: "Backend Lambda for Serverless Ops Workshop"
       Handler: index.handler
       Timeout: 60
-      Policies: 
+      Policies:
         - AmazonRekognitionFullAccess
         - AmazonS3ReadOnlyAccess
       Runtime: nodejs4.3
@@ -325,14 +325,258 @@ Response time histogram:
   11.798 [0]	|
   13.262 [3]	|
   14.727 [18]	|∎
-  
+
   ...
   Status code distribution:
   [502]	501 responses
   [200]	499 responses
 ```
-As we can see here, the 502's responses has increased! 
+As we can see here, the 502's responses has increased!
 
 https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-reservedconcurrentexecutions
 
+## 4.4. Integration tests.
 
+In this section we will extend the deployment pipeline we built in the previous section to include an automatic integration test step so we can improve our confidence on the changes being continuously introduced before them reach our production environment.
+
+The changes that we will introduce will basically add a new QA environment so we can deploy the new version of our infrastructure/application to this new environment, run the integration tests again this just-deployed version and, only if tests succeeds, proceed with the deployment to our production environment.
+
+Our integration test will be implemented using a new lambda function that will execute an HTTP request against the API Gateway endpoint (so the production lambda code will be executed and the invocation to Recognition as well) using a previously uploaded input (i.e. an image available in our S3 bucket corresponding to a well known celebrity) and validate that the HTTP response is okay (i.e. status code is 200) and the response contains the name expected celebrity.
+
+### 4.4.1: Extend CFN template to support multiple environments.
+
+Lets start by extending our CFN template to support multiple environments. To achieve that, we will use CFN parameters (https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/parameters-section-structure.html) so we can create multiple stacks (one for each environment or stage) using the same template with different values for the parameters.
+
+We will edit our `template.yaml` file and add the following section just before the *Resources* section.
+
+```yaml
+Parameters:
+  ApiStageParameter:
+    Type: String
+    Default: QA
+    AllowedValues:
+      - QA
+      - Prod
+```
+
+Additionally, we will modify property *StageName* of the *ApiGatewayApi* artifact (also within the `template.yaml` file) to use the just-added parameter instead of the previously hard-coded *Prod*.
+
+```yaml
+    StageName: !Ref ApiStageParameter
+```
+
+Commit and push the changes ...
+
+````bash
+git commit -am "adding stage param to API definition"
+git push
+````
+
+Our pipeline will deploy the new version of the template and that will result in our stack being updated so the existing API Gateway will replace its stage (*Prod*) with a new stage named *QA*. We have not instructed CFN (invoked via our pipeline) to use any specific value for the just added parameter but since its default value is *QA*, the API Gateway will use that default value.
+
+### 4.4.2: Extend deployment pipeline to include a PROD environment.
+
+Lets now extend our deployment pipeline to include a new environment (aka stage) representing our production environment. This will be a complete copy of our artifacts (API Gateway and Lambda).
+
+Go and edit the pipeline and add a new stage at the end of the pipeline (name it *Prod*).
+
+Within the stage, add a new action with the following attributes:
+
+* Action category -> Deploy
+* Action name -> ServerlessOps-stack-Prod
+* Deployment provider -> AWS CloudFormation
+* Action mode -> Create or replace a change set
+* Stack name -> ServerlessOps-stack-Prod
+* Change set name -> ServerlessOps-changeset-Prod
+* Template -> MyAppBuild::SAM-template.yaml
+* Capabilities -> CAPABILITY_IAM
+* Role name -> ServerlessOps-cloudformationrole
+* Advanced -> Parameter overrides -> {"ApiStageParameter":"Prod"}
+* Input artifacts 1 -> MyAppBuild
+
+Note that this action is very similar to the existing one for our staging/QA environment but here we are overriding the default value for our input parameter to the CFN template in order to use *Prod* to represent our PROD API Gateway (and corresponding Lambda).
+
+Next, as we did for the staging/QA environment, lets add a second action (just after the just created action) to actually execute the change set.
+
+Again, add a new section with the following attributes:
+
+* Action category -> Deploy
+* Action name -> ExecuteChangeSetProd
+* Deployment provider -> AWS CloudFormation
+* Action mode -> Execute a change set
+* Stack name -> ServerlessOps-stack-Prod
+* Change set name -> ServerlessOps-changeset-Prod
+
+### 4.4.4: Create the testing lambda (and its supporting artifacts).
+
+Before we can use the testing lambda in our pipeline (do not desperate, we are almost there), we need to create it (and before that, we need to create the required IAM role).
+
+Go to IAM console and create a new policy with the following JSON definition and name it *LogsAndPipeline*:
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "logs:*"
+            ],
+            "Effect": "Allow",
+            "Resource": "arn:aws:logs:*:*:*"
+        },
+        {
+            "Action": [
+                "codepipeline:PutJobSuccessResult",
+                "codepipeline:PutJobFailureResult"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        }
+    ]
+}
+```
+
+Next, also in the IAM console, create a new role with the following configuration:
+
+* Type of trusted entity -> AWS service -> Lambda
+* Permissions -> Search for the just created policy (*LogsAndPipeline*) and select it
+* Name -> LambdaForPipelineInvocation
+
+Now we are ready to create the testing lambda. Go to Lambda console and create (author from scratch) a new function with the following configuration:
+
+* Name -> HttpTest
+* Runtime -> Node.js 4.3
+* Role -> Choose an existing role
+* Existing role -> LambdaForPipelineInvocation
+
+Paste the following code for the function implementation:
+
+```javascript
+'use strict';
+
+var assert = require('assert');
+var AWS = require('aws-sdk');
+var https = require('https');
+
+exports.handler = function(event, context) {
+    console.log(event);
+
+    var codepipeline = new AWS.CodePipeline();
+
+    // Retrieve the Job ID from the Lambda action
+    var jobId = event["CodePipeline.job"].id;
+
+    // Retrieve the value of UserParameters from the Lambda action configuration in AWS CodePipeline
+    // In this case a set of request options which will be health checked by this function.
+    var input = JSON.parse(event["CodePipeline.job"].data.actionConfiguration.configuration.UserParameters);
+    console.log("input: " + JSON.stringify(input));
+
+    // Notify AWS CodePipeline of a successful job
+    var putJobSuccess = function(message) {
+        var params = {
+            jobId: jobId
+        };
+        codepipeline.putJobSuccessResult(params, function(err, data) {
+            if(err) {
+                context.fail(err);      
+            } else {
+                context.succeed(message);      
+            }
+        });
+    };
+
+    // Notify AWS CodePipeline of a failed job
+    var putJobFailure = function(message) {
+        var params = {
+            jobId: jobId,
+            failureDetails: {
+                message: JSON.stringify(message),
+                type: 'JobFailed',
+                externalExecutionId: context.invokeid
+            }
+        };
+        codepipeline.putJobFailureResult(params, function(err, data) {
+            context.fail(message);      
+        });
+    };
+
+    // Helper function to make a HTTP request to the page.
+    // The helper will test the response and succeed or fail the job accordingly
+    var getPage = function(input, callback) {
+        var pageObject = {
+            body: '',
+            statusCode: 0,
+            contains: function(search) {
+                return this.body.indexOf(search) > -1;    
+            }
+        };
+
+        const req = https.request(input.options, (res) => {
+            console.log('Status:', res.statusCode);
+            console.log('Headers:', JSON.stringify(res.headers));
+
+            pageObject.body = '';
+            pageObject.statusCode = res.statusCode;
+            res.setEncoding('utf8');
+            res.on('data', function (chunk) {
+                pageObject.body += chunk;
+            });
+            res.on('end', function () {
+                console.log('Successfully processed HTTPS response');
+                callback(pageObject);
+            });
+        });
+        req.on('error', function(error) {
+            // Fail the job if our request failed
+            putJobFailure(error);    
+        });
+        req.write(JSON.stringify(input.data));
+        req.end();
+    };
+
+    getPage(input, function(returnedPage) {
+        try {
+            // Check if the HTTP response has a 200 status
+            assert(returnedPage.statusCode === 200);
+            // Check if the page contains the expected text
+            assert(returnedPage.contains(input.expected));  
+
+            // Succeed the job
+            putJobSuccess("Tests passed.");
+        } catch (ex) {
+            // If any of the assertions failed then fail the job
+            putJobFailure(ex);    
+        }
+    });     
+};
+```
+
+Save it!
+
+### 4.4.4: Add the integration tests step to the pipeline.
+
+Lets go and wire our testing lambda in the pipeline so we can validate that a new version of the infrastructure and code is working as expected before deploying it to our production environment.
+
+Go to pipeline and edit it, add a new stage in between our 2 environments (Staging and Prod). You can name it *Test*.
+
+Within the stage, add a new action with the following attributes (please note that you need to replace *<your-api-id>* and *<your-alias-here>* in the *User parameters* with the corresponding values for your QA's environment API Gateway's ID and the S3 bucket where you will be putting your images respectively):
+
+* Action category -> Invoke
+* Action name -> Validate_HTTP_request
+* Provider -> AWS Lambda
+* Function name -> HttpTest
+* User parameters -> {"options":{"hostname":"<your-api-id>.execute-api.us-east-1.amazonaws.com","port": 443,"path":"/QA/getinfo","method": "POST","headers":{"Content-Type":"application/json"}},"data":{"bucket":"serverlessops-step0-stack-serverlessopsfrontend-<your-alias-here>","key":"JeffB.jpg"},"expected":"Jeff Bezos"}
+
+### 4.4.5: Upload the celebrity to be used as 'decoy'.
+
+Grab the `JeffB.jpg` image below and upload it to the S3 bucket that is being used for image recognition ...
+
+<img src="../images/JeffB.jpg" />
+
+### 4.4.6: Profit!
+
+Go and *Release change* in your pipeline (or even better, make a change in your code and push it) ...
+
+### 4.4.7: Potential improvements
+
+* Provision the test lambda function using CFN as well!
