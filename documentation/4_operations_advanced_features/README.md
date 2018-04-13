@@ -347,7 +347,7 @@ Our integration test will be implemented using a new lambda function that will e
 
 Lets start by extending our CFN template to support multiple environments. To achieve that, we will use CFN parameters (https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/parameters-section-structure.html) so we can create multiple stacks (one for each environment or stage) using the same template with different values for the parameters.
 
-We will edit our `template.yaml` file and add the following section just before the `Resources` section.
+We will edit our `template.yaml` file and add the following section just before the *Resources* section.
 
 ```yaml
 Parameters:
@@ -359,10 +359,10 @@ Parameters:
       - Prod
 ```
 
-Additionally, we will modify property `StageName` of the `ApiGatewayApi` artifact (also within the `template.yaml` file) to use the just-added parameter instead of the previously hard-coded `Prod`.
+Additionally, we will modify property *StageName* of the *ApiGatewayApi* artifact (also within the `template.yaml` file) to use the just-added parameter instead of the previously hard-coded *Prod*.
 
 ```yaml
-			StageName: !Ref ApiStageParameter
+    StageName: !Ref ApiStageParameter
 ```
 
 Commit and push the changes ...
@@ -372,46 +372,46 @@ git commit -am "adding stage param to API definition"
 git push
 ````
 
-Our pipeline will deploy the new version of the template and that will result in our stack being updated so the existing API Gateway will replace its stage (`Prod`) with a new stage named `QA`. We have not instructed CFN (invoked via our pipeline) to use any specific value for the just added parameter but since its default value is `QA`, the API Gateway will use that default value.
+Our pipeline will deploy the new version of the template and that will result in our stack being updated so the existing API Gateway will replace its stage (*Prod*) with a new stage named *QA*. We have not instructed CFN (invoked via our pipeline) to use any specific value for the just added parameter but since its default value is *QA*, the API Gateway will use that default value.
 
 ### 4.4.2: Extend deployment pipeline to include a PROD environment.
 
 Lets now extend our deployment pipeline to include a new environment (aka stage) representing our production environment. This will be a complete copy of our artifacts (API Gateway and Lambda).
 
-Go and edit the pipeline and add a new stage at the end of the pipeline (name it `Prod`).
+Go and edit the pipeline and add a new stage at the end of the pipeline (name it *Prod*).
 
 Within the stage, add a new action with the following attributes:
 
-Action category -> Deploy
-Action name -> ServerlessOps-stack-Prod
-Deployment provider -> AWS CloudFormation
-Action mode -> Create or replace a change set
-Stack name -> ServerlessOps-stack-Prod
-Change set name -> ServerlessOps-changeset-Prod
-Template -> MyAppBuild::SAM-template.yaml
-Capabilities -> CAPABILITY_IAM
-Role name -> ServerlessOps-cloudformationrole
-Advanced -> Parameter overrides -> {"ApiStageParameter":"Prod"}
-Input artifacts 1 -> MyAppBuild
+* Action category -> Deploy
+* Action name -> ServerlessOps-stack-Prod
+* Deployment provider -> AWS CloudFormation
+* Action mode -> Create or replace a change set
+* Stack name -> ServerlessOps-stack-Prod
+* Change set name -> ServerlessOps-changeset-Prod
+* Template -> MyAppBuild::SAM-template.yaml
+* Capabilities -> CAPABILITY_IAM
+* Role name -> ServerlessOps-cloudformationrole
+* Advanced -> Parameter overrides -> {"ApiStageParameter":"Prod"}
+* Input artifacts 1 -> MyAppBuild
 
-Note that this action is very similar to the existing one for our staging/QA environment but here we are overriding the default value for our input parameter to the CFN template in order to use `Prod` to represent our PROD API Gateway (and corresponding Lambda).
+Note that this action is very similar to the existing one for our staging/QA environment but here we are overriding the default value for our input parameter to the CFN template in order to use *Prod* to represent our PROD API Gateway (and corresponding Lambda).
 
 Next, as we did for the staging/QA environment, lets add a second action (just after the just created action) to actually execute the change set.
 
 Again, add a new section with the following attributes:
 
-Action category -> Deploy
-Action name -> ExecuteChangeSetProd
-Deployment provider -> AWS CloudFormation
-Action mode -> Execute a change set
-Stack name -> ServerlessOps-stack-Prod
-Change set name -> ServerlessOps-changeset-Prod
+* Action category -> Deploy
+* Action name -> ExecuteChangeSetProd
+* Deployment provider -> AWS CloudFormation
+* Action mode -> Execute a change set
+* Stack name -> ServerlessOps-stack-Prod
+* Change set name -> ServerlessOps-changeset-Prod
 
 ### 4.4.4: Create the testing lambda (and its supporting artifacts).
 
 Before we can use the testing lambda in our pipeline (do not desperate, we are almost there), we need to create it (and before that, we need to create the required IAM role).
 
-Go to IAM console and create a new policy with the following JSON definition and name it `LogsAndPipeline`:
+Go to IAM console and create a new policy with the following JSON definition and name it *LogsAndPipeline*:
 
 ```json
 {
@@ -438,16 +438,16 @@ Go to IAM console and create a new policy with the following JSON definition and
 
 Next, also in the IAM console, create a new role with the following configuration:
 
-Type of trusted entity -> AWS service -> Lambda
-Permissions -> Search for the just created policy (`LogsAndPipeline`) and select it
-Name -> LambdaForPipelineInvocation
+* Type of trusted entity -> AWS service -> Lambda
+* Permissions -> Search for the just created policy (*LogsAndPipeline*) and select it
+* Name -> LambdaForPipelineInvocation
 
 Now we are ready to create the testing lambda. Go to Lambda console and create (author from scratch) a new function with the following configuration:
 
-Name -> HttpTest
-Runtime -> Node.js 4.3
-Role -> Choose an existing role
-Existing role -> LambdaForPipelineInvocation
+* Name -> HttpTest
+* Runtime -> Node.js 4.3
+* Role -> Choose an existing role
+* Existing role -> LambdaForPipelineInvocation
 
 Paste the following code for the function implementation:
 
@@ -557,15 +557,15 @@ Save it!
 
 Lets go and wire our testing lambda in the pipeline so we can validate that a new version of the infrastructure and code is working as expected before deploying it to our production environment.
 
-Go to pipeline and edit it, add a new stage in between our 2 environments (Staging and Prod). You can name it `Test`.
+Go to pipeline and edit it, add a new stage in between our 2 environments (Staging and Prod). You can name it *Test*.
 
-Within the stage, add a new action with the following attributes (please note that you need to replace `<your-api-id>` and `<your-alias-here>` in the `User parameters` with the corresponding values for your QA's environment API Gateway's ID and the S3 bucket where you will be putting your images respectively):
+Within the stage, add a new action with the following attributes (please note that you need to replace *<your-api-id>* and *<your-alias-here>* in the *User parameters* with the corresponding values for your QA's environment API Gateway's ID and the S3 bucket where you will be putting your images respectively):
 
-Action category -> Invoke
-Action name -> Validate_HTTP_request
-Provider -> AWS Lambda
-Function name -> HttpTest
-User parameters -> {"options":{"hostname":"<your-api-id>.execute-api.us-east-1.amazonaws.com","port": 443,"path":"/QA/getinfo","method": "POST","headers":{"Content-Type":"application/json"}},"data":{"bucket":"serverlessops-step0-stack-serverlessopsfrontend-<your-alias-here>","key":"JeffB.jpg"},"expected":"Jeff Bezos"}
+* Action category -> Invoke
+* Action name -> Validate_HTTP_request
+* Provider -> AWS Lambda
+* Function name -> HttpTest
+* User parameters -> {"options":{"hostname":"<your-api-id>.execute-api.us-east-1.amazonaws.com","port": 443,"path":"/QA/getinfo","method": "POST","headers":{"Content-Type":"application/json"}},"data":{"bucket":"serverlessops-step0-stack-serverlessopsfrontend-<your-alias-here>","key":"JeffB.jpg"},"expected":"Jeff Bezos"}
 
 ### 4.4.5: Upload the celebrity to be used as 'decoy'.
 
@@ -575,7 +575,7 @@ Grab the `JeffB.jpg` image below and upload it to the S3 bucket that is being us
 
 ### 4.4.6: Profit!
 
-Go and `Release change` in your pipeline (or even better, make a change in your code and push it) ...
+Go and *Release change* in your pipeline (or even better, make a change in your code and push it) ...
 
 ### 4.4.7: Potential improvements
 
