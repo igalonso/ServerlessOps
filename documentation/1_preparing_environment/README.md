@@ -48,21 +48,7 @@ serverlessops-deploymentbucket-<your-alias-here>
 
 Now we have to go to `buildspec.yaml`. You will find it in the root folder, of the ZIP you downloaded on previous steps. Change the S3 bucket to the one you have just created. Basically, add the alias you added to the CloudFormation here.
 
-## 1.3. Review swagger
-
-Now, the application consists on an API, Lambda and Rekognition to get the tags of a photo. A key element on this application is the API which is defined by a swagger template called `swagger.yaml`.
-
-Go to that file and and change the line 23 which cotains:
-
-```yaml
-
-uri: arn:aws:apigateway:<region>:lambda:path/2015-03-31/functions/arn:aws:lambda:<region>:<AccountID>:function:${stageVariables.LambdaFunctionName}:live/invocations
-
-```
-
-Here you have to change `<region>` and `<AccountId>`with the region you're deploying in and the account Id you are using.
-
-## 1.4. Upload your web page
+## 1.3. Upload your web page
 
 During the course of this workshop we will use this web page as the application we will be changing over time. In this case, upload all the content under *frontend* to the S3 bucket created by **step 1.1.1**.
 

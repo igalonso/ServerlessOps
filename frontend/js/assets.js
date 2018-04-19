@@ -8,12 +8,16 @@ function include(file)
 include("js/jquery.jsontotable.js");
 
 var image = "img/uploads/someguy.jpg";
-
+/*
+Here you can hardcore your values for the website bucket name and the API endpoint
+*/
+var api ="";
+var bucket ="";
 console.log("loading");
 $(document).ready ( function () {
     $("#trigger").click( function(){
-        var api = $("#endpoint").val();
-        var bucket = $("#bucket").val();
+        api = $("#endpoint").val();
+        bucket = $("#bucket").val();
         performRequest(api+"/getinfo",JSON.stringify({ "bucket": bucket,"key": image}) );
     });
 
