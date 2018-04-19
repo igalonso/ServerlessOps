@@ -34,16 +34,17 @@ $(document).ready ( function () {
                 $("#td-labels").removeAttr('hidden');
                 var counter = 0;
                 if(responseData.hasOwnProperty("Labels")){
+                    console.log("Labels printing");
                     var row = "";
-                    for(var i=0;i<responseData["Labels"].Labels.length;i++){
-                        row = row + "<tr ><td style='padding: 5px;'>"+ responseData["Labels"].Labels[i]["Name"]+"</td></tr>";
+                    for(var i=0;i<responseData["Labels"].length;i++){
+                        row = row + "<tr><td style='padding: 5px;'>"+ responseData["Labels"][i]["Name"]+"</td></tr>";
                     }
-                    row = row + "</tr>"; 
                     $('#table-results > tbody:last-child').append(row);
                     counter++;
                 }
                 if(responseData.hasOwnProperty("CelebrityFaces")){
                     var iter = 0;
+                    console.log("CelebrityFaces printing");
                     var counterRow= 0;
                     $("#td-celebrities").removeAttr('hidden');
                     $('#table-results').find("tr").each(function(){
@@ -63,6 +64,7 @@ $(document).ready ( function () {
                 }
                 if(responseData.hasOwnProperty("TextDetections")){
                     var iter = 0;
+                    console.log("TextDetections printing");
                     var counterRow= 0;
                     $("#td-text").removeAttr('hidden');
                     $('#table-results').find("tr").each(function(){

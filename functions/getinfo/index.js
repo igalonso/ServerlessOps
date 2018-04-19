@@ -32,7 +32,7 @@ exports.handler = (event, context, callback) => {
     setTimeout(function(){
         rekognition.detectLabels(params).promise().then(function (data) {
             console.log(createResponse(200, data.Labels));
-            callback(null, createResponse(200, data.Labels));
+            callback(null, createResponse(200, data));
         }).catch(function (err) {
             callback(null, createResponse(err.statusCode, err));
     })},3000);

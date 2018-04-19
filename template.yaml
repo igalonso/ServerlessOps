@@ -1,15 +1,17 @@
 AWSTemplateFormatVersion : '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: AWS SAM template with API defined in an external Swagger file along with Lambda integrations and CORS configurations
-Resources:
-  ApiGatewayApi:
-    Type: AWS::Serverless::Api
-    Properties:
-      DefinitionUri: swagger.yaml
-      StageName: Prod
-      Variables:
-        LambdaFunctionName: !Ref LambdaFunction
 
+
+Globals:
+  Api:
+    Cors:
+      AllowMethods: "'OPTIONS,POST'"
+      AllowHeaders: "'Content-Type, Authorization, X-Amz-Date, X-Api-Key, X-Amz-Security-Token'"
+      AllowOrigin: "'*'"
+      MaxAge: "'600'"
+
+Resources:
   LambdaFunction:
    Type: AWS::Serverless::Function
    Properties:
@@ -25,7 +27,6 @@ Resources:
         ProxyApiRoot:
           Type: Api
           Properties:
-            RestApiId: !Ref ApiGatewayApi
             Path: /getinfo
             Method: POST
       AutoPublishAlias: live
