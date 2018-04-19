@@ -12,7 +12,7 @@ You have successfully deployed your first pipeline from the repository till fina
 
 
 <details>
-<summary><strong>These steps are not required for the workshop. The are just optional.</strong></summary><p>
+<summary><strong>These steps are not required for the workshop. These are just optional.</strong></summary><p>
 To do so, you just need to follow these steps:
 
 1. Go to the **CodeStar** Console.
@@ -32,13 +32,15 @@ After these steps, and some more time for the project to build, you will see tha
 
 ## 4.2: Blue Green Deployments
 
-One of the most wanted features for Serverless applications is the possibility of shifting the traffic to, for example, prevent failing deployments to impact your application entirely. Some others like to shift the traffic to monitor if their infrastructure (behind the scenes) can stand it.
+One of the most requested features for Serverless applications is the possibility of shifting the traffic to, for example, prevent failing deployments to impact your application entirely. 
+
+Others would like to shift the traffic to monitor if their infrastructure (behind the scenes) can stand it.
 
 With Lambda, you can easily create this traffic shifting feature with just a few lines of SAM code:
 
 ### 4.2.1: Update your deployment preference
 
-1. Go to the file *template.yaml* and uncomment these lines:
+1. Go to the file *template.yaml* and add these lines under **Properties** of the resource **LambdaFunction** (be careful with extra spaces/tabs since yaml is sensitive to these differences):
 
 	```yaml
 	DeploymentPreference:
@@ -109,14 +111,18 @@ Let's make our release. As we did on previous steps, we will do it directly from
 	git push
 	```
 
-2. Go to CodeDeploy and select the deployment that starts with ServerlessOps-stack.
+2. After a few minutes (when the pipeline finishes), go to CodeDeploy and select the deployment that starts with ServerlessOps-stack.
 3. Under status, you should see an identifies starting with "d-". Click it.
 
 <img src="../images/codedeploy.png" />
 
 We are shifting traffic 10% each minute! This has been done using 2 lines on SAM. How awesome it is?
 
-You can run tests (different requests) against the application to find see the different results. Sometimes it will give you the labels and sometime, text found on the picture!
+You can run tests (different requests) against the application to find see the different results. Sometimes it will give you the labels and sometime, text found on the picture! 
+
+While th frontend could be a good resource to test these B/G changes, you might want to use a tool like [PostMan](https://www.getpostman.com/) to send a POST request to your API faster.
+
+<img src="../images/4_postman-test.png" />
 
 ### 4.2.3 OPTIONAL - Use hooks and alarms.
 <details>
@@ -144,7 +150,7 @@ Hooks:
 
 Before traffic shifting starts, CodeDeploy will invoke the PreTraffic Hook Lambda Function. This Lambda function must call back to CodeDeploy with an explicit status of Success or Failure, via the [PutLifecycleEventHookExecutionStatus](https://docs.aws.amazon.com/codedeploy/latest/APIReference/API_PutLifecycleEventHookExecutionStatus.html) API. On Failure, CodeDeploy will abort and report a failure back to CloudFormation. On Success, CodeDeploy will proceed with the specified traffic shifting.
 
-If you want to implement this feature, you can create a Lambda function based on [this one](https://github.com/awslabs/serverless-application-model/blob/master/examples/2016-10-31/lambda_safe_deployments/preTrafficHook.js). For example, for the shake of this workshop, you can use a random choice such as **1** equals, it's validated, **0** has failed. Here is, for example, a pice of the code you might want to use:
+If you want to implement this feature, you can create a Lambda function based on [this one](https://github.com/awslabs/serverless-application-model/blob/master/examples/2016-10-31/lambda_safe_deployments/src/preTrafficHook.js). For example, for the shake of this workshop, you can use a random choice such as **1** equals, it's validated, **0** has failed. Here is, for example, a pice of the code you might want to use:
 
 ```javascript
 var rand_status = 'Succeeded';
@@ -200,7 +206,10 @@ Now, let's test this feature:
 ``` bash
 curl -X POST   https://<api-id>.execute-api.us-east-1.amazonaws.com/Prod/a-ramdom-name-that-will-trigger-403 'Content-Type: application/json' -d '{ "bucket": "serverlessops-step0-stack-serverlessopsfrontend-<bucket-id>","key": "someguy.jpg"}'
 ```
-Didn't work? Are you seeing the "message-customized" response? Of course not! you need to try to several times since only 10% of the traffic is going to the canary! Try a little harder.
+
+<img src="../images/4_postman-test.png" />
+
+Didn't work? Are you seeing the "*message-customized*" response? Of course not! you need to try to several times since only 10% of the traffic is going to the canary! Try a little harder.
 
 <img src="../images/joke-canary.png" width="80%"/>
 
@@ -239,10 +248,16 @@ brew install go
 
 go get -u github.com/rakyll/hey
 
-./go/bin/hey -n 5000 -c 50 -d '{ "bucket": "serverlessops-step0-stack-serverlessopsfrontend-<your-alias-here>","key": "someguy.jpg"}' -H 'Content-Type: application/json' -m POST https://<your-api-endpoint>/Prod/getinfo
-```
+##linux
+./go/bin/hey -n 5000 -c 50 -d '{ "bucket": "serverlessops-step0-stack-serverlessopsfrontend-<your-alias-here>","key": "img/uploads/someguy.jpg"}' -H 'Content-Type: application/json' -m POST https://<your-api-endpoint>/Prod/getinfo
 
-Yoy should see the a result like this:
+##mac
+
+~/go/bin/hey -n 5000 -c 50 -d '{ "bucket": "serverlessops-step0-stack-serverlessopsfrontend-<your-alias-here>","key": "img/uploads/someguy.jpg"}' -H 'Content-Type: application/json' -m POST https://<your-api-endpoint>/Prod/getinfo 
+```
+This might take a while so you might want to grab a coffee or review the CloudWatch metrics (does it reflect the request count for this specific API?).
+
+After some time, you should see the a result like this:
 
 ```bash
 Response time histogram:
@@ -262,7 +277,7 @@ Status code distribution:
   [200]	5000 responses
 ```
 
-Let's enable concurrency in your Lambda. To do so, we will implement it via SAM. We are going to remove the blue green deployment and add a line for concurrency reserverd executions. Uncomment the line `ReservedConcurrentExecutions` Your Lambda Function in SAM should look like this:
+Let's enable concurrency in your Lambda. To do so, we will implement it via SAM. We are going to remove the blue green deployment and add a line for concurrency reserverd executions. Add the line `ReservedConcurrentExecutions` Your Lambda Function in SAM should look like this:
 
 ```yaml
 LambdaFunction:
@@ -284,7 +299,7 @@ LambdaFunction:
             Path: /getinfo
             Method: POST
       AutoPublishAlias: live
-      ReservedConcurrentExecutions : 25
+      ReservedConcurrentExecutions : 10
 ```
 
 Seems like CloudFormation in SAM doesn't work right now:
@@ -310,6 +325,7 @@ To test this concurrency, let's go to our terminal and run the previous command 
 ./go/bin/hey -n 5000 -c 50 -d '{ "bucket": "serverlessops-step0-stack-serverlessopsfrontend-<your-alias-here>","key": "someguy.jpg"}' -H 'Content-Type: application/json' -m POST https://<your-api-endpoint>/Prod/getinfo
 ```
 
+
 You will see something like this:
 
 ```bash
@@ -333,7 +349,7 @@ Response time histogram:
 ```
 As we can see here, the 502's responses has increased!
 
-https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-reservedconcurrentexecutions
+[Lambda Concurrent requests](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-reservedconcurrentexecutions)
 
 ## 4.4. Integration tests.
 
@@ -359,7 +375,7 @@ Parameters:
       - Prod
 ```
 
-Additionally, we will modify property *StageName* of the *ApiGatewayApi* artifact (also within the `template.yaml` file) to use the just-added parameter instead of the previously hard-coded *Prod*.
+Additionally, we will add the property *StageName* to the globals artifact (also within the `template.yaml` file) to use the just-added parameter instead of the previously hard-coded *Prod*.
 
 ```yaml
     StageName: !Ref ApiStageParameter

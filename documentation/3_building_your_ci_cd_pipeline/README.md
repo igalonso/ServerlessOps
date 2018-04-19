@@ -60,6 +60,7 @@ cat ~/.ssh/codecommit_rsa.pub
 Now, you need to upload it to your IAM user Git credentials:
 
 1. Go to the IAM Console > Users > your user.
+2. Click on *Security Credentials*
 2. If you go to the bottom of the settings, you should see something like this:
 
 <img src="../images/iam_codecommit_credentials_ssh.png" />
@@ -92,7 +93,7 @@ By now, you should have a folder called **ServerlessOps-repository**.
 cd ServerlessOps-repository
 git add -A
 git commit -m "initial commit"
-git push
+git push --set-upstream origin master
 ````
 Go to the **CodeCommit** console to verify that the content has been added.
 
@@ -140,7 +141,7 @@ Within the project, the file buildspec.yml has the information necesary for your
 Click on *Next Step* once you have created your build project. Altough SAM (behind the scenes) will use CodeDeploy, SAM is based in CloudFormation and the deploy will do it as well.
 
 1. Select ```CloudFormation``` as the deployment provider.
-2. Chose ```Change or replace a change set``` as the Action Mode.
+2. Chose ```Create or replace a change set``` as the Action Mode.
 3. Name the Stack ```ServerlessOps-stack```
 4. Name the Change set as ```ServerlessOps-changeset```
 5. The template file that CodeBuild generates is ```SAM-template.yaml```. Set it under Template file.
@@ -156,9 +157,9 @@ Click on *Next Step* once you have created your build project. Altough SAM (behi
 
 Go to the **CodePipeline** console and take a look at all the stages flowing. This might take a while but worth seeing!
 
-After everything is in green, did it work? Have you deployed a new API? Seems like you haven't!
+After everything is in green, did it work? Have you deployed a new API? Seems like it hasn't!
 
-You need to go to CloudFormation and Execute the ChangeSet.
+You need to go to CloudFormation and Execute the [ChangeSet](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html).
 
 1. Select the stack *ServerlessOps-stack*. On the down panel, click on *Change sets*. 
 2. Click on the Change Set called *ServerlessOps-changeset*.
