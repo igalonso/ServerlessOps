@@ -83,7 +83,7 @@ With Lambda, you can easily create this traffic shifting feature with just a few
 	            rekognition.detectText(params).promise().then(function (detectedtext){
 	                result.TextDetections = detectedtext;
 	                rekognition.detectLabels(params).promise().then(function (labels){
-	                    result.Labels = labels;
+	                    result.Labels = labels.Labels;
 	                    callback(null, createResponse(200, result));
 	                });
 	            });
