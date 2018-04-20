@@ -204,7 +204,7 @@ Now, let's test this feature:
 1. Use the following command with the appropiate parameters for your API:
 
 ``` bash
-curl -X POST   https://<api-id>.execute-api.us-east-1.amazonaws.com/Prod/a-ramdom-name-that-will-trigger-403 'Content-Type: application/json' -d '{ "bucket": "serverlessops-step0-stack-serverlessopsfrontend-<bucket-id>","key": "someguy.jpg"}'
+curl -X POST   https://<api-id>.amazonaws.com/Prod/a-ramdom-name-that-will-trigger-403 'Content-Type: application/json' -d '{ "bucket": "serverlessops-step0-stack-serverlessopsfrontend-<bucket-id>","key": "img/uploads/someguy.jpg"}'
 ```
 
 <img src="../images/4_postman-test.png" />
