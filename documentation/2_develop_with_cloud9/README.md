@@ -45,13 +45,12 @@ Specify `functions` as folder name. Right click over the `functions` folder to c
 ![Folder structure](../images/2201-cloud9-folder-structure.png)
 
 
-Right click on the `getinfo` folder and select *New file*. Name it `template.yaml`. This is the YAML-formated SAM template that describes your serverless API. Double click on in to open the editor. On the *Editor pane* paste the following content.
+Right click on the `getinfo` folder and select *New file*. Name it `template.yaml`. This is the YAML-formated SAM template that describes your serverless API. Double click on in to open the editor. On the *Editor pane* paste the following content:
 
 ```yaml
 AWSTemplateFormatVersion : '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: AWS SAM template with API defined in an external Swagger file along with Lambda integrations and CORS configurations
-
 
 Globals:
   Api:
@@ -65,7 +64,7 @@ Resources:
   LambdaFunction:
    Type: AWS::Serverless::Function
    Properties:
-      CodeUri: functions/getinfo
+      CodeUri: ./
       Description: "Backend Lambda for Serverless Ops Workshop"
       Handler: index.handler
       Timeout: 60
@@ -86,6 +85,8 @@ Outputs:
       Description: "API endpoint URL for Prod environment"
       Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"
 ``` 
+
+
 
 
 
@@ -130,10 +131,6 @@ exports.handler = (event, context, callback) => {
     })},3000);
 };
 ``` 
-
-If you see a welcome page click **Get started**.
-
-1. In the navigation pane on the left, click on the **Crawlers** link.
 
 
 ## 2.2. Debugging.
