@@ -34,7 +34,7 @@ It looks pretty much like any IDE you are used to, doesn't it?
 
 The *Environment pane*, on the left side of the screen, shows a list of folders and files in your project. The *Editor pane*, on the right, is where you will write, test and debug code.  
 
-## 2.2. Code, test & debug your serverless API
+## 2.2. Create your serverless API
 
 On the *Environment pane* right click over the root folder and select **New Folder**.
 
@@ -43,7 +43,6 @@ On the *Environment pane* right click over the root folder and select **New Fold
 Specify `functions` as folder name. Right click over the `functions` folder to create another one called `getinfo`.
 
 ![Folder structure](../images/2201-cloud9-folder-structure.png)
-
 
 Right click on the `getinfo` folder and select *New file*. Name it `template.yaml`. This is the YAML-formated SAM template that describes your serverless API. Double click on in to open the editor. On the *Editor pane* paste the following content:
 
@@ -86,12 +85,7 @@ Outputs:
       Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"
 ``` 
 
-
-
-
-
-Name it `index.js`. This will be the source code for your serverless API. Double click on `index.js` to open the file. On the *index.js* tab on the *Editor pane* paste the following Node.js construct 
-
+Right click again on the `getinfo` folder and select *New file*. Name it `index.js`. This will be the source code for your serverless API. Double click on `index.js` to open the editor. On the *index.js* tab on the *Editor pane* paste the following Node.js construct:
 
 ```javascript
 'use strict';
@@ -132,5 +126,20 @@ exports.handler = (event, context, callback) => {
 };
 ``` 
 
+To the right of the *Editor pane* Click on *AWS Resources* and verify that you have a new Lambda function on the *Local Functions* tree, as shown below.
 
-## 2.2. Debugging.
+![Local lambda](../images/2202-cloud9-local-lambda.png)
+
+
+## 2.3. Test and debug your serverless API
+
+To the right of the *Editor pane* Click on *AWS Resources*. Locate your local Lambda function, right click on it and select *Run Local*.
+
+![Local lambda](../images/2203-cloud9-local-lambda-run.png)
+
+This will open a new run tests tab on the *Editor pane*.
+
+
+
+## 2.4. Push changes to your repo
+
