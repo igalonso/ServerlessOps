@@ -322,7 +322,12 @@ To test this concurrency, let's go to our terminal and run the previous command 
 
 
 ```bash
-./go/bin/hey -n 5000 -c 50 -d '{ "bucket": "serverlessops-step0-stack-serverlessopsfrontend-<your-alias-here>","key": "someguy.jpg"}' -H 'Content-Type: application/json' -m POST https://<your-api-endpoint>/Prod/getinfo
+##linux
+./go/bin/hey -n 5000 -c 50 -d '{ "bucket": "serverlessops-step0-stack-serverlessopsfrontend-<your-alias-here>","key": "img/uploads/someguy.jpg"}' -H 'Content-Type: application/json' -m POST https://<your-api-endpoint>/Prod/getinfo
+
+##mac
+
+~/go/bin/hey -n 5000 -c 50 -d '{ "bucket": "serverlessops-step0-stack-serverlessopsfrontend-<your-alias-here>","key": "img/uploads/someguy.jpg"}' -H 'Content-Type: application/json' -m POST https://<your-api-endpoint>/Prod/getinfo 
 ```
 
 
