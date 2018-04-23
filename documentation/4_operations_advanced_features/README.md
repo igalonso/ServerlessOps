@@ -6,7 +6,7 @@ Now you are prepare for some advaneced features. We have created a pipeline, cha
 
 You have successfully deployed your first pipeline from the repository till final deployment. However, I would like to share a little secret with you. All of this job is automatically done with CodeStar!
 
-<center><img src="../images/codestar-logo.png"/></center>
+<img src="../images/codestar-logo.png"/>
 
 
 <details>
