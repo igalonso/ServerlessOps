@@ -402,17 +402,17 @@ Go and edit the pipeline and add a new stage at the end of the pipeline (name it
 
 Within the stage, add a new action with the following attributes:
 
-* Action category -> Deploy
-* Action name -> ServerlessOps-stack-Prod
-* Deployment provider -> AWS CloudFormation
-* Action mode -> Create or replace a change set
-* Stack name -> ```ServerlessOps-stack-Prod```
-* Change set name -> ```ServerlessOps-changeset-Prod```
-* Template -> ```MyAppBuild::SAM-template.yaml```
-* Capabilities -> CAPABILITY_IAM
-* Role name -> ```ServerlessOps-cloudformationrole```
-* Advanced -> Parameter overrides -> ```{"EnvNameParameter":"Prod"}```
-* Input artifacts 1 -> ```MyAppBuild```
+* Action category: Deploy
+* Action name: ServerlessOps-stack-Prod
+* Deployment provider: AWS CloudFormation
+* Action mode: Create or replace a change set
+* Stack name: ```ServerlessOps-stack-Prod```
+* Change set name: ```ServerlessOps-changeset-Prod```
+* Template: ```MyAppBuild::SAM-template.yaml```
+* Capabilities: CAPABILITY_IAM
+* Role name: ```ServerlessOps-cloudformationrole```
+* Advanced: Parameter overrides -> ```{"EnvNameParameter":"Prod"}```
+* Input artifacts 1: ```MyAppBuild```
 
 Note that this action is very similar to the existing one for our staging/QA environment but here we are overriding the default value for our input parameter to the CFN template in order to use *Prod* to represent our PROD API Gateway (and corresponding Lambda).
 
@@ -420,12 +420,12 @@ Next, as we did for the staging/QA environment, lets add a second action (just a
 
 Again, add a new section with the following attributes:
 
-* Action category -> Deploy
-* Action name -> ```ExecuteChangeSetProd```
-* Deployment provider -> AWS CloudFormation
-* Action mode -> Execute a change set
-* Stack name -> ```ServerlessOps-stack-Prod```
-* Change set name -> ```ServerlessOps-changeset-Prod```
+* Action category: Deploy
+* Action name: ```ExecuteChangeSetProd```
+* Deployment provider: AWS CloudFormation
+* Action mode: Execute a change set
+* Stack name: ```ServerlessOps-stack-Prod```
+* Change set name: ```ServerlessOps-changeset-Prod```
 
 ### 4.4.4: Create the testing lambda (and its supporting artifacts).
 
@@ -458,16 +458,16 @@ Go to IAM console and create a new policy with the following JSON definition and
 
 Next, also in the IAM console, create a new role with the following configuration:
 
-* Type of trusted entity -> AWS service -> Lambda
-* Permissions -> Search for the just created policy (*LogsAndPipeline*) and select it
-* Name -> LambdaForPipelineInvocation
+* Type of trusted entity: AWS service -> Lambda
+* Permissions: Search for the just created policy (*LogsAndPipeline*) and select it
+* Name: LambdaForPipelineInvocation
 
 Now we are ready to create the testing lambda. Go to Lambda console and create (author from scratch) a new function with the following configuration:
 
-* Name -> HttpTest
-* Runtime -> Node.js 4.3
-* Role -> Choose an existing role
-* Existing role -> LambdaForPipelineInvocation
+* Name: HttpTest
+* Runtime: Node.js 4.3
+* Role: Choose an existing role
+* Existing role: LambdaForPipelineInvocation
 
 Paste the following code for the function implementation:
 
