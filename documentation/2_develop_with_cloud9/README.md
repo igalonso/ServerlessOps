@@ -12,6 +12,11 @@ In this section, you are going to use [AWS Cloud9](https://aws.amazon.com/cloud9
 <a href="https://github.com/awslabs/serverless-application-model" target=_blank><img src="../images/sam.png" alt="Serverless Application Model"/></a>
 </center>
 
+- [2.1. Create your cloud-based development environment](#21-create-your-cloud-based-development-environment)
+- [2.2. Create your serverless API](#22-create-your-serverless-api)
+- [2.3. Test your serverless API locally](#23-test-your-serverless-api-locally)
+- [2.4. Push changes to your repo](#24-push-changes-to-your-repo)
+
 ## 2.1. Create your cloud-based development environment
 
 Navigate to the [AWS Cloud9 management console](https://console.aws.amazon.com/cloud9/home). Make sure the AWS Region selector matches the one you have been working with so far. 
@@ -33,6 +38,8 @@ The *Review* page summarizes the characteristics of your Cloud9 environment. Pro
 It looks pretty much like any IDE you are used to, doesn't it? 
 
 The *Environment pane*, on the left side of the screen, shows a list of folders and files in your project. The *Editor pane*, on the right, is where you will write, test and debug code.  
+
+[Back to top]((#2-develop-with-cloud9))
 
 ## 2.2. Create your serverless API
 
@@ -98,6 +105,7 @@ As a last step, on the right-hand side of the *Editor pane* Click on *AWS Resour
 
 ![Local lambda](../images/2203-cloud9-local-lambda.png)
 
+[Back to top]((#2-develop-with-cloud9))
 
 ## 2.3. Test your serverless API locally
 
@@ -213,6 +221,7 @@ Execute a test by clicking the run button <img src="../images/aws-cloud9-run.png
 
 ![Local API](../images/2309-cloud9-tests-local-api-run.png)
 
+[Back to top]((#2-develop-with-cloud9))
 
 ## 2.4. Push changes to your repo
 
@@ -254,6 +263,8 @@ After that, go back to your CodeCommit repository and verify you have your files
 
 ![CodeCommit repo contents](../images/2402-codecommit-repo-contents.png)
 
+
+[Back to top]((#2-develop-with-cloud9))
 
 ### Congratulations! You completed this section
 
