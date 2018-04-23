@@ -46,6 +46,9 @@ One of the most requested features for Serverless applications is the possibilit
 
 Others would like to shift the traffic to monitor if their infrastructure (behind the scenes) can stand it.
 
+<details>
+<summary><strong>These steps are not required for the workshop. These are just optional.</strong></summary>
+
 With Lambda, you can easily create this traffic shifting feature with just a few lines of SAM code:
 
 ### 4.2.1: Update your deployment preference
@@ -177,6 +180,7 @@ var params = {
 
 Or if you want to go beyond that, try to build your first integration test!
 
+</details>
 
 ## 4.3. API Gateway Canary releases.
 
