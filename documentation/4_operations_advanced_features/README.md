@@ -585,8 +585,7 @@ Within the stage, add a new action with the following attributes (please note th
 * Action name: ```Validate_HTTP_request```
 * Provider: AWS Lambda
 * Function name: ```HttpTest```
-* User parameters:
-
+* User parameters: *(please notice that the hostname is without 'https')*
 	```json
 	{"options":{"hostname":"<your-api-id>.execute-api.us-east-1.amazonaws.com","port": 443,"path":"/Prod/getinfo","method": "POST","headers":{"Content-Type":"application/json"}},"data":{"bucket":"serverlessops-step0-stack-serverlessopsfrontend-<your-alias-here>","key":"JeffB.jpg"},"expected":"Jeff Bezos"}
 	```
