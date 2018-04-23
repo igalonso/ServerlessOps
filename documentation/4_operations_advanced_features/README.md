@@ -579,13 +579,13 @@ Lets go and wire our testing lambda in the pipeline so we can validate that a ne
 
 Go to pipeline and edit it, add a new stage in between our 2 environments (Staging and Prod). You can name it *Test*.
 
-Within the stage, add a new action with the following attributes (please note that you need to replace *<your-api-id>* and *<your-alias-here>* in the *User parameters* with the corresponding values for your QA's environment API Gateway's ID and the S3 bucket where you will be putting your images respectively):
+Within the stage, add a new action with the following attributes (please note that you need to replace `<your-api-id>` and `<your-alias-here>` in the *User parameters* with the corresponding values for your QA's environment API Gateway's ID and the S3 bucket where you will be putting your images respectively):
 
 * Action category -> Invoke
 * Action name -> Validate_HTTP_request
 * Provider -> AWS Lambda
 * Function name -> HttpTest
-* User parameters -> {"options":{"hostname":"<your-api-id>.execute-api.us-east-1.amazonaws.com","port": 443,"path":"/Prod/getinfo","method": "POST","headers":{"Content-Type":"application/json"}},"data":{"bucket":"serverlessops-step0-stack-serverlessopsfrontend-<your-alias-here>","key":"JeffB.jpg"},"expected":"Jeff Bezos"}
+* User parameters -> {"options":{"hostname":"`<your-api-id>`.execute-api.us-east-1.amazonaws.com","port": 443,"path":"/Prod/getinfo","method": "POST","headers":{"Content-Type":"application/json"}},"data":{"bucket":"serverlessops-step0-stack-serverlessopsfrontend-`<your-alias-here>`","key":"JeffB.jpg"},"expected":"Jeff Bezos"}
 
 ### 4.4.5: Upload the celebrity to be used as 'reference input'.
 
