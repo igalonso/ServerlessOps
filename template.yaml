@@ -2,9 +2,17 @@ AWSTemplateFormatVersion : '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: AWS SAM template with API defined in an external Swagger file along with Lambda integrations and CORS configurations
 
+Parameters:
+  EnvNameParameter:
+    Type: String
+    Default: QA
+    AllowedValues:
+      - QA
+      - Prod
 
 Globals:
   Api:
+    Name: !Sub ServerlessOps${EnvNameParameter}
     Cors:
       AllowMethods: "'OPTIONS,POST'"
       AllowHeaders: "'Content-Type, Authorization, X-Amz-Date, X-Api-Key, X-Amz-Security-Token'"
@@ -15,11 +23,12 @@ Resources:
   LambdaFunction:
    Type: AWS::Serverless::Function
    Properties:
+      FunctionName: !Sub ServerlessOps${EnvNameParameter}     
       CodeUri: functions/getinfo
       Description: "Backend Lambda for Serverless Ops Workshop"
       Handler: index.handler
       Timeout: 60
-      Policies: 
+      Policies:
         - AmazonRekognitionFullAccess
         - AmazonS3ReadOnlyAccess
       Runtime: nodejs4.3
