@@ -406,13 +406,13 @@ Within the stage, add a new action with the following attributes:
 * Action name -> ServerlessOps-stack-Prod
 * Deployment provider -> AWS CloudFormation
 * Action mode -> Create or replace a change set
-* Stack name -> ServerlessOps-stack-Prod
-* Change set name -> ServerlessOps-changeset-Prod
-* Template -> MyAppBuild::SAM-template.yaml
+* Stack name -> ```ServerlessOps-stack-Prod```
+* Change set name -> ```ServerlessOps-changeset-Prod```
+* Template -> ```MyAppBuild::SAM-template.yaml```
 * Capabilities -> CAPABILITY_IAM
-* Role name -> ServerlessOps-cloudformationrole
-* Advanced -> Parameter overrides -> {"EnvNameParameter":"Prod"}
-* Input artifacts 1 -> MyAppBuild
+* Role name -> ```ServerlessOps-cloudformationrole```
+* Advanced -> Parameter overrides -> ```{"EnvNameParameter":"Prod"}```
+* Input artifacts 1 -> ```MyAppBuild```
 
 Note that this action is very similar to the existing one for our staging/QA environment but here we are overriding the default value for our input parameter to the CFN template in order to use *Prod* to represent our PROD API Gateway (and corresponding Lambda).
 
@@ -421,11 +421,11 @@ Next, as we did for the staging/QA environment, lets add a second action (just a
 Again, add a new section with the following attributes:
 
 * Action category -> Deploy
-* Action name -> ExecuteChangeSetProd
+* Action name -> ```ExecuteChangeSetProd```
 * Deployment provider -> AWS CloudFormation
 * Action mode -> Execute a change set
-* Stack name -> ServerlessOps-stack-Prod
-* Change set name -> ServerlessOps-changeset-Prod
+* Stack name -> ```ServerlessOps-stack-Prod```
+* Change set name -> ```ServerlessOps-changeset-Prod```
 
 ### 4.4.4: Create the testing lambda (and its supporting artifacts).
 
@@ -581,11 +581,12 @@ Go to pipeline and edit it, add a new stage in between our 2 environments (Stagi
 
 Within the stage, add a new action with the following attributes (please note that you need to replace `<your-api-id>` and `<your-alias-here>` in the *User parameters* with the corresponding values for your QA's environment API Gateway's ID and the S3 bucket where you will be putting your images respectively):
 
-* Action category -> Invoke
-* Action name -> Validate_HTTP_request
-* Provider -> AWS Lambda
-* Function name -> HttpTest
-* User parameters -> {"options":{"hostname":"`<your-api-id>`.execute-api.us-east-1.amazonaws.com","port": 443,"path":"/Prod/getinfo","method": "POST","headers":{"Content-Type":"application/json"}},"data":{"bucket":"serverlessops-step0-stack-serverlessopsfrontend-`<your-alias-here>`","key":"JeffB.jpg"},"expected":"Jeff Bezos"}
+* Action category: Invoke
+* Action name: ```Validate_HTTP_request```
+* Provider: AWS Lambda
+* Function name: ```HttpTest```
+* User parameters:
+	```{"options":{"hostname":"`<your-api-id>`.execute-api.us-east-1.amazonaws.com","port": 443,"path":"/Prod/getinfo","method": "POST","headers":{"Content-Type":"application/json"}},"data":{"bucket":"serverlessops-step0-stack-serverlessopsfrontend-`<your-alias-here>`","key":"JeffB.jpg"},"expected":"Jeff Bezos"}```
 
 ### 4.4.5: Upload the celebrity to be used as 'reference input'.
 
