@@ -296,7 +296,7 @@ LambdaFunction:
             Path: /getinfo
             Method: POST
       AutoPublishAlias: live
-      ReservedConcurrentExecutions : 10
+      ReservedConcurrentExecutions : 25
 ```
 
 Seems like CloudFormation in SAM doesn't work right now:
