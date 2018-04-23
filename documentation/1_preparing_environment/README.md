@@ -18,10 +18,9 @@ To deploy these assets go to the step0 folder and find the following file:
 
 Click on one of the following links. Beware! This will be the region you will use during the rest of the workshop!
 
-Region| Launch
-------|-----
-
-EU (Ireland) | [![Launch Step 0 in eu-west-1](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=serverlessops-step0-stack&templateURL=https://s3.amazonaws.com/igngar/public/serverlessops-workshop/cf_step0.yml)
+	Region| Code | Launch
+	------|------|-------
+	EU (Ireland) | <span style="font-family:'Courier';">eu-west-1</span> | [![Launch Step 0 in eu-west-1](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=serverlessops-step0-stack&templateURL=https://s3-eu-west-1.amazonaws.com/serverlessops-functions-eu-west-1/cfn/cf_step0.yml)
 
 
 1. In the **CloudFormation** Console and click on Next.
@@ -46,13 +45,18 @@ serverlessops-deploymentbucket-<your-alias-here>
 Now we have to go to `buildspec.yaml`. You will find it in the root folder, of the ZIP you downloaded on previous steps. Change the S3 bucket to the one you have just created. Basically, add the alias you added to the CloudFormation here.
 
 
-Once you have finished this step you can start the second step [here](../../documentation/2_develop_with_cloud9).
-
 ## 1.3 Create a repository in CodeCommit
 
-1. Go to the CodeCommit repository and click on **Create Repository**
+You will see a landing page with a Get Started button. Click it to start with the creation of the repository.
 
-<img src="../images/codecommit_create_repository.png" width="70%" />
+
 
 2. Enter a repository name such as ```ServerlessOps_Repository```
+	<img src="../images/codecommit_create_repository.png" width="70%" />
 3. Skip Configure email notifications' step.
+
+After doing this, you can skip the connection part of the wizard. We will use it later in the next section.
+
+##Next step
+
+Once you have finished this step you can start the second step [here](../../documentation/2_develop_with_cloud9).

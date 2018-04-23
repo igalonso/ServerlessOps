@@ -4,6 +4,20 @@ Remember this? Let's build it!
 
 <img src="../images/diagrams/serverlessops-workshop-workflow.png" />
 
+First you need to create a file called **buildspec.yml** which will have the instructions for the pipeline builder to deploy our changes in the stage.
+
+1. To do so, in the root folder of your repository (within Cloud9) create a file with that name.
+2. Got to the [builspec.yml file](../../buildspec.yml) and copy the content to this new created file.
+3. Within this buildspec.yml you will see that the build will use the bucket ```serverlessops-deploymentbucket-<your-alias-here>```. Change the ```<you-alias-here>```with the alias you selected in the first step.
+3. Once you have added this, make a push to the repository:
+
+	```bash
+	git add .
+	git commit -m "Adding buildspec.yml to build the pipeline"
+	git push	
+	```
+	
+
 ## 3.1. Set up your pipeline with CodePipeline.
 
 Now we are going to create our first pipeline! 
