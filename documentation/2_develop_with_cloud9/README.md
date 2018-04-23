@@ -44,70 +44,34 @@ Specify `functions` as folder name. Right click over the `functions` folder to c
 
 ![Folder structure](../images/2201-cloud9-folder-structure.png)
 
-Right click on the `getinfo` folder and select *New file*. Name it `template.yaml`. This is the YAML-formated SAM template that describes your serverless API. Double click on in to open the editor. On the *Editor pane* paste the following content:
+Right click on the `serverlessIDE` root folder and select *New file*. Name it `template.yaml`. This is the YAML-formated SAM template that describes your serverless API. Double click on in to open the editor. On the *Editor pane* paste the contents on the file [template.yaml](../../template.yaml)
 
-```yaml
-AWSTemplateFormatVersion : '2010-09-09'
-Transform: AWS::Serverless-2016-10-31
-Description: AWS SAM template with API defined in an external Swagger file along with Lambda integrations and CORS configurations
+Right click again on the `getinfo` folder and select *New file*. Name it `index.js`. This will be the source code for your serverless API. Double click on `index.js` to open the editor. On the *index.js* tab on the *Editor pane* paste the contents on the file [index.js](../../functions/getinfo/index.js)
 
-Globals:
-  Api:
-    Cors:
-      AllowMethods: "'OPTIONS,POST'"
-      AllowHeaders: "'Content-Type, Authorization, X-Amz-Date, X-Api-Key, X-Amz-Security-Token'"
-      AllowOrigin: "'*'"
-      MaxAge: "'600'"
-
-Resources:
-  LambdaFunction:
-   Type: AWS::Serverless::Function
-   Properties:
-      CodeUri: ./
-      Description: "Backend Lambda for Serverless Ops Workshop"
-      Handler: index.handler
-      Timeout: 60
-      Policies: 
-        - AmazonRekognitionFullAccess
-        - AmazonS3ReadOnlyAccess
-      Runtime: nodejs4.3
-      Events:
-        ProxyApiRoot:
-          Type: Api
-          Properties:
-            Path: /getinfo
-            Method: POST
-      AutoPublishAlias: live
-
-Outputs:
-  ApiURL:
-      Description: "API endpoint URL for Prod environment"
-      Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"
-``` 
-
-Right click again on the `getinfo` folder and select *New file*. Name it `index.js`. This will be the source code for your serverless API. Double click on `index.js` to open the editor. On the *index.js* tab on the *Editor pane* paste the following Node.js construct:
+Inspect the code. It contains a `handler` function that is executed when the Lambda function is invoked. The first part of the function retrieves, from the input event, the bucket name and object key that identify where the image to process is located.
 
 ```javascript
-'use strict';
-const util = require('util');
-const AWS = require('aws-sdk');
-const rekognition = new AWS.Rekognition({region: process.env.AWS_REGION});
-
-const createResponse = (statusCode, body) => {
-    return {
-        "statusCode": statusCode,
-        "headers": {
-            'Access-Control-Allow-Origin': '*'
-        },
-        "body": JSON.stringify(body)
-    }
-};
-
+...
+...
 exports.handler = (event, context, callback) => {
     const body = JSON.parse(event.body);
     const srcBucket = body.bucket;
     const srcKey = decodeURIComponent(body.key ? body.key.replace(/\+/g, " ") : null); 
 
+    ...
+    ...
+};
+``` 
+
+
+The second part invokes [Amazon Rekognition detecLabels function](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Rekognition.html#detectLabels-property) to detect real-world entities (labels) within an image provided as input.
+
+```javascript
+...
+...
+exports.handler = (event, context, callback) => {
+    ...
+    ...
     var params = {
         Image: {
             S3Object: {
@@ -138,6 +102,49 @@ To the right of the *Editor pane* Click on *AWS Resources*. Locate your local La
 ![Local lambda](../images/2203-cloud9-local-lambda-run.png)
 
 This will open a new run tests tab on the *Editor pane*.
+
+
+Notice a drop-down list on the top-right corner of the tests tab. Click the arrow icon and learn about the different tests available:
+
+* Lambda (local), leverages [SAM local](https://github.com/awslabs/aws-sam-local) to run your Lambda function locally 
+* Lambda (remote), the IDE sends an event to a Lambda function deployed on your AWS acccount
+* API Gateway (local), leverages [SAM local](https://github.com/awslabs/aws-sam-local) to run a local version of your API
+* API Gateway (remote), the IDE sends a request to an API deployed on your AWS account
+
+Let's start with *Lambda (local)* so, please, make sure it is selected from the drop-down list.
+
+
+Let's move our attention to the top-left area of the tests tab. The run icon starts the execution. Immediatly to the right of it you will see a debug icon gray. By clicking on it, it will change color to light green, meaning that debugging is enabled. Leave debug disabled for now.
+
+
+Last, but not the list, the test tab allows us to specify the payload that is going to be used to trigger the function/API. Since we are now testing the Lamba function directly, we need a test event as the Lambda function expects. Our Lambda function is proxied by an API Gateway API, so the event looks like this.
+
+
+
+**Note:** You can generate sample events using the `generate-event` command of the [SAM local](https://github.com/awslabs/aws-sam-local) command line interface:
+
+`
+sam local generate-event
+NAME:
+   sam local generate-event - Generates Lambda events (e.g. for S3/Kinesis etc) that can be piped to 'sam local invoke'
+
+USAGE:
+   sam local generate-event command [command options] [arguments...]
+
+COMMANDS:
+     s3        Generates a sample Amazon S3 event
+     sns       Generates a sample Amazon SNS event
+     kinesis   Generates a sample Amazon Kinesis event
+     dynamodb  Generates a sample Amazon DynamoDB event
+     api       Generates a sample Amazon API Gateway event
+     schedule  Generates a sample scheduled event
+
+OPTIONS:
+   --help, -h  show help
+`
+
+
+
 
 
 
