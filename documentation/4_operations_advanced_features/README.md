@@ -1,6 +1,18 @@
-# 4. Operations: Advanced Features - WARNING: MEMES AHEAD
+# 4. Operations: Advanced Features
 
 Now you are prepare for some advaneced features. We have created a pipeline, changed different settings and reduced the operational overhead of our deployments. It's time to execute at the most reliable level!
+
+You don't need to follow all the steps in this section. You might want to implement one or two during the time of the workshop and test the rest at home.
+
+This section of the workshop covers:
+
+```
+- CodeStar
+- Blue/Green deployments in Lambda
+- Canary deployments in Lambda
+- Concurrency in Lambda
+- Integration tests within the pipelines.
+```
 
 ## 4.1 What about CodeStar?
 
@@ -165,7 +177,6 @@ var params = {
 
 Or if you want to go beyond that, try to build your first integration test!
 
-</p></details>
 
 ## 4.3. API Gateway Canary releases.
 
