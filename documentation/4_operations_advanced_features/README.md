@@ -237,22 +237,19 @@ setTimeout(function(){...
 ```
 This has been made on purpose to force your Lambda function to have concurrent executions.
 
-Let's test our Lambda Function without concurrency. To do it, we recommend you to use an EC2 instance so you can install hey easily.
+Let's test our Lambda Function without concurrency. To do it, we recommend you to use the Cloud9 terminal (powered by EC2) so you can install hey easily.
 
 ```bash
-## If you don't have go installed:
+## Cloud9 environment:
 sudo yum install go -y
+
 ## mac with brew
 brew install go
-##
 
+## grab hey tool
 go get -u github.com/rakyll/hey
 
-##linux
-./go/bin/hey -n 5000 -c 50 -d '{ "bucket": "serverlessops-step0-stack-serverlessopsfrontend-<your-alias-here>","key": "img/uploads/someguy.jpg"}' -H 'Content-Type: application/json' -m POST https://<your-api-endpoint>/Prod/getinfo
-
-##mac
-
+##Cloud9 or mac
 ~/go/bin/hey -n 5000 -c 50 -d '{ "bucket": "serverlessops-step0-stack-serverlessopsfrontend-<your-alias-here>","key": "img/uploads/someguy.jpg"}' -H 'Content-Type: application/json' -m POST https://<your-api-endpoint>/Prod/getinfo
 ```
 This might take a while so you might want to grab a coffee or review the CloudWatch metrics (does it reflect the request count for this specific API?).
@@ -322,11 +319,7 @@ To test this concurrency, let's go to our terminal and run the previous command 
 
 
 ```bash
-##linux
-./go/bin/hey -n 5000 -c 50 -d '{ "bucket": "serverlessops-step0-stack-serverlessopsfrontend-<your-alias-here>","key": "img/uploads/someguy.jpg"}' -H 'Content-Type: application/json' -m POST https://<your-api-endpoint>/Prod/getinfo
-
-##mac
-
+##Cloud9 or mac
 ~/go/bin/hey -n 5000 -c 50 -d '{ "bucket": "serverlessops-step0-stack-serverlessopsfrontend-<your-alias-here>","key": "img/uploads/someguy.jpg"}' -H 'Content-Type: application/json' -m POST https://<your-api-endpoint>/Prod/getinfo
 ```
 
