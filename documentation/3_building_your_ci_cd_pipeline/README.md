@@ -4,108 +4,7 @@ Remember this? Let's build it!
 
 <img src="../images/diagrams/serverlessops-workshop-workflow.png" />
 
-## 3.1. Set up your repository with CodeCommit.
-
-We need to place our code in a repository. For this, we will use, CodeCommit.
-
-### 3.1.1: Create IAM git credentials - SSH
-
-Now, we have our deployment ready to go. To start building our pipeline, we need to create keys to our IAM user to be able to push/pull code from CodeCommit (our respository). Continue this guide to create these keys.
-
-#### 3.1.1.1: SSH and Linux, macOS, or Unix: Set Up the Public and Private Keys for Git and AWS CodeCommit
-
-From the terminal on your local machine, run the ssh-keygen command, and follow the directions to save the file to the .ssh directory for your profile.
-
-For example:
-
-```bash
-$ ssh-keygen
-
-Generating public/private rsa key pair.
-Enter file in which to save the key (/home/user-name/.ssh/id_rsa): Type /home/your-user-name/.ssh/ and a file name here, for example /home/your-user-name/.ssh/codecommit_rsa
-
-Enter passphrase (empty for no passphrase): <Type a passphrase, and then press Enter>
-Enter same passphrase again: <Type the passphrase again, and then press Enter>
-
-Your identification has been saved in /home/user-name/.ssh/codecommit_rsa.
-Your public key has been saved in /home/user-name/.ssh/codecommit_rsa.pub.
-The key fingerprint is:
-45:63:d5:99:0e:99:73:50:5e:d4:b3:2d:86:4a:2c:14 user-name@client-name
-The key's randomart image is:
-+--[ RSA 2048]----+
-|        E.+.o*.++|
-|        .o .=.=o.|
-|       . ..  *. +|
-|        ..o . +..|
-|        So . . . |
-|          .      |
-|                 |
-|                 |
-|                 |
-+-----------------+
-
-```
-
-This generates:
-
-- The codecommit_rsa file, which is the private key file.
-- The codecommit_rsa.pub file, which is the public key file.
-
-Run the following command to display the value of the public key file (codecommit_rsa.pub):
-
-```bash
-cat ~/.ssh/codecommit_rsa.pub
-```
-
-Now, you need to upload it to your IAM user Git credentials:
-
-1. Go to the IAM Console > Users > your user.
-2. Click on *Security Credentials*
-2. If you go to the bottom of the settings, you should see something like this:
-
-<img src="../images/iam_codecommit_credentials_ssh.png" />
-
-Select Upload SSH public key with the content displayed in previous steps:
-
-<img src="../images/iam_codecommit_public_key.png" width="70%"/>
-
-Upload it.
-
-### Step 3.1.2: Create a CodeCommit repository.
-
-1. Go to the CodeCommit repository and click on **Create Repository**
-
-<img src="../images/codecommit_create_repository.png" width="70%" />
-
-2. Enter a repository name such as ```ServerlessOps_Repository```
-3. Skip Configure email notifications' step.
-4. Follow the steps provided by CodeCommit to **Connect to your repository**
-
-<img src="../images/codecommit_connect_instructions.png" />
-
-By now, you should have a folder called **ServerlessOps-repository**.
-
-1. Copy the content of the folder **ServerlessOps_workshop** to the recently created **ServerlessOps_Repository**
-<img src="../images/codecommit_copy_content.png" />
-2. You can delete most of the content here since the backend application will use only the following files:
- -	template.yaml
- - buildspec.yml
- - functions (folder).
-
- If you decide to remove the rest of the files, your code will be lighter and deployments will go faster. Also, having a clean repository will prevent future mistakes. 
-2. Run these commands to perform the inital commit:
-
-````bash
-cd ServerlessOps-repository
-git add -A
-git commit -m "initial commit"
-git push --set-upstream origin master
-````
-Go to the **CodeCommit** console to verify that the content has been added.
-
-Now, let's try the application. Go to the public bucket url and test it.
-
-## 3.2. Set up your pipeline with CodePipeline.
+## 3.1. Set up your pipeline with CodePipeline.
 
 Now we are going to create our first pipeline! 
 
@@ -114,7 +13,7 @@ Now we are going to create our first pipeline!
 
 <img src="../images/codepipeline1.png" />
 
-### Step 3.2.1 Create the source of your pipeline.
+### Step 3.1.1 Create the source of your pipeline.
 
 3. Drop down the service provider and select **CodeCommit**.
 4. Look for the repository name created previously and select it.
@@ -124,7 +23,7 @@ Now we are going to create our first pipeline!
 
 After defining our source, we will chose **CodeBuild** as our build provider. Click on Next Step.
 
-### Step 3.2.2: How to create a CodeBuild project for your serveless pipeline
+### Step 3.1.2: How to create a CodeBuild project for your serveless pipeline
 
 Here we are going to select the build provider. In this case, we will use CodeBuild.
 
@@ -142,7 +41,7 @@ Within the project, the file buildspec.yml has the information necesary for your
 
 <img src="../images/codepipeline3.png" />
 
-### Step 3.2.3: Select the deploy phase using CloudFormation.
+### Step 3.1.3: Select the deploy phase using CloudFormation.
 
 Click on *Next Step* once you have created your build project. Altough SAM (behind the scenes) will use CodeDeploy, SAM is based in CloudFormation and the deploy will do it as well.
 
@@ -159,7 +58,7 @@ Click on *Next Step* once you have created your build project. Altough SAM (behi
 <img src="../images/codepipeline4.png" />
 
 
-## 3.4. Modify your pipeline: add a ChangeSet execution Automation.
+## 3.2. Modify your pipeline: add a ChangeSet execution Automation.
 
 Go to the **CodePipeline** console and take a look at all the stages flowing. This might take a while but worth seeing!
 
@@ -197,7 +96,7 @@ Your pipeline should look like this:
 
 
 
-## 3.5. Try again to  push to you pipeline.
+## 3.4. Try again to  push to you pipeline.
 
 Now we have our pipeline out. Shall we start with our first deployment? Why not!
 
