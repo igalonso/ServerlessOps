@@ -2,8 +2,6 @@
 
 Now you are prepare for some advaneced features. We have created a pipeline, changed different settings and reduced the operational overhead of our deployments. It's time to execute at the most reliable level!
 
-<img src="../images/joke-continious-delivery.png" width="75%" />
-
 ## 4.1 What about CodeStar?
 
 You have successfully deployed your first pipeline from the repository till final deployment. However, I would like to share a little secret with you. All of this job is automatically done with CodeStar!
