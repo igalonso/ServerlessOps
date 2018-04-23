@@ -32,7 +32,7 @@ After these steps, and some more time for the project to build, you will see tha
 
 ## 4.2: Blue Green Deployments
 
-One of the most requested features for Serverless applications is the possibility of shifting the traffic to, for example, prevent failing deployments to impact your application entirely. 
+One of the most requested features for Serverless applications is the possibility of shifting the traffic to, for example, prevent failing deployments to impact your application entirely.
 
 Others would like to shift the traffic to monitor if their infrastructure (behind the scenes) can stand it.
 
@@ -118,7 +118,7 @@ Let's make our release. As we did on previous steps, we will do it directly from
 
 We are shifting traffic 10% each minute! This has been done using 2 lines on SAM. How awesome it is?
 
-You can run tests (different requests) against the application to find see the different results. Sometimes it will give you the labels and sometime, text found on the picture! 
+You can run tests (different requests) against the application to find see the different results. Sometimes it will give you the labels and sometime, text found on the picture!
 
 While th frontend could be a good resource to test these B/G changes, you might want to use a tool like [PostMan](https://www.getpostman.com/) to send a POST request to your API faster.
 
@@ -177,7 +177,7 @@ With API gateway, you can deploy these changes easily on an percentage of resour
 
 To do so, follow these steps:
 
-1. Go to the API Gateway console and click on *Stages* of the *ServerlessOps-api*.
+1. Go to the API Gateway console and click on *Stages* of the *ServerlessOps-stack*.
 2. Click on the Stage where you want to add Canary. In this case, *Prod*.
 2. Click on the *Canary* tab.
 3. Click on *Create canary*.
@@ -253,7 +253,7 @@ go get -u github.com/rakyll/hey
 
 ##mac
 
-~/go/bin/hey -n 5000 -c 50 -d '{ "bucket": "serverlessops-step0-stack-serverlessopsfrontend-<your-alias-here>","key": "img/uploads/someguy.jpg"}' -H 'Content-Type: application/json' -m POST https://<your-api-endpoint>/Prod/getinfo 
+~/go/bin/hey -n 5000 -c 50 -d '{ "bucket": "serverlessops-step0-stack-serverlessopsfrontend-<your-alias-here>","key": "img/uploads/someguy.jpg"}' -H 'Content-Type: application/json' -m POST https://<your-api-endpoint>/Prod/getinfo
 ```
 This might take a while so you might want to grab a coffee or review the CloudWatch metrics (does it reflect the request count for this specific API?).
 
@@ -327,7 +327,7 @@ To test this concurrency, let's go to our terminal and run the previous command 
 
 ##mac
 
-~/go/bin/hey -n 5000 -c 50 -d '{ "bucket": "serverlessops-step0-stack-serverlessopsfrontend-<your-alias-here>","key": "img/uploads/someguy.jpg"}' -H 'Content-Type: application/json' -m POST https://<your-api-endpoint>/Prod/getinfo 
+~/go/bin/hey -n 5000 -c 50 -d '{ "bucket": "serverlessops-step0-stack-serverlessopsfrontend-<your-alias-here>","key": "img/uploads/someguy.jpg"}' -H 'Content-Type: application/json' -m POST https://<your-api-endpoint>/Prod/getinfo
 ```
 
 
@@ -372,7 +372,7 @@ We will edit our `template.yaml` file and add the following section just before 
 
 ```yaml
 Parameters:
-  ApiStageParameter:
+  EnvNameParameter:
     Type: String
     Default: QA
     AllowedValues:
@@ -380,20 +380,26 @@ Parameters:
       - Prod
 ```
 
-Additionally, we will add the property *StageName* to the globals artifact (also within the `template.yaml` file) to use the just-added parameter instead of the previously hard-coded *Prod*.
+Additionally, we will add the property *Name* to the *Api* artifacts under the *Globals* section (also within the `template.yaml` file) to use the just-added parameter as part of the name for the API Gateway artifact being created by the template.
 
 ```yaml
-    StageName: !Ref ApiStageParameter
+    Name: !Sub ServerlessOps${EnvNameParameter}
+```
+
+Finally, lets also use the just added parameter as part of the name for the Lambda function. Add the property *FunctionName* to the *LambdaFunction* artifact (also within the `template.yaml` file).
+
+```yaml
+    FunctionName: !Sub ServerlessOps${EnvNameParameter}
 ```
 
 Commit and push the changes ...
 
 ````bash
-git commit -am "adding stage param to API definition"
+git commit -am "adding param to API/Lambda definition"
 git push
 ````
 
-Our pipeline will deploy the new version of the template and that will result in our stack being updated so the existing API Gateway will replace its stage (*Prod*) with a new stage named *QA*. We have not instructed CFN (invoked via our pipeline) to use any specific value for the just added parameter but since its default value is *QA*, the API Gateway will use that default value.
+Our pipeline will deploy the new version of the template and that will result in our stack being updated so the existing API Gateway will replace its name with a new name including the *QA* literal. We have not instructed CFN (invoked via our pipeline) to use any specific value for the just added parameter *EnvNameParameter* but since its default value is *QA*, the API Gateway will use that default value.
 
 ### 4.4.2: Extend deployment pipeline to include a PROD environment.
 
@@ -412,7 +418,7 @@ Within the stage, add a new action with the following attributes:
 * Template -> MyAppBuild::SAM-template.yaml
 * Capabilities -> CAPABILITY_IAM
 * Role name -> ServerlessOps-cloudformationrole
-* Advanced -> Parameter overrides -> {"ApiStageParameter":"Prod"}
+* Advanced -> Parameter overrides -> {"EnvNameParameter":"Prod"}
 * Input artifacts 1 -> MyAppBuild
 
 Note that this action is very similar to the existing one for our staging/QA environment but here we are overriding the default value for our input parameter to the CFN template in order to use *Prod* to represent our PROD API Gateway (and corresponding Lambda).
@@ -586,9 +592,9 @@ Within the stage, add a new action with the following attributes (please note th
 * Action name -> Validate_HTTP_request
 * Provider -> AWS Lambda
 * Function name -> HttpTest
-* User parameters -> {"options":{"hostname":"<your-api-id>.execute-api.us-east-1.amazonaws.com","port": 443,"path":"/QA/getinfo","method": "POST","headers":{"Content-Type":"application/json"}},"data":{"bucket":"serverlessops-step0-stack-serverlessopsfrontend-<your-alias-here>","key":"JeffB.jpg"},"expected":"Jeff Bezos"}
+* User parameters -> {"options":{"hostname":"<your-api-id>.execute-api.us-east-1.amazonaws.com","port": 443,"path":"/Prod/getinfo","method": "POST","headers":{"Content-Type":"application/json"}},"data":{"bucket":"serverlessops-step0-stack-serverlessopsfrontend-<your-alias-here>","key":"JeffB.jpg"},"expected":"Jeff Bezos"}
 
-### 4.4.5: Upload the celebrity to be used as 'decoy'.
+### 4.4.5: Upload the celebrity to be used as 'reference input'.
 
 Grab the `JeffB.jpg` image below and upload it to the S3 bucket that is being used for image recognition ...
 
