@@ -32,7 +32,7 @@ Asia Pacific (Sydney) | [![Launch Step 0 in ap-southeast-2](http://docs.aws.amaz
 Asia Pacific (Mumbai) | [![Launch Step 0 in ap-south-1](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=ap-south-1#/stacks/new?stackName=serverlessops-step0-stack&templateURL=https://s3.amazonaws.com/wildrydes-ap-south-1/WebApplication/1_StaticWebHosting/webapp-static-hosting.yaml)
 
 
-1. Go to the **CloudFormation** Console and click on create a new stack.
+1. In the **CloudFormation** Console and click on Next.
 2. Verify the Stack name ```serverlessops-step0-stack```, write your **Alias** and click continue. Make sure you enter an **Alias** as it will be used to create your S3 bucket and also ensure that your **Alias** is unique among everyone so chose it wisely.
 3. Once you are in the final option page, enable CloudFormation to create IAM resources:
 

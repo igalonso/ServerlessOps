@@ -87,6 +87,12 @@ By now, you should have a folder called **ServerlessOps-repository**.
 
 1. Copy the content of the folder **ServerlessOps_workshop** to the recently created **ServerlessOps_Repository**
 <img src="../images/codecommit_copy_content.png" />
+2. You can delete most of the content here since the backend application will use only the following files:
+ -	template.yaml
+ - buildspec.yml
+ - functions (folder).
+
+ If you decide to remove the rest of the files, your code will be lighter and deployments will go faster. Also, having a clean repository will prevent future mistakes. 
 2. Run these commands to perform the inital commit:
 
 ````bash
@@ -172,13 +178,17 @@ But... This isn't pretty automatic, right? Sometimes, we might want to review al
 1. Go to the *CodePipeline* console.
 2. Select *ServelessOps_pipeline* and click *Edit*.
 3. Under the stage *Staging*, click on the pen icon:
-<img src="../images/codepipeline-staging-changeset.png" />
+
+	<img src="../images/codepipeline-staging-changeset.png" />
+	
 4. Click on Action and, in the new panel, add *Action category* as ```Deploy```.
 5. Action name, call it ```ExecuteChangeSet```.
 6. Under *Deployment provider*, select *AWS CloudFormation*.
 7. Then, a new panel for CloudFormation will appear. Select Action mode *Execute a change set*, Stack name ```ServerlessOps-stack```and Change set name, ```ServerlessOps-changeset```.
 8. Click on *Add action*.
 9. On top of the page, click *Save pipeline changes*.
+
+
 <img src="../images/codepipeline-staging-changeset-2.png" />
 
 Your pipeline should look like this:

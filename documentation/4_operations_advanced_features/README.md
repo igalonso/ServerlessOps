@@ -177,7 +177,7 @@ With API gateway, you can deploy these changes easily on an percentage of resour
 
 To do so, follow these steps:
 
-1. Go to the API Gateway console and click on *Stages* of the *ServerlessOps-api*.
+1. Go to the API Gateway console and click on *Stages* of the *ServerlessOps-stack*.
 2. Click on the Stage where you want to add Canary. In this case, *Prod*.
 2. Click on the *Canary* tab.
 3. Click on *Create canary*.
