@@ -39,7 +39,7 @@ It looks pretty much like any IDE you are used to, doesn't it?
 
 The *Environment pane*, on the left side of the screen, shows a list of folders and files in your project. The *Editor pane*, on the right, is where you will write, test and debug code.  
 
-[Back to top]((#2-develop-with-cloud9))
+[Back to top](#2-develop-with-cloud9)
 
 ## 2.2. Create your serverless API
 
@@ -105,7 +105,7 @@ As a last step, on the right-hand side of the *Editor pane* Click on *AWS Resour
 
 ![Local lambda](../images/2203-cloud9-local-lambda.png)
 
-[Back to top]((#2-develop-with-cloud9))
+[Back to top](#2-develop-with-cloud9)
 
 ## 2.3. Test your serverless API locally
 
@@ -221,7 +221,7 @@ Execute a test by clicking the run button <img src="../images/aws-cloud9-run.png
 
 ![Local API](../images/2309-cloud9-tests-local-api-run.png)
 
-[Back to top]((#2-develop-with-cloud9))
+[Back to top](#2-develop-with-cloud9)
 
 ## 2.4. Push changes to your repo
 
@@ -264,9 +264,11 @@ After that, go back to your CodeCommit repository and verify you have your files
 ![CodeCommit repo contents](../images/2402-codecommit-repo-contents.png)
 
 
-[Back to top]((#2-develop-with-cloud9))
+[Back to top](#2-develop-with-cloud9)
 
 ### Congratulations! You completed this section
+
+[Proceed to next section](../3_building_your_ci_cd_pipeline/README.md)
 
 [Back to home page](../../README.md)
 
