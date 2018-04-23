@@ -14,10 +14,16 @@ Here you can hardcore your values for the website bucket name and the API endpoi
 var api ="";
 var bucket ="";
 console.log("loading");
+
+
 $(document).ready ( function () {
+    $("#endpoint").val(sessionStorage.getItem("endpoint"));
+    $("#bucket").val(sessionStorage.getItem("bucket"));
     $("#trigger").click( function(){
         api = $("#endpoint").val();
         bucket = $("#bucket").val();
+        sessionStorage.setItem("endpoint", api);
+        sessionStorage.setItem("bucket",bucket);
         performRequest(api+"/getinfo",JSON.stringify({ "bucket": bucket,"key": image}) );
     });
 

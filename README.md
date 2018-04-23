@@ -38,13 +38,7 @@ However, this is not the important part. Let's take a look at this new diagram:
 <img src="documentation/images/diagrams/serverlessops-workshop-workflow.png" />
 
 
-## Introduction
-
-To start, please download the zip file with the content on this GitHub. To do this, under the green button, use *Clone or Download*
-
-<img src="documentation/images/0_download_content.png" />
-
-Then, you can start with the first step:
+## Steps:
 
 1. [Preparing the environment](documentation/1_preparing_environment)
 2. [Develop with Cloud9](documentation/2_develop_with_cloud9)
