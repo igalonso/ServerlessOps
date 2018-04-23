@@ -586,7 +586,10 @@ Within the stage, add a new action with the following attributes (please note th
 * Provider: AWS Lambda
 * Function name: ```HttpTest```
 * User parameters:
-	```{"options":{"hostname":"`<your-api-id>`.execute-api.us-east-1.amazonaws.com","port": 443,"path":"/Prod/getinfo","method": "POST","headers":{"Content-Type":"application/json"}},"data":{"bucket":"serverlessops-step0-stack-serverlessopsfrontend-`<your-alias-here>`","key":"JeffB.jpg"},"expected":"Jeff Bezos"}```
+
+	```json
+	{"options":{"hostname":"<your-api-id>.execute-api.us-east-1.amazonaws.com","port": 443,"path":"/Prod/getinfo","method": "POST","headers":{"Content-Type":"application/json"}},"data":{"bucket":"serverlessops-step0-stack-serverlessopsfrontend-<your-alias-here>","key":"JeffB.jpg"},"expected":"Jeff Bezos"}
+	```
 
 ### 4.4.5: Upload the celebrity to be used as 'reference input'.
 
