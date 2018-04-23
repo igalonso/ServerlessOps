@@ -26,7 +26,7 @@ Resources:
       FunctionName: !Sub ServerlessOps${EnvNameParameter}     
       CodeUri: ./
       Description: "Backend Lambda for Serverless Ops Workshop"
-      Handler: ifunctions/getinfo/ndex.handler
+      Handler: functions/getinfo/index.handler
       Timeout: 60
       Policies:
         - AmazonRekognitionFullAccess
