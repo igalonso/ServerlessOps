@@ -172,7 +172,7 @@ After the pipeline has propagated the change, go back to your application... Can
 
 ### Congratulations! You completed this section
 
-[Proceed to next section](../3_building_your_ci_cd_pipeline/README.md)
+[Proceed to next section](../../documentation/4_operations_advanced_features)
 
-[Back to home page](../../documentation/4_operations_advanced_features)
+[Back to home page](../../README.md)
 
