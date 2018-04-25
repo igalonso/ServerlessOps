@@ -161,7 +161,7 @@ For the sake of simplicity you can copy and paste the example below to the *Payl
 ![Local lambda payload](../images/2304-cloud9-tests-lambda-local-payload.png)
 
 <details>
-<summary>You can generate sample events easily with SAM local. Expand to learn more</summary>
+<summary><strong>You can generate sample events easily with SAM local. Expand to learn more</strong></summary>
 <p>
 Sample test events can also be generated with the `generate-event` command of the [SAM local](https://github.com/awslabs/aws-sam-local) command line interface:
 
@@ -193,7 +193,7 @@ Execute a test by clicking the run button <img src="../images/aws-cloud9-run.png
 ![Local lambda](../images/2305-cloud9-tests-lambda-local-run.png)
 
 <details>
-<summary>You can also debug your functions with Cloud9. Expand to learn more</summary>
+<summary><strong>You can also debug your functions with Cloud9. Expand to learn more</strong></summary>
 <p>
 You can also enable the debugger by clicking the debug icon <img src="../images/aws-cloud9-debug.png" height="16px"/>. It will change color to light green, meaning that debugging is enabled.
 You can toggle breakpoints on the `index.js` file by clickinng right to the left of the line number where you want the breakpoint to be set. The line is decorated with a red circle.
