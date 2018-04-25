@@ -11,10 +11,10 @@ Let's finish this workshop by cleaining all the resources:
 5. Click in you respository **ServerlessOps_Repository**.
 6. Click on Settings.
 7. At the bottom, click on Delete repository. Confirm the deletion.
+8. Go to **Cloud9** console and click on Delete. Type *Delete* and click Delete.
 1. Go to CloudFormation Console.
 2. Select **ServerlessOps-stack** > *Actions* and *Delete stack*. Wait for the deletion to complete.
-3. Go to S3 and delete all the object within the bucket you have created. 
-3. Select **ServerlessOps-step0-stack** > *Actions* and *Delete stack*.
+3. Select **ServerlessOps-step0-stack** > *Actions* and *Delete stack*. If it fails, try to re-delete it again and uncheck elements that couldn't be deleted.
 4. Verify all the resources have been deleted.
 
-To finish, you can visit the [following issue](https://github.com/igalonso/workshop-ServerlessOps/issues/20) where we will keep a discussion about different ways to tests our Serverless Application and do it a Serverless way. For example, how do we implement a Serverless uni-test stage on our pipeline. Do you want to Join?
+<img src="../images/devops.png"/>
