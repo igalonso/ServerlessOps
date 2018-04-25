@@ -14,7 +14,7 @@ First you need to create a file called **buildspec.yml** which will have the ins
 	```bash
 	git add .
 	git commit -m "Adding buildspec.yml to build the pipeline"
-	git push	
+	git push origin master
 	```
 	
 
