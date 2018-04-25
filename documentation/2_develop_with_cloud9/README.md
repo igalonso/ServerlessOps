@@ -161,7 +161,7 @@ For the sake of simplicity you can copy and paste the example below to the *Payl
 ![Local lambda payload](../images/2304-cloud9-tests-lambda-local-payload.png)
 
 <details>
-<summary>You can generate sample events easily with SAM local. Expand to learn more</summary>
+<summary><strong>You can generate sample events easily with SAM local. Expand to learn more</strong></summary>
 <p>
 Sample test events can also be generated with the `generate-event` command of the [SAM local](https://github.com/awslabs/aws-sam-local) command line interface:
 
@@ -186,13 +186,14 @@ OPTIONS:
 ```
 </p>
 </details>
+<br>
 
 Execute a test by clicking the run button <img src="../images/aws-cloud9-run.png" height="16px"/>. The *Execution results* area will show the function response. The `body` attribute is a list of labels detected with its corresponding confidence score. Along with that, it also shows the memory used by the Lambda function and the time it took to execute.
 
 ![Local lambda](../images/2305-cloud9-tests-lambda-local-run.png)
 
 <details>
-<summary>You can also debug your functions with Cloud9. Expand to learn more</summary>
+<summary><strong>You can also debug your functions with Cloud9. Expand to learn more</strong></summary>
 <p>
 You can also enable the debugger by clicking the debug icon <img src="../images/aws-cloud9-debug.png" height="16px"/>. It will change color to light green, meaning that debugging is enabled.
 You can toggle breakpoints on the `index.js` file by clickinng right to the left of the line number where you want the breakpoint to be set. The line is decorated with a red circle.
@@ -204,6 +205,9 @@ Execute a new test and wait until the debugger pane shows up.
 ![Local lambda](../images/2307-cloud9-tests-lambda-local-debug.png)
 </p>
 </details>
+<br>
+
+
 
 Finally, you can also invoke the API locally. On the test tab, change from *Lambda (local)* to *API Gateway (local)* 
 

@@ -14,7 +14,7 @@ First you need to create a file called **buildspec.yml** which will have the ins
 	```bash
 	git add .
 	git commit -m "Adding buildspec.yml to build the pipeline"
-	git push	
+	git push origin master
 	```
 	
 
@@ -163,7 +163,6 @@ We have added a new and awesome feature! Now we not only get the labels of each 
 Let's test the pipeline with, again:
 
 ````bash
-cd ServerlessOps-repository
 git add -A
 git commit -m "Adding famous labels to the application."
 git push

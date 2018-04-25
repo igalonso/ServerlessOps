@@ -9,7 +9,7 @@ This section of the workshop covers:
 ```
 - CodeStar
 - Blue/Green deployments in Lambda
-- Canary deployments in Lambda
+- Canary deployments in API Gateway
 - Concurrency in Lambda
 - Integration tests within the pipelines.
 ```
@@ -176,7 +176,10 @@ var params = {
 ```
 
 Or if you want to go beyond that, try to build your first integration test!
+
 </details>
+
+
 
 ## 4.3. API Gateway Canary releases.
 
