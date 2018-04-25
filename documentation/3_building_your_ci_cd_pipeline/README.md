@@ -165,10 +165,14 @@ Let's test the pipeline with, again:
 ````bash
 git add -A
 git commit -m "Adding famous labels to the application."
-git push
+git push origin master
 ````
 
 After the pipeline has propagated the change, go back to your application... Can you see the difference?
 
-If you are ready, go to the next [section](../../documentation/4_operations_advanced_features)
+### Congratulations! You completed this section
+
+[Proceed to next section](../3_building_your_ci_cd_pipeline/README.md)
+
+[Back to home page](../../documentation/4_operations_advanced_features)
 
