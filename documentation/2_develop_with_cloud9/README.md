@@ -272,7 +272,7 @@ After that, go back to your CodeCommit repository and verify you have your files
 
 ### Congratulations! You completed this section
 
-[Proceed to next section](../3_building_your_ci_cd_pipeline/README.md)
+[Proceed to next section](../3_building_your_ci_cd_pipeline)
 
 [Back to home page](../../README.md)
 
