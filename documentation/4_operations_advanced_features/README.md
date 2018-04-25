@@ -177,6 +177,8 @@ var params = {
 
 Or if you want to go beyond that, try to build your first integration test!
 
+</details>
+
 
 ## 4.3. API Gateway Canary releases.
 
