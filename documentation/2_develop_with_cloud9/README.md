@@ -186,6 +186,7 @@ OPTIONS:
 ```
 </p>
 </details>
+<br>
 
 Execute a test by clicking the run button <img src="../images/aws-cloud9-run.png" height="16px"/>. The *Execution results* area will show the function response. The `body` attribute is a list of labels detected with its corresponding confidence score. Along with that, it also shows the memory used by the Lambda function and the time it took to execute.
 
@@ -204,6 +205,9 @@ Execute a new test and wait until the debugger pane shows up.
 ![Local lambda](../images/2307-cloud9-tests-lambda-local-debug.png)
 </p>
 </details>
+<br>
+
+
 
 Finally, you can also invoke the API locally. On the test tab, change from *Lambda (local)* to *API Gateway (local)* 
 
