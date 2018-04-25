@@ -2,7 +2,13 @@
 
 All right! We have covered different topics related with the operations with Serverless technologies. However, there are a lot of different topics that worth discussion. We provide more guidance on the [Wild Rydes Workshop](https://github.com/awslabs/aws-serverless-workshops/tree/master/DevOps) about multi-stage pipeline, uni-testing an API, analyze and debug the Unicorn API to dive a bit deeper into ServerlessOps.
 
+One of the topics that is not covered in this Workshop is the debug and operations of the platform such as centrilized logs, alarming, automated responses and automation mitigation. However, it would be a good chance to review different discussion on this matter.
+
+<img src="../images/devops.png"/>
+
 Let's finish this workshop by cleaining all the resources:
+
+# Deleting the resources
 
 1. Go to CodePipeline console and click in your Pipeline.
 2. Click on **Edit**, then click on **Delete** and confirm.
@@ -17,4 +23,4 @@ Let's finish this workshop by cleaining all the resources:
 3. Select **ServerlessOps-step0-stack** > *Actions* and *Delete stack*. If it fails, try to re-delete it again and uncheck elements that couldn't be deleted.
 4. Verify all the resources have been deleted.
 
-<img src="../images/devops.png"/>
+
