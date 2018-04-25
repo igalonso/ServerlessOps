@@ -18,9 +18,9 @@ To deploy these assets go to the step0 folder and find the following file:
 
 Click on one of the following links. Beware! This will be the region you will use during the rest of the workshop!
 
-	Region| Code | Launch
-	------|------|-------
-	EU (Ireland) | <span style="font-family:'Courier';">eu-west-1</span> | [![Launch Step 0 in eu-west-1](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=serverlessops-step0-stack&templateURL=https://s3-eu-west-1.amazonaws.com/serverlessops-functions-eu-west-1/cfn/cf_step0.yml)
+Region| Code | Launch
+------|------|-------
+EU (Ireland) | eu-west-1 | [![Launch Step 0 in eu-west-1](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=serverlessops-step0-stack&templateURL=https://s3-eu-west-1.amazonaws.com/serverlessops-functions-eu-west-1/cfn/cf_step0.yml)
 
 
 1. In the **CloudFormation** Console and click on Next.
@@ -57,6 +57,6 @@ You will see a landing page with a Get Started button. Click it to start with th
 
 After doing this, you can skip the connection part of the wizard. We will use it later in the next section.
 
-##Next step
+## Next step
 
 Once you have finished this step you can start the second step [here](../../documentation/2_develop_with_cloud9).
