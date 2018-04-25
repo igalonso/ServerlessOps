@@ -33,22 +33,22 @@ EU (Ireland) | eu-west-1 | [![Launch Step 0 in eu-west-1](http://docs.aws.amazon
 6. Click on **Create Change Set**.
 7. Click on **Execute** once you have finished.
 
+Notice that, in the output tab of your CloudFormation, you will see an S3 bucket. This one is the **frontend** of your application. Take some time to go to the S3 Console and review the content of this web frontend.
 
-## 1.2: Change the buildspec.yaml to add S3 deployments.
+## 1.2 Review the frontend
 
-The CloudFormation stack will create an S3 bucket for deployments with the following
+<img src="../images/0_frontend.png" width="70%" />
 
-```
-serverlessops-deploymentbucket-<your-alias-here>
-```
+During the workshop you will use this simple web application to see the results of your progress. To use it, click on **The Photo** and add the **endpoint of your API Gateway** and the **name of your frontend bucket**. Here is an example of the format:
 
-Now we have to go to `buildspec.yaml`. You will find it in the root folder, of the ZIP you downloaded on previous steps. Change the S3 bucket to the one you have just created. Basically, add the alias you added to the CloudFormation here.
+- Endpoint: https://xxxxxxx.execute-api.eu-west-1.amazonaws.com/Prod
+- Bucket name: serverlessops-step0-stack-serverlessopsfrontend-xxxxxxxx
 
+Then, click on **get info!** and you will see under **The Result** tab, the labels of the Jeff Bezos photo.
 
 ## 1.3 Create a repository in CodeCommit
 
-You will see a landing page with a Get Started button. Click it to start with the creation of the repository.
-
+Go to the [CodeCommit console](https://eu-west-1.console.aws.amazon.com/codecommit/home?region=eu-west-1#/introduction). You will see a landing page with a Get Started button. Click it to start with the creation of the repository.
 
 
 2. Enter a repository name such as ```ServerlessOps_Repository```
