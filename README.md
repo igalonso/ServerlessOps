@@ -2,6 +2,14 @@
 
 Serverless is the last iteration of reducing the cost and improving the efectiviness of the team. You can now focus on what really matters. Your business. 
 
+### You can find the slides of this workshop here:
+------------------------------
+
+---> [SLIDES](https://s3-eu-west-1.amazonaws.com/serverlessops-frontend/assets/slides.zip)
+
+--------------------------------
+
+
 Serverless computing allows you to build and run applications and services without thinking about servers. Serverless applications don't require you to provision, scale, and manage any servers. You can build them for nearly any type of application or backend service, and everything required to run and scale your application with high availability is handled for you.
 
 <img src="documentation/images/devops.png"/>
@@ -19,11 +27,7 @@ This workshop requires:
 - An active AWS Account with administrative permissions.
 - If you are using your own development environment, you should have [npm](https://docs.npmjs.com/getting-started/installing-node) and [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) installed.
 
-We won't cover these topics during this workshop. If you need some extra help with this, we recommend you visit these other resources:
-
-- [Serverless 101 workshop - Wild Rydes Web Application](https://github.com/awslabs/aws-serverless-workshops/tree/master/WebApplication)
-- [Introduction to AWS](https://aws.amazon.com/es/about-aws/whats-new/2014/01/14/new-introduction-to-aws-instructional-videos-and-labs/)
-- [SAM documentation](https://github.com/awslabs/serverless-application-model)
+We won't cover these topics during this workshop. If you need some extra help with this, we recommend you visit other resources that can be found in the last section of this workshop.
 
 ## The application workflow
 

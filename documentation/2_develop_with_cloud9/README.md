@@ -12,6 +12,10 @@ In this section, you are going to use [AWS Cloud9](https://aws.amazon.com/cloud9
 <a href="https://github.com/awslabs/serverless-application-model" target=_blank><img src="../images/sam.png" alt="Serverless Application Model"/></a>
 </center>
 
+During this part of the workshop we will develop the backend of our application. Here an image of the state of our infrastructure at the end of this step:
+
+<img src="../images/serverlessops-app-step1.png" />
+
 - [2.1. Create your cloud-based development environment](#21-create-your-cloud-based-development-environment)
 - [2.2. Create your serverless API](#22-create-your-serverless-api)
 - [2.3. Test your serverless API locally](#23-test-your-serverless-api-locally)
@@ -274,6 +278,6 @@ After that, go back to your CodeCommit repository and verify you have your files
 
 [Proceed to next section](../3_building_your_ci_cd_pipeline)
 
-[Back to home page](../../README.md)
+[Back to home page](../../)
 
 

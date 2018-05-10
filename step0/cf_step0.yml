@@ -22,6 +22,11 @@ Resources:
       AccessControl: PublicRead
       WebsiteConfiguration:
         IndexDocument: index.html
+      CorsConfiguration:
+        CorsRules:
+        - AllowedOrigins: ['*']
+          AllowedMethods: [GET,PUT,POST,DELETE,HEAD]
+          AllowedHeaders: ['*']
  
   ServerlessOpsDeployments:
     Type: 'AWS::S3::Bucket'
@@ -46,6 +51,48 @@ Resources:
                 - /*
       Bucket: !Ref ServerlessOpsFrontend
   
+  CognitoIdentityPool:
+    Type: "AWS::Cognito::IdentityPool"
+    Properties:
+      IdentityPoolName: ServerlessOpsIdentityPool
+      AllowUnauthenticatedIdentities: true
+  
+  CognitoUnauthorizedRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Federated: "cognito-identity.amazonaws.com"
+            Action:
+              - "sts:AssumeRoleWithWebIdentity"
+            Condition:
+              StringEquals:
+                "cognito-identity.amazonaws.com:aud": !Ref CognitoIdentityPool
+              "ForAnyValue:StringLike":
+                "cognito-identity.amazonaws.com:amr": unauthenticated
+      Policies:
+        - PolicyName: "CognitoUnauthorizedPolicy"
+          PolicyDocument: 
+            Version: "2012-10-17"
+            Statement: 
+              - Effect: "Allow"
+                Action:
+                  - "mobileanalytics:PutEvents"
+                  - "cognito-sync:*"
+                  - "s3:Put*"
+                Resource: "*"
+
+  CognitoIdPoolRoleAttachment:
+    Type: "AWS::Cognito::IdentityPoolRoleAttachment"
+    Properties:
+        IdentityPoolId: !Ref CognitoIdentityPool
+        Roles:
+            unauthenticated: !GetAtt CognitoUnauthorizedRole.Arn
+            authenticated: !GetAtt CognitoUnauthorizedRole.Arn     
+      
   S3ObjectsHelperFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -175,8 +222,12 @@ Resources:
     Properties:
       ServiceToken: !GetAtt S3ObjectsHelperFunction.Arn
       Bucket: !Ref ServerlessOpsDeployments
+  
 
 Outputs:
   FrontendBucket:
     Description: Bucket where data will be placed
     Value: !Ref ServerlessOpsFrontend
+  CognitoIdentityPool:
+    Description: Identity pool to use in our application
+    Value: !Ref CognitoIdentityPool

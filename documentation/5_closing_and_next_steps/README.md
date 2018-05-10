@@ -24,3 +24,9 @@ Let's finish this workshop by cleaining all the resources:
 4. Verify all the resources have been deleted.
 
 
+# Extra: Resources
+
+- [Serverless 101 workshop - Wild Rydes Web Application](https://github.com/awslabs/aws-serverless-workshops/tree/master/WebApplication)
+- [Introduction to AWS](https://aws.amazon.com/es/about-aws/whats-new/2014/01/14/new-introduction-to-aws-instructional-videos-and-labs/)
+- [SAM documentation](https://github.com/awslabs/serverless-application-model)
+

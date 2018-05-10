@@ -18,11 +18,7 @@ In this section we will also create a Git repository on CodeCommit. We will cove
 
 ### 1.1.1: Deploy the Step 0 CloudFormation Stack.
 
-To deploy these assets go to the step0 folder and find the following file:
-
-<img src="../images/0_cloudformation_stack.png" />
-
-Click on one of the following links. Beware! This will be the region you will use during the rest of the workshop!
+Click on of the following link to deploy the stack. Beware! This will be the region you will use during the rest of the workshop!
 
 Region| Code | Launch
 ------|------|-------
@@ -30,7 +26,7 @@ EU (Ireland) | eu-west-1 | [![Launch Step 0 in eu-west-1](http://docs.aws.amazon
 
 
 1. In the **CloudFormation** Console and click on Next.
-2. Verify the Stack name ```serverlessops-step0-stack```, write your **Alias** and click continue. Make sure you enter an **Alias** as it will be used to create your S3 bucket and also ensure that your **Alias** is unique among everyone so chose it wisely.
+2. Verify the Stack name ```serverlessops-step0-stack```, write your **Alias** and click continue. Make sure you enter an **Alias** as it will be used to create your S3 bucket and also ensure that your **Alias** is lowercase and is unique among everyone so chose it wisely.
 3. Verify that the **DataPrefix** and the **WsS3BucketBaseName** are filled and click next. 
 4. In the next page, leave the default options and click next.
 3. Once you are in the final option page, enable CloudFormation to create IAM resources:
@@ -42,6 +38,14 @@ EU (Ireland) | eu-west-1 | [![Launch Step 0 in eu-west-1](http://docs.aws.amazon
 Notice that, in the output tab of your CloudFormation, you will see an S3 bucket. This one is the **frontend** of your application. Take some time to go to the S3 Console and review the content of this web frontend.
 
 ## 1.2 Review the frontend
+
+Once the **Cloudfront** stack is launched successfully, you will have the front-end working. Keep in mind that the backend won't be accessible until the next steps of the workshops are done.
+
+Here is an image of the actual infrastructure you are developing.
+
+<img src="../images/serverlessops-app-step0.png" width="50%" />
+
+If you go to the frontend application link that appears in the output of your CloudFormation, you will see the following static application:
 
 <img src="../images/0_frontend.png" width="70%" />
 
@@ -67,4 +71,4 @@ After doing this, you can skip the connection part of the wizard. We will use it
 
 [Proceed to next section](../2_develop_with_cloud9)
 
-[Back to home page](../../README.md)
+[Back to home page](../../)
