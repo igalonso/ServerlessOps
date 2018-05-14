@@ -9,47 +9,72 @@
         <script src="https://sdk.amazonaws.com/js/aws-sdk-2.236.1.min.js"></script>
         <title>Serverless Ops App</title>
         <script type="text/javascript" src="js/assets.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/serverlessops.css" />
 
     </head>
 
     <body id="page-top">
-        <div >
-            <h1 >Serverless Ops</h1>
-            <h2 >A dummy web page to test our operations</h2>
-        </div>
-        <div >
-            <div  >
-                <img max-width="640px" src="img/uploads/someguy.jpg" id="image-to-recog" alt="Photo to recognite">        
-            </div>
-            <br>
-            <div>
-                <h3>Step 1:</h3>
-            <div>
-                1) Cognito Identity Pool: <input type="text" id="cognito" />
-            </div>
-            
-            <div>
-                2) Upload: <input type="file" id="image-to-upload"><button id="upload" type="button" >Upload</button>
-            </div>
-            </div>
-            <br>
-            <div>
-                <h3>Step 2:</h3>
-                <div>
-                    1) Endpoint: <input  type="text" id="endpoint" />
-                    <button id="trigger" type="button" >get info!</button>
+        <div class="container">
+            <div class="header" >
+                <div class="center">
+                    <h1 >Serverless Ops</h1>
+                    <h2 >A dummy web page to test our operations</h2>
                 </div>
             </div>
-        </div>
-        <div>
-            <table id="table-results">
-                    <tbody>
-                        <tr>
-                        <th id="td-labels" style="padding: 5px; color: #2d3e4f;font-weight: bold !important;" hidden>LABELS</th>
-                        <th id="td-celebrities" style="padding: 5px; color: #2d3e4f;font-weight: bold !important;" hidden>CELEBRITIES</th>
-                        <th id="td-text" style="padding: 5px; color: #2d3e4f;font-weight: bold !important;" hidden>TEXTS</th>
-                        </tr>
-                    </tbody>
-            </table>
+            <div class="container" >
+                <div class="column left">&nbsp;</div>
+                <div class="column middle"  >
+                    <img class="rekog-image" src="img/uploads/someguy.jpg" id="image-to-recog" alt="Photo to recognite">        
+                </div>
+                <div class="column right">&nbsp;</div>
+            </div>
+            <div class="container">
+                <div class="column-task left-task">
+                    <div class="left-task-inner">
+                        <div>
+                            <h3>Step 1:</h3>
+                        </div>
+                        <div>
+                            Cognito Identity Pool 
+                            <br>
+                            <input type="text" id="cognito" />
+                        </div>
+                        <div>
+                            <br>
+                            Upload 
+                            <br>
+                            <input type="file" id="image-to-upload"><button id="upload" type="button" >Upload</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="column-task middle-task">
+                    <div class="middle-task-inner">
+                        <h3>Step 2:</h3>
+                        <div>
+                            Endpoint: 
+                            <br><input  type="text" id="endpoint" />
+                            <button id="trigger" type="button" >GET INFO</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="column-task right-task">
+                    <div class ="right-task-inner">
+                        <table id="table-results">
+                                <tbody>
+                                    <tr>
+                                    <th id="td-labels" style="padding: 5px; color: #2d3e4f;font-weight: bold !important;" hidden>LABELS</th>
+                                    <th id="td-celebrities" style="padding: 5px; color: #2d3e4f;font-weight: bold !important;" hidden>CELEBRITIES</th>
+                                    <th id="td-text" style="padding: 5px; color: #2d3e4f;font-weight: bold !important;" hidden>TEXTS</th>
+                                    </tr>
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="center">
+                <p style="color:#fff">- Amazon Web Services - 2018 -</p>
+                </div>
+            </div>
         </div>
     </body>

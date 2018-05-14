@@ -1,3 +1,128 @@
 .rekog-image{
-    max-width="640px";
+    vertical-align: middle;
+    margin: 0;
+    position: relative;               /* 2 */
+    top: 50%;                         /* 3 */
+    transform: translate(0, -50%);  /* 4 */
+
 }
+
+html,body {
+   margin:0;
+   padding:0;
+   height:100%;
+   font-family: Arial, Helvetica, sans-serif;
+   letter-spacing: 2.8px;
+   word-spacing: 2px;
+   color:#345487;
+
+}
+
+button{
+    background-color:#d5cad6;
+    border:1px solid #9d969e;
+    display:inline-block;
+    cursor:pointer;
+    color:#ffffff;
+    font-family:Trebuchet MS;
+    font-size:17px;
+    padding:10px 27px;
+    text-decoration:none;
+    text-shadow:0px 1px 0px #5e2063;
+}
+button:hover {
+    background-color:#bcb6bd;
+}
+button:active {
+    position:relative;
+    top:1px;
+}
+    
+#cognito, #endpoint{
+    border:1px solid #9d969e;
+    display:inline-block;
+    color:#000;
+    font-family:Trebuchet MS;
+    font-size:17px;
+    padding:10px;
+    text-decoration:none;
+    widows: 100%;
+}
+
+
+.container {
+   min-height:100%;
+   position:relative;
+}
+.header {
+   background:#C9F0FF;
+   padding:10px;
+}
+.body {
+   padding:10px;
+   padding-bottom:60px;   /* Height of the footer */
+}
+.footer {
+   position:fixed;
+   bottom:0;
+   width:100%;
+   background:#6B5E62;
+}
+.column {
+    float: left;
+    height: 400px;
+    width: 100%;
+}
+
+@media screen and (max-width: 600px) {
+    .column {
+        width: 100%;
+    }
+    .column-task{
+        width: 100%;
+    }
+}
+
+.middle {
+    width: 50%;
+    background:#EAFFFD;
+}
+.left, .right{
+    width: 25%;
+    background:#EAFFFD;
+}
+
+.column-task{
+    float: left;
+    height: 300px;
+    width: 100%;
+}
+
+.middle-task{
+    width: 34%;
+    background: #EFEFF0;
+    
+}
+.right-task, .left-task{
+    width: 33%;
+    background: #EFEFF0;
+}
+.middle-task-inner, .right-task-inner, .left-task-inner{
+    padding:10px;
+    height: 300px;
+}
+
+.right-task-inner{
+    border-left: #D5CAD6 2px solid;
+}
+
+.left-task-inner{
+    border-right: #D5CAD6 2px solid;
+}
+
+.center {
+    margin: auto;
+    width: 50%;
+    text-align: center;
+}
+
