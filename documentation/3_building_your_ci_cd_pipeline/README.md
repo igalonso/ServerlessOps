@@ -49,7 +49,7 @@ Within the project, the file buildspec.yml has the information necesary for your
 2. Select ```Use an image managed by AWs CodeBuild```.
 3. Chose ```Ubuntu``` as the Operating system.
 4. Select ```Node.js``` as the runtime.
-5. Select Version ```4.3.2```.
+5. Select Version ```6.3.1```.
 3. Select ```Chose an existing service role from your account``` and, on that dropdown, select ```ServerlessOps-codebuildrole```. We will review it after creating the pipeline.
 4. Click on *Save build project*
 
