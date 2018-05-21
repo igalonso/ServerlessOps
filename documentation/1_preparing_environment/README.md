@@ -49,12 +49,10 @@ If you go to the frontend application link that appears in the output of your Cl
 
 <img src="../images/0_frontend.png" width="70%" />
 
-During the workshop you will use this simple web application to see the results of your progress. To use it, click on **The Photo** and add the **endpoint of your API Gateway** and the **name of your frontend bucket**. Here is an example of the format:
+During the workshop you will use this simple web application to see the results of your progress. To use it, you can either use the "Jeff Bezos photo" or upload the one you prefer on each iteration. To do so, you need to gather the **Cognito Identity Pool id** from the CloudFormation Console, under outputs of the *serverlessops-step0-stack*.
 
-- Endpoint: https://xxxxxxx.execute-api.eu-west-1.amazonaws.com/Prod
-- Bucket name: serverlessops-step0-stack-serverlessopsfrontend-xxxxxxxx
+In this step, you won't be able to get the labels of the image because you haven't deployed any API. During the next steps we will create the backend application and, with the endpoint generated, you will send POST requests to it. You will put the endpoint under Step 2 of this frontend.
 
-Then, click on **get info!** and you will see under **The Result** tab, the labels of the Jeff Bezos photo.
 
 ## 1.3 Create a repository in CodeCommit
 
