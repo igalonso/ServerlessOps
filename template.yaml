@@ -31,7 +31,7 @@ Resources:
       Policies:
         - AmazonRekognitionFullAccess
         - AmazonS3ReadOnlyAccess
-      Runtime: nodejs4.3
+      Runtime: nodejs6.10
       Events:
         ProxyApiRoot:
           Type: Api

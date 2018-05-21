@@ -1,10 +1,12 @@
 .rekog-image{
-    vertical-align: middle;
-    margin: 0;
-    position: relative;               /* 2 */
-    top: 50%;                         /* 3 */
-    transform: translate(0, -50%);  /* 4 */
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
 
+}
+.the-title{
+    color: #9d969e;
 }
 
 html,body {
@@ -15,6 +17,7 @@ html,body {
    letter-spacing: 2.8px;
    word-spacing: 2px;
    color:#345487;
+   background: #EFEFF0;
 
 }
 
@@ -61,6 +64,7 @@ button:active {
 .body {
    padding:10px;
    padding-bottom:60px;   /* Height of the footer */
+   background: #EFEFF0;
 }
 .footer {
    position:fixed;
@@ -70,7 +74,6 @@ button:active {
 }
 .column {
     float: left;
-    height: 400px;
     width: 100%;
 }
 
@@ -84,7 +87,7 @@ button:active {
 }
 
 .middle {
-    width: 50%;
+    width: 100%;
     background:#EAFFFD;
 }
 .left, .right{
@@ -94,12 +97,12 @@ button:active {
 
 .column-task{
     float: left;
-    height: 300px;
     width: 100%;
+    padding-bottom: 50px;
 }
 
 .middle-task{
-    width: 34%;
+    width: 33%;
     background: #EFEFF0;
     
 }
@@ -109,14 +112,13 @@ button:active {
 }
 .middle-task-inner, .right-task-inner, .left-task-inner{
     padding:10px;
-    height: 300px;
 }
 
-.right-task-inner{
+.right-task{
     border-left: #D5CAD6 2px solid;
 }
 
-.left-task-inner{
+.left-task{
     border-right: #D5CAD6 2px solid;
 }
 
