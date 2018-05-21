@@ -22,7 +22,7 @@ Click on of the following link to deploy the stack. Beware! This will be the reg
 
 Region| Code | Launch
 ------|------|-------
-EU (Ireland) | eu-west-1 | [![Launch Step 0 in eu-west-1](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=serverlessops-step0-stack&templateURL=https://raw.githubusercontent.com/igalonso/workshop-ServerlessOps/master/step0/cf_step0.yml)
+EU (Ireland) | eu-west-1 | [![Launch Step 0 in eu-west-1](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=serverlessops-step0-stack&templateURL=https://s3-eu-west-1.amazonaws.com/serverlessops-functions-eu-west-1/cfn/cf_step0.yml)
 
 
 1. In the **CloudFormation** Console and click on Next.
